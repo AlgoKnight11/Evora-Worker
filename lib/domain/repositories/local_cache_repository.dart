@@ -23,7 +23,8 @@ class QueuedWorkerOperation {
   });
 }
 
-/// Repository contract for Encrypted IndexedDB task snapshots & OPFS media staging.
+/// Repository contract for encrypted local mobile storage (SQLite / secure storage)
+/// and local app-private media staging.
 /// Respects the configurable 24-hour TTL and full purge on sign-out.
 /// Concrete implementation wired in Phase 6.
 abstract class LocalCacheRepository {

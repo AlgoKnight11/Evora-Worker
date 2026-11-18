@@ -11,7 +11,8 @@ The **EVORA Field Worker Portal** bridges municipal dispatch and boots-on-the-gr
 
 ### ✨ Key Capabilities
 * **Task Inbox & Team Pools:** Individual task assignments and atomic first-claim team pool dispatch.
-* **Offline-First PWA:** Safe local caching via encrypted IndexedDB and deferred command synchronization with server-validated state transitions.
+* **Offline-First Mobile App (Android & iOS):** Safe local caching via encrypted mobile storage and deferred command synchronization with server-validated state transitions.
+* **Bilingual UX (English & Hindi):** First-launch language picker plus instant in-app switching in Profile & Help.
 * **Evidence & Verification:** Before/after photo pairing, structured measurements, mandatory task checklists, and citizen acknowledgement.
 * **Worker Safety & Escalation:** Immediate out-of-band hazard reporting, emergency dispatch access, and operational block tracking.
 * **Supervisor Review Flow:** Strict maker-checker review pipeline before task completion synchronizes with the citizen's CivicFlow grievance.

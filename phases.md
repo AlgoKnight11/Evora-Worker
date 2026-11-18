@@ -9,7 +9,7 @@
 
 ## 🗺️ Master Architecture & Phasing Overview
 
-The **EVORA Field Worker Portal** is designed as a mobile-first, offline-ready Progressive Web Application (PWA) built to handle harsh field operating conditions, spotty cellular connectivity, and strict municipal accountability.
+The **EVORA Field Worker Portal (`Evora-Workers`)** is built as an offline-ready **Flutter mobile application (Android & iOS)** designed for harsh field operating conditions, spotty cellular connectivity, and strict municipal accountability.
 
 ```mermaid
 flowchart TD
