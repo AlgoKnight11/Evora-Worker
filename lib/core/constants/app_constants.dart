@@ -30,8 +30,8 @@ class AppConstants {
   // Accessibility minimum touch target
   static const double minTouchTargetSize = 48.0;
 
-  // Brand logo asset paths (shared with Evora-Citizen)
-  static const String logoFullAsset = 'assets/images/evora_logo_transparent_clean.png';
+  // Brand logo asset paths (transparent, matched to EVORA Himalayan Modernism light UI)
+  static const String logoFullAsset = 'assets/images/evora_logo_cropped_transparent.png';
   static const String logoCroppedAsset = 'assets/images/evora_logo_cropped_transparent.png';
   static const String leafBadgeAsset = 'assets/images/evora_leaf_badge.png';
 }
