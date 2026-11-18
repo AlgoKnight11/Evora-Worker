@@ -1,0 +1,301 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for English (`en`).
+class AppLocalizationsEn extends AppLocalizations {
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
+
+  @override
+  String get appTitle => 'Evora-Workers';
+
+  @override
+  String get appSubtitle => 'Field Operations Portal';
+
+  @override
+  String get brandTagline => 'Greener Choices. Healthier Cities.';
+
+  @override
+  String get languageSelectTitle => 'Choose Your Language';
+
+  @override
+  String get languageSelectSubtitle =>
+      'Select your preferred language for Evora-Workers. You can change this anytime in Profile & Help.';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageEnglishSub => 'Continue in English';
+
+  @override
+  String get languageHindi => 'हिन्दी';
+
+  @override
+  String get languageHindiSub => 'हिन्दी में जारी रखें';
+
+  @override
+  String get languageContinue => 'Continue';
+
+  @override
+  String get languageSettingsTitle => 'App Language';
+
+  @override
+  String get languageSettingsSubtitle => 'Switch between English and Hindi';
+
+  @override
+  String languageChangedNotice(String language) {
+    return 'Language switched to $language';
+  }
+
+  @override
+  String get navOverview => 'Overview';
+
+  @override
+  String get navOverviewFull => 'My Overview';
+
+  @override
+  String get navTasks => 'Tasks';
+
+  @override
+  String get navTasksFull => 'My Tasks';
+
+  @override
+  String get navMap => 'Map';
+
+  @override
+  String get navMapFull => 'Task Map';
+
+  @override
+  String get navNotifications => 'Alerts';
+
+  @override
+  String get navNotificationsFull => 'Notifications';
+
+  @override
+  String get navHistory => 'History';
+
+  @override
+  String get navHistoryFull => 'Task History';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get navProfileFull => 'Profile & Help';
+
+  @override
+  String get syncOnline => 'Online';
+
+  @override
+  String get syncOffline => 'Offline';
+
+  @override
+  String get syncSyncing => 'Syncing...';
+
+  @override
+  String syncPendingCount(int count) {
+    return '$count pending';
+  }
+
+  @override
+  String syncLastUpdated(String time) {
+    return 'Last synced $time';
+  }
+
+  @override
+  String get statusAssigned => 'Assigned';
+
+  @override
+  String get statusAccepted => 'Accepted';
+
+  @override
+  String get statusInProgress => 'In Progress';
+
+  @override
+  String get statusBlocked => 'Blocked';
+
+  @override
+  String get statusSubmittedForReview => 'Pending Review';
+
+  @override
+  String get statusReturned => 'Returned';
+
+  @override
+  String get statusApproved => 'Approved';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get statusReassigned => 'Reassigned';
+
+  @override
+  String get priorityP1 => 'P1 Critical';
+
+  @override
+  String get priorityP2 => 'P2 High';
+
+  @override
+  String get priorityP3 => 'P3 Normal';
+
+  @override
+  String get priorityP4 => 'P4 Low';
+
+  @override
+  String get stateLoadingTitle => 'Loading data...';
+
+  @override
+  String get stateLoadingSubtitle =>
+      'Fetching your latest municipal task updates.';
+
+  @override
+  String get stateEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get stateEmptySubtitle =>
+      'Assigned items will appear here once dispatched.';
+
+  @override
+  String get stateErrorTitle => 'Something went wrong';
+
+  @override
+  String get stateErrorSubtitle =>
+      'Unable to load records right now. Please try again.';
+
+  @override
+  String get stateOfflineTitle => 'Working offline';
+
+  @override
+  String get stateOfflineSubtitle =>
+      'Showing authorized cached data. Actions will sync automatically once reconnected.';
+
+  @override
+  String get statePermissionDeniedTitle => 'Access restricted';
+
+  @override
+  String get statePermissionDeniedSubtitle =>
+      'You do not have permission to view this scope. Contact your supervisor.';
+
+  @override
+  String get stateStaleDataTitle => 'Cached snapshot';
+
+  @override
+  String get stateStaleDataSubtitle =>
+      'Data may be outdated. Pull to refresh when online.';
+
+  @override
+  String get actionRetry => 'Retry';
+
+  @override
+  String get actionRefresh => 'Refresh';
+
+  @override
+  String get overviewGreeting => 'Ready for field duty';
+
+  @override
+  String get overviewTodayTasks => 'Today\'s Tasks';
+
+  @override
+  String get overviewUrgentWork => 'Urgent / P1';
+
+  @override
+  String get overviewOverdueTasks => 'Overdue';
+
+  @override
+  String get overviewPendingSync => 'Pending Sync';
+
+  @override
+  String get overviewNoticesTitle => 'Operational Notices';
+
+  @override
+  String get overviewNoticesEmpty =>
+      'No active operational notices for your ward or team.';
+
+  @override
+  String get overviewPhaseBanner =>
+      'Phase 1 Foundation Ready — Live task queues & OTP auth connect in Phases 2–3.';
+
+  @override
+  String get tasksSubtitle =>
+      'Assigned, accepted, in-progress, blocked, and pending-review work';
+
+  @override
+  String get tasksFilterAll => 'All';
+
+  @override
+  String get tasksFilterIndividual => 'My Assigned';
+
+  @override
+  String get tasksFilterTeamPool => 'Team Pool';
+
+  @override
+  String get tasksEmptyTitle => 'No active tasks in your queue';
+
+  @override
+  String get tasksEmptySubtitle =>
+      'Tasks assigned to you or your crew pool will appear here once authenticated.';
+
+  @override
+  String get mapSubtitle =>
+      'Assigned task pins, approved service area, and offline navigation fallback';
+
+  @override
+  String get mapServiceAreaLabel => 'Approved Service Area';
+
+  @override
+  String get mapOfflineFallbackTitle => 'Offline Navigation Support';
+
+  @override
+  String get mapOfflineFallbackDesc =>
+      'In-app map, external directions link, and textual landmark directions will load here.';
+
+  @override
+  String get notificationsSubtitle =>
+      'New assignments, SLA reminders, supervisor feedback, and schedule changes';
+
+  @override
+  String get notificationsEmptyTitle => 'All caught up';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'You have no unread dispatch alerts or supervisor review messages.';
+
+  @override
+  String get historySubtitle =>
+      'Completed, returned, reassigned, and cancelled tasks';
+
+  @override
+  String get historyEmptyTitle => 'No task history yet';
+
+  @override
+  String get historyEmptySubtitle =>
+      'Past outcomes and supervisor feedback will appear here after your first completion.';
+
+  @override
+  String get profileDepartmentLabel => 'Department & Team';
+
+  @override
+  String get profileDepartmentPending => 'Assigned after OTP login (Phase 2)';
+
+  @override
+  String get profileSupervisorLabel => 'Supervisor & Support';
+
+  @override
+  String get profileSupervisorPending => 'Configured per municipal tenant';
+
+  @override
+  String get profileSafetyTitle => 'Field Safety & Emergency';
+
+  @override
+  String get profileSafetyDesc =>
+      'Never enter unsafe areas or work beyond assigned scope. Emergency numbers remain accessible offline.';
+
+  @override
+  String get profileEmergencyHelpline => 'Emergency Dispatch: 112';
+
+  @override
+  String get profileVersionLabel => 'Evora-Workers v1.0.0 • Phase 1 Baseline';
+}

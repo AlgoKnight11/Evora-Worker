@@ -1,0 +1,128 @@
+{
+  "@@locale": "en",
+  "appTitle": "Evora-Workers",
+  "@appTitle": {
+    "description": "Display name of the EVORA Field Worker Portal"
+  },
+  "appSubtitle": "Field Operations Portal",
+  "brandTagline": "Greener Choices. Healthier Cities.",
+
+  "languageSelectTitle": "Choose Your Language",
+  "languageSelectSubtitle": "Select your preferred language for Evora-Workers. You can change this anytime in Profile & Help.",
+  "languageEnglish": "English",
+  "languageEnglishSub": "Continue in English",
+  "languageHindi": "हिन्दी",
+  "languageHindiSub": "हिन्दी में जारी रखें",
+  "languageContinue": "Continue",
+  "languageSettingsTitle": "App Language",
+  "languageSettingsSubtitle": "Switch between English and Hindi",
+  "languageChangedNotice": "Language switched to {language}",
+  "@languageChangedNotice": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+
+  "navOverview": "Overview",
+  "navOverviewFull": "My Overview",
+  "navTasks": "Tasks",
+  "navTasksFull": "My Tasks",
+  "navMap": "Map",
+  "navMapFull": "Task Map",
+  "navNotifications": "Alerts",
+  "navNotificationsFull": "Notifications",
+  "navHistory": "History",
+  "navHistoryFull": "Task History",
+  "navProfile": "Profile",
+  "navProfileFull": "Profile & Help",
+
+  "syncOnline": "Online",
+  "syncOffline": "Offline",
+  "syncSyncing": "Syncing...",
+  "syncPendingCount": "{count} pending",
+  "@syncPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncLastUpdated": "Last synced {time}",
+  "@syncLastUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+
+  "statusAssigned": "Assigned",
+  "statusAccepted": "Accepted",
+  "statusInProgress": "In Progress",
+  "statusBlocked": "Blocked",
+  "statusSubmittedForReview": "Pending Review",
+  "statusReturned": "Returned",
+  "statusApproved": "Approved",
+  "statusCancelled": "Cancelled",
+  "statusReassigned": "Reassigned",
+
+  "priorityP1": "P1 Critical",
+  "priorityP2": "P2 High",
+  "priorityP3": "P3 Normal",
+  "priorityP4": "P4 Low",
+
+  "stateLoadingTitle": "Loading data...",
+  "stateLoadingSubtitle": "Fetching your latest municipal task updates.",
+  "stateEmptyTitle": "Nothing here yet",
+  "stateEmptySubtitle": "Assigned items will appear here once dispatched.",
+  "stateErrorTitle": "Something went wrong",
+  "stateErrorSubtitle": "Unable to load records right now. Please try again.",
+  "stateOfflineTitle": "Working offline",
+  "stateOfflineSubtitle": "Showing authorized cached data. Actions will sync automatically once reconnected.",
+  "statePermissionDeniedTitle": "Access restricted",
+  "statePermissionDeniedSubtitle": "You do not have permission to view this scope. Contact your supervisor.",
+  "stateStaleDataTitle": "Cached snapshot",
+  "stateStaleDataSubtitle": "Data may be outdated. Pull to refresh when online.",
+  "actionRetry": "Retry",
+  "actionRefresh": "Refresh",
+
+  "overviewGreeting": "Ready for field duty",
+  "overviewTodayTasks": "Today's Tasks",
+  "overviewUrgentWork": "Urgent / P1",
+  "overviewOverdueTasks": "Overdue",
+  "overviewPendingSync": "Pending Sync",
+  "overviewNoticesTitle": "Operational Notices",
+  "overviewNoticesEmpty": "No active operational notices for your ward or team.",
+  "overviewPhaseBanner": "Phase 1 Foundation Ready — Live task queues & OTP auth connect in Phases 2–3.",
+
+  "tasksSubtitle": "Assigned, accepted, in-progress, blocked, and pending-review work",
+  "tasksFilterAll": "All",
+  "tasksFilterIndividual": "My Assigned",
+  "tasksFilterTeamPool": "Team Pool",
+  "tasksEmptyTitle": "No active tasks in your queue",
+  "tasksEmptySubtitle": "Tasks assigned to you or your crew pool will appear here once authenticated.",
+
+  "mapSubtitle": "Assigned task pins, approved service area, and offline navigation fallback",
+  "mapServiceAreaLabel": "Approved Service Area",
+  "mapOfflineFallbackTitle": "Offline Navigation Support",
+  "mapOfflineFallbackDesc": "In-app map, external directions link, and textual landmark directions will load here.",
+
+  "notificationsSubtitle": "New assignments, SLA reminders, supervisor feedback, and schedule changes",
+  "notificationsEmptyTitle": "All caught up",
+  "notificationsEmptySubtitle": "You have no unread dispatch alerts or supervisor review messages.",
+
+  "historySubtitle": "Completed, returned, reassigned, and cancelled tasks",
+  "historyEmptyTitle": "No task history yet",
+  "historyEmptySubtitle": "Past outcomes and supervisor feedback will appear here after your first completion.",
+
+  "profileDepartmentLabel": "Department & Team",
+  "profileDepartmentPending": "Assigned after OTP login (Phase 2)",
+  "profileSupervisorLabel": "Supervisor & Support",
+  "profileSupervisorPending": "Configured per municipal tenant",
+  "profileSafetyTitle": "Field Safety & Emergency",
+  "profileSafetyDesc": "Never enter unsafe areas or work beyond assigned scope. Emergency numbers remain accessible offline.",
+  "profileEmergencyHelpline": "Emergency Dispatch: 112",
+  "profileVersionLabel": "Evora-Workers v1.0.0 • Phase 1 Baseline"
+}

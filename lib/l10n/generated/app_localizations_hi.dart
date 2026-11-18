@@ -1,0 +1,300 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Hindi (`hi`).
+class AppLocalizationsHi extends AppLocalizations {
+  AppLocalizationsHi([String locale = 'hi']) : super(locale);
+
+  @override
+  String get appTitle => 'Evora-Workers';
+
+  @override
+  String get appSubtitle => 'फील्ड संचालन पोर्टल';
+
+  @override
+  String get brandTagline => 'हरित विकल्प। स्वस्थ शहर।';
+
+  @override
+  String get languageSelectTitle => 'अपनी भाषा चुनें';
+
+  @override
+  String get languageSelectSubtitle =>
+      'Evora-Workers के लिए अपनी पसंदीदा भाषा चुनें। आप इसे कभी भी प्रोफ़ाइल और सहायता में बदल सकते हैं।';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageEnglishSub => 'Continue in English';
+
+  @override
+  String get languageHindi => 'हिन्दी';
+
+  @override
+  String get languageHindiSub => 'हिन्दी में जारी रखें';
+
+  @override
+  String get languageContinue => 'जारी रखें';
+
+  @override
+  String get languageSettingsTitle => 'ऐप की भाषा';
+
+  @override
+  String get languageSettingsSubtitle => 'अंग्रेज़ी और हिन्दी के बीच बदलें';
+
+  @override
+  String languageChangedNotice(String language) {
+    return 'भाषा $language में बदल दी गई है';
+  }
+
+  @override
+  String get navOverview => 'अवलोकन';
+
+  @override
+  String get navOverviewFull => 'मेरा अवलोकन';
+
+  @override
+  String get navTasks => 'कार्य';
+
+  @override
+  String get navTasksFull => 'मेरे कार्य';
+
+  @override
+  String get navMap => 'मानचित्र';
+
+  @override
+  String get navMapFull => 'कार्य मानचित्र';
+
+  @override
+  String get navNotifications => 'सूचनाएँ';
+
+  @override
+  String get navNotificationsFull => 'सूचनाएँ';
+
+  @override
+  String get navHistory => 'इतिहास';
+
+  @override
+  String get navHistoryFull => 'कार्य इतिहास';
+
+  @override
+  String get navProfile => 'प्रोफ़ाइल';
+
+  @override
+  String get navProfileFull => 'प्रोफ़ाइल और सहायता';
+
+  @override
+  String get syncOnline => 'ऑनलाइन';
+
+  @override
+  String get syncOffline => 'ऑफ़लाइन';
+
+  @override
+  String get syncSyncing => 'सिंक हो रहा है...';
+
+  @override
+  String syncPendingCount(int count) {
+    return '$count लंबित';
+  }
+
+  @override
+  String syncLastUpdated(String time) {
+    return 'अंतिम सिंक $time';
+  }
+
+  @override
+  String get statusAssigned => 'आवंटित';
+
+  @override
+  String get statusAccepted => 'स्वीकृत';
+
+  @override
+  String get statusInProgress => 'प्रगति पर';
+
+  @override
+  String get statusBlocked => 'अवरुद्ध';
+
+  @override
+  String get statusSubmittedForReview => 'समीक्षा हेतु लंबित';
+
+  @override
+  String get statusReturned => 'वापस भेजा गया';
+
+  @override
+  String get statusApproved => 'अनुमोदित';
+
+  @override
+  String get statusCancelled => 'रद्द';
+
+  @override
+  String get statusReassigned => 'पुनः आवंटित';
+
+  @override
+  String get priorityP1 => 'P1 अति आवश्यक';
+
+  @override
+  String get priorityP2 => 'P2 उच्च';
+
+  @override
+  String get priorityP3 => 'P3 सामान्य';
+
+  @override
+  String get priorityP4 => 'P4 निम्न';
+
+  @override
+  String get stateLoadingTitle => 'डेटा लोड हो रहा है...';
+
+  @override
+  String get stateLoadingSubtitle =>
+      'आपके नवीनतम नगरपालिका कार्य अपडेट प्राप्त किए जा रहे हैं।';
+
+  @override
+  String get stateEmptyTitle => 'यहाँ अभी कुछ नहीं है';
+
+  @override
+  String get stateEmptySubtitle => 'कार्य आवंटित होने पर वे यहाँ दिखाई देंगे।';
+
+  @override
+  String get stateErrorTitle => 'कुछ गड़बड़ हो गई';
+
+  @override
+  String get stateErrorSubtitle =>
+      'अभी रिकॉर्ड लोड नहीं हो सके। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get stateOfflineTitle => 'ऑफ़लाइन कार्य मोड';
+
+  @override
+  String get stateOfflineSubtitle =>
+      'अधिकृत कैश डेटा दिखाया जा रहा है। नेटवर्क आने पर कार्य स्वतः सिंक हो जाएंगे।';
+
+  @override
+  String get statePermissionDeniedTitle => 'पहुँच प्रतिबंधित';
+
+  @override
+  String get statePermissionDeniedSubtitle =>
+      'आपको इस क्षेत्र को देखने की अनुमति नहीं है। अपने सुपरवाइज़र से संपर्क करें।';
+
+  @override
+  String get stateStaleDataTitle => 'कैश किया गया डेटा';
+
+  @override
+  String get stateStaleDataSubtitle =>
+      'डेटा पुराना हो सकता है। ऑनलाइन होने पर रीफ़्रेश करें।';
+
+  @override
+  String get actionRetry => 'पुनः प्रयास करें';
+
+  @override
+  String get actionRefresh => 'रीफ़्रेश करें';
+
+  @override
+  String get overviewGreeting => 'फील्ड ड्यूटी के लिए तैयार';
+
+  @override
+  String get overviewTodayTasks => 'आज के कार्य';
+
+  @override
+  String get overviewUrgentWork => 'तत्काल / P1';
+
+  @override
+  String get overviewOverdueTasks => 'अतिदेय';
+
+  @override
+  String get overviewPendingSync => 'सिंक लंबित';
+
+  @override
+  String get overviewNoticesTitle => 'संचालन सूचनाएँ';
+
+  @override
+  String get overviewNoticesEmpty =>
+      'आपके वार्ड या टीम के लिए कोई सक्रिय सूचना नहीं है।';
+
+  @override
+  String get overviewPhaseBanner =>
+      'फ़ेज़ 1 आधार तैयार — लाइव कार्य कतार और OTP लॉगिन फ़ेज़ 2–3 में जुड़ेंगे।';
+
+  @override
+  String get tasksSubtitle =>
+      'आवंटित, स्वीकृत, प्रगति पर, अवरुद्ध और समीक्षा हेतु लंबित कार्य';
+
+  @override
+  String get tasksFilterAll => 'सभी';
+
+  @override
+  String get tasksFilterIndividual => 'मेरे आवंटित';
+
+  @override
+  String get tasksFilterTeamPool => 'टीम पूल';
+
+  @override
+  String get tasksEmptyTitle => 'आपकी कतार में कोई सक्रिय कार्य नहीं है';
+
+  @override
+  String get tasksEmptySubtitle =>
+      'सत्यापन के बाद आपको या आपकी टीम को सौंपे गए कार्य यहाँ दिखाई देंगे।';
+
+  @override
+  String get mapSubtitle =>
+      'आवंटित कार्य स्थान, स्वीकृत सेवा क्षेत्र और ऑफ़लाइन दिशा-निर्देश';
+
+  @override
+  String get mapServiceAreaLabel => 'स्वीकृत सेवा क्षेत्र';
+
+  @override
+  String get mapOfflineFallbackTitle => 'ऑफ़लाइन नेविगेशन सहायता';
+
+  @override
+  String get mapOfflineFallbackDesc =>
+      'इन-ऐप मानचित्र, बाहरी दिशा लिंक और ऑफ़लाइन पता विवरण यहाँ लोड होंगे।';
+
+  @override
+  String get notificationsSubtitle =>
+      'नए कार्य आवंटन, समय-सीमा अनुस्मारक और सुपरवाइज़र प्रतिक्रिया';
+
+  @override
+  String get notificationsEmptyTitle => 'सभी सूचनाएँ पढ़ ली गईं';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'आपके पास कोई अपठित कार्य सूचना या सुपरवाइज़र संदेश नहीं है।';
+
+  @override
+  String get historySubtitle =>
+      'पूर्ण, वापस किए गए, पुनः आवंटित और रद्द किए गए कार्य';
+
+  @override
+  String get historyEmptyTitle => 'अभी कोई कार्य इतिहास नहीं है';
+
+  @override
+  String get historyEmptySubtitle =>
+      'पहला कार्य पूर्ण करने के बाद पिछले परिणाम और सुपरवाइज़र प्रतिक्रिया यहाँ दिखाई देंगे।';
+
+  @override
+  String get profileDepartmentLabel => 'विभाग और टीम';
+
+  @override
+  String get profileDepartmentPending => 'OTP लॉगिन के बाद आवंटित (फ़ेज़ 2)';
+
+  @override
+  String get profileSupervisorLabel => 'सुपरवाइज़र और सहायता';
+
+  @override
+  String get profileSupervisorPending => 'नगरपालिका द्वारा निर्धारित';
+
+  @override
+  String get profileSafetyTitle => 'फील्ड सुरक्षा और आपातकाल';
+
+  @override
+  String get profileSafetyDesc =>
+      'असुरक्षित क्षेत्रों में न जाएँ और निर्धारित कार्य-क्षेत्र से बाहर कार्य न करें। आपातकालीन नंबर ऑफ़लाइन भी उपलब्ध हैं।';
+
+  @override
+  String get profileEmergencyHelpline => 'आपातकालीन सहायता: 112';
+
+  @override
+  String get profileVersionLabel => 'Evora-Workers v1.0.0 • फ़ेज़ 1 आधार';
+}
