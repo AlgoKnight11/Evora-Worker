@@ -49,7 +49,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Navigate to OTP verify only when code transition actually happens
     ref.listen<AuthState>(authNotifierProvider, (prev, next) {
       if (prev?.status != AuthStatus.otpSent && next.status == AuthStatus.otpSent) {
-        context.push(WorkerRoutes.otpVerify);
+        context.go(WorkerRoutes.otpVerify);
       }
     });
 
@@ -225,7 +225,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           side: BorderSide(
                             color: EvoraColors.emeraldAccent.withValues(alpha: 0.3),
                           ),
-                          onPressed: authState.isBusy ? null : _fillTestNumber,
+                          onPressed: (authState.isBusy ||
+                                  authState.status == AuthStatus.otpSent)
+                              ? null
+                              : _fillTestNumber,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -264,7 +267,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       SizedBox(
                         height: AppConstants.minTouchTargetSize,
                         child: ElevatedButton(
-                          onPressed: authState.isBusy ? null : _onGetOtpPressed,
+                          onPressed: (authState.isBusy ||
+                                  authState.status == AuthStatus.otpSent)
+                              ? null
+                              : _onGetOtpPressed,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: EvoraColors.pinePrimary,
                             foregroundColor: Colors.white,

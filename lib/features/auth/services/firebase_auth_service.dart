@@ -65,6 +65,14 @@ class FirebaseAuthService implements AuthRepository {
     int? forceResendingToken,
   }) async {
     final e164Phone = normalizePhoneNumber(phoneNumber);
+    bool codeSentDispatched = false;
+
+    void safeOnCodeSent(String verificationId, int? resendToken) {
+      if (!codeSentDispatched) {
+        codeSentDispatched = true;
+        onCodeSent(verificationId, resendToken);
+      }
+    }
 
     try {
       await _auth.verifyPhoneNumber(
@@ -80,13 +88,13 @@ class FirebaseAuthService implements AuthRepository {
           // If this is the test number (9999999999), and Google API Key restriction blocks com.evora.evora_workers,
           // gracefully fallback so developer testing is never blocked.
           if (e164Phone.contains('9999999999')) {
-            onCodeSent('test-verification-id-9999999999', null);
+            safeOnCodeSent('test-verification-id-9999999999', null);
             return;
           }
           onError(e.message ?? 'SMS verification failed. Check phone number.');
         },
         codeSent: (String verificationId, int? resendToken) {
-          onCodeSent(verificationId, resendToken);
+          safeOnCodeSent(verificationId, resendToken);
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           // Timeout reached for auto retrieval; user can still enter code manually
@@ -94,7 +102,7 @@ class FirebaseAuthService implements AuthRepository {
       );
     } catch (e) {
       if (e164Phone.contains('9999999999')) {
-        onCodeSent('test-verification-id-9999999999', null);
+        safeOnCodeSent('test-verification-id-9999999999', null);
         return;
       }
       onError(e.toString());

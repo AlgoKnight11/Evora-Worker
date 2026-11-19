@@ -37,7 +37,7 @@ class _OtpVerificationScreenState
 
   void _onEditPhonePressed() {
     ref.read(authNotifierProvider.notifier).resetToPhoneInput();
-    context.pop();
+    context.go(WorkerRoutes.login);
   }
 
   @override
@@ -72,17 +72,24 @@ class _OtpVerificationScreenState
       }
     });
 
-    return Scaffold(
-      backgroundColor: EvoraColors.cloudSurface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: EvoraColors.slateCharcoal),
-          onPressed: _onEditPhonePressed,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          _onEditPhonePressed();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: EvoraColors.cloudSurface,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: EvoraColors.slateCharcoal),
+            onPressed: _onEditPhonePressed,
+          ),
         ),
-      ),
-      body: SafeArea(
+        body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
@@ -301,8 +308,9 @@ class _OtpVerificationScreenState
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 /// Isolated sub-widget that rebuilds on countdown ticks without affecting
