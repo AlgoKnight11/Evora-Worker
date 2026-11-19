@@ -43,23 +43,32 @@ class _OtpVerificationScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final authState = ref.watch(authNotifierProvider);
-    final phoneNumber = authState.phoneNumber ?? '';
+    // Granular selectors so 1-second countdown ticks do NOT rebuild this screen or dismiss keyboard
+    final phoneNumber =
+        ref.watch(authNotifierProvider.select((s) => s.phoneNumber ?? ''));
+    final isBusy =
+        ref.watch(authNotifierProvider.select((s) => s.isBusy));
+    final isVerifying =
+        ref.watch(authNotifierProvider.select((s) => s.status == AuthStatus.verifying));
+    final errorMessage =
+        ref.watch(authNotifierProvider.select((s) => s.errorMessage));
     final isTestNumber = phoneNumber.contains('9999999999');
 
-    // Handle unregistered worker modal
+    // Handle unregistered worker modal & authentication transitions only on real status changes
     ref.listen<AuthState>(authNotifierProvider, (prev, next) {
-      if (next.status == AuthStatus.unregisteredWorker) {
-        UnregisteredWorkerDialog.show(
-          context,
-          phoneNumber: phoneNumber,
-          onDismiss: () {
-            ref.read(authNotifierProvider.notifier).resetToPhoneInput();
-            context.go(WorkerRoutes.login);
-          },
-        );
-      } else if (next.status == AuthStatus.authenticated) {
-        context.go(WorkerRoutes.overview);
+      if (prev?.status != next.status) {
+        if (next.status == AuthStatus.unregisteredWorker) {
+          UnregisteredWorkerDialog.show(
+            context,
+            phoneNumber: phoneNumber,
+            onDismiss: () {
+              ref.read(authNotifierProvider.notifier).resetToPhoneInput();
+              context.go(WorkerRoutes.login);
+            },
+          );
+        } else if (next.status == AuthStatus.authenticated) {
+          context.go(WorkerRoutes.overview);
+        }
       }
     });
 
@@ -196,10 +205,10 @@ class _OtpVerificationScreenState
                         const SizedBox(height: 18),
                       ],
 
-                      // 6-digit numeric PIN input
+                      // 6-digit numeric PIN input (stable, never rebuilt by timer)
                       NumericPinInput(
                         length: 6,
-                        enabled: !authState.isBusy,
+                        enabled: !isBusy,
                         onChanged: (pin) {
                           setState(() {
                             _enteredOtp = pin;
@@ -214,35 +223,12 @@ class _OtpVerificationScreenState
                       ),
                       const SizedBox(height: 20),
 
-                      // Resend countdown timer or button
-                      Center(
-                        child: authState.resendCountdown > 0
-                            ? Text(
-                                l10n?.authResendIn(authState.resendCountdown) ??
-                                    'Resend OTP in ${authState.resendCountdown}s',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: EvoraColors.slateMuted,
-                                ),
-                              )
-                            : TextButton(
-                                onPressed:
-                                    authState.canResendOtp ? _onResendPressed : null,
-                                child: Text(
-                                  l10n?.authResendButton ?? 'Resend OTP Code',
-                                  style: const TextStyle(
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: EvoraColors.pinePrimary,
-                                  ),
-                                ),
-                              ),
-                      ),
+                      // Isolated Resend countdown timer (only this sub-tree rebuilds every second)
+                      _ResendCountdownSection(onResendPressed: _onResendPressed),
                       const SizedBox(height: 16),
 
                       // Error banner if any
-                      if (authState.errorMessage != null) ...[
+                      if (errorMessage != null) ...[
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
@@ -257,7 +243,7 @@ class _OtpVerificationScreenState
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  authState.errorMessage!,
+                                  errorMessage,
                                   style: TextStyle(
                                     fontSize: 12.5,
                                     color: Colors.red.shade900,
@@ -275,8 +261,7 @@ class _OtpVerificationScreenState
                       SizedBox(
                         height: AppConstants.minTouchTargetSize,
                         child: ElevatedButton(
-                          onPressed: (_enteredOtp.trim().length == 6 &&
-                                  !authState.isBusy)
+                          onPressed: (_enteredOtp.trim().length == 6 && !isBusy)
                               ? _onVerifyPressed
                               : null,
                           style: ElevatedButton.styleFrom(
@@ -289,7 +274,7 @@ class _OtpVerificationScreenState
                             ),
                             elevation: 0,
                           ),
-                          child: authState.status == AuthStatus.verifying
+                          child: isVerifying
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
@@ -316,6 +301,46 @@ class _OtpVerificationScreenState
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Isolated sub-widget that rebuilds on countdown ticks without affecting
+/// the parent OtpVerificationScreen or the active keyboard input focus.
+class _ResendCountdownSection extends ConsumerWidget {
+  final VoidCallback onResendPressed;
+
+  const _ResendCountdownSection({required this.onResendPressed});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final countdown =
+        ref.watch(authNotifierProvider.select((s) => s.resendCountdown));
+    final canResend =
+        ref.watch(authNotifierProvider.select((s) => s.canResendOtp));
+
+    return Center(
+      child: countdown > 0
+          ? Text(
+              l10n?.authResendIn(countdown) ?? 'Resend OTP in ${countdown}s',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: EvoraColors.slateMuted,
+              ),
+            )
+          : TextButton(
+              onPressed: canResend ? onResendPressed : null,
+              child: Text(
+                l10n?.authResendButton ?? 'Resend OTP Code',
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  color: EvoraColors.pinePrimary,
+                ),
+              ),
+            ),
     );
   }
 }

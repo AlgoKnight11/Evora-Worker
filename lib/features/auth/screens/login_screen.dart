@@ -46,9 +46,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = AppLocalizations.of(context);
     final authState = ref.watch(authNotifierProvider);
 
-    // Navigate to OTP verify when code is sent
+    // Navigate to OTP verify only when code transition actually happens
     ref.listen<AuthState>(authNotifierProvider, (prev, next) {
-      if (next.status == AuthStatus.otpSent) {
+      if (prev?.status != AuthStatus.otpSent && next.status == AuthStatus.otpSent) {
         context.push(WorkerRoutes.otpVerify);
       }
     });

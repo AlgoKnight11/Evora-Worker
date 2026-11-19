@@ -25,6 +25,7 @@ class NumericPinInput extends StatefulWidget {
 class _NumericPinInputState extends State<NumericPinInput> {
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
+  late final List<FocusNode> _keyboardFocusNodes;
 
   @override
   void initState() {
@@ -37,6 +38,10 @@ class _NumericPinInputState extends State<NumericPinInput> {
       widget.length,
       (_) => FocusNode(),
     );
+    _keyboardFocusNodes = List.generate(
+      widget.length,
+      (_) => FocusNode(),
+    );
   }
 
   @override
@@ -45,6 +50,9 @@ class _NumericPinInputState extends State<NumericPinInput> {
       c.dispose();
     }
     for (final f in _focusNodes) {
+      f.dispose();
+    }
+    for (final f in _keyboardFocusNodes) {
       f.dispose();
     }
     super.dispose();
@@ -108,7 +116,7 @@ class _NumericPinInputState extends State<NumericPinInput> {
           width: 48,
           height: 56,
           child: KeyboardListener(
-            focusNode: FocusNode(),
+            focusNode: _keyboardFocusNodes[index],
             onKeyEvent: (event) => _handleBackspace(index, event),
             child: TextField(
               controller: _controllers[index],
