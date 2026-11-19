@@ -3,6 +3,7 @@ class AppConstants {
   AppConstants._();
 
   static const String appName = 'Evora-Workers';
+  static const String defaultTenantId = 'tenant-shimla-01';
 
   // Local persistence keys (SharedPreferences)
   static const String prefLocaleCode = 'evora_workers_locale_code';

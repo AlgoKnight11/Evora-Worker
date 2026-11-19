@@ -296,5 +296,87 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileEmergencyHelpline => 'आपातकालीन सहायता: 112';
 
   @override
-  String get profileVersionLabel => 'Evora-Workers v1.0.0 • फ़ेज़ 1 आधार';
+  String get profileVersionLabel => 'Evora-Workers v1.0.0 • फ़ेज़ 2 उत्पादन';
+
+  @override
+  String get authLoginTitle => 'नगर निगम फ़ील्ड कार्यकर्ता साइन इन';
+
+  @override
+  String get authLoginSubtitle =>
+      'सुरक्षित लॉगिन ओटीपी प्राप्त करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें।';
+
+  @override
+  String get authPhoneLabel => 'मोबाइल नंबर';
+
+  @override
+  String get authPhoneHint => '98765 43210';
+
+  @override
+  String get authGetOtp => 'सत्यापन ओटीपी प्राप्त करें';
+
+  @override
+  String get authSendingOtp => 'एसएमएस ओटीपी भेजा जा रहा है...';
+
+  @override
+  String get authTestChip => 'त्वरित परीक्षण कार्यकर्ता (9999999999)';
+
+  @override
+  String get authRestrictedNotice =>
+      'केवल अधिकृत नगर निगम कर्मचारी • स्व-पंजीकरण अक्षम है।';
+
+  @override
+  String get authVerifyTitle => 'एकमुश्त पासवर्ड सत्यापित करें';
+
+  @override
+  String authVerifySubtitle(String phone) {
+    return '$phone पर भेजा गया 6-अंकीय कोड दर्ज करें';
+  }
+
+  @override
+  String get authEditPhone => 'फ़ोन नंबर बदलें';
+
+  @override
+  String get authVerifyButton => 'सत्यापित करें और साइन इन करें';
+
+  @override
+  String get authVerifying => 'पहचान सत्यापित की जा रही है...';
+
+  @override
+  String authResendIn(int seconds) {
+    return '${seconds}s में पुनः भेजें';
+  }
+
+  @override
+  String get authResendButton => 'ओटीपी कोड पुनः भेजें';
+
+  @override
+  String get authTestModeBanner =>
+      'परीक्षण मोड: सत्यापन कोड 123456 का उपयोग करें';
+
+  @override
+  String get authUnregisteredTitle => 'पहुंच प्रतिबंधित: पंजीकृत नहीं है';
+
+  @override
+  String authUnregisteredMessage(String phone) {
+    return 'मोबाइल नंबर $phone नगर निगम फ़ील्ड रिकॉर्ड में सूचीबद्ध नहीं है। अपना खाता सक्रिय करने के लिए अपने सुपरवाइज़र से संपर्क करें।';
+  }
+
+  @override
+  String get authCallSupervisor => 'नगर निगम हेल्पलाइन पर कॉल करें';
+
+  @override
+  String get authBackToLogin => 'साइन इन पर वापस जाएँ';
+
+  @override
+  String get authSignOut => 'साइन आउट';
+
+  @override
+  String get authSignOutConfirmTitle => 'साइन आउट की पुष्टि करें';
+
+  @override
+  String get authSignOutConfirmMessage =>
+      'क्या आप वाकई साइन आउट करना चाहते हैं? इस डिवाइस पर आपका सत्र समाप्त हो जाएगा।';
+
+  @override
+  String get authCancel => 'रद्द करें';
 }

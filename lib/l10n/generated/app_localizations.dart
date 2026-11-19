@@ -629,8 +629,152 @@ abstract class AppLocalizations {
   /// No description provided for @profileVersionLabel.
   ///
   /// In en, this message translates to:
-  /// **'Evora-Workers v1.0.0 • Phase 1 Baseline'**
+  /// **'Evora-Workers v1.0.0 • Phase 2 Production'**
   String get profileVersionLabel;
+
+  /// No description provided for @authLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Municipal Field Worker Sign In'**
+  String get authLoginTitle;
+
+  /// No description provided for @authLoginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your registered mobile number to receive a secure login OTP.'**
+  String get authLoginSubtitle;
+
+  /// No description provided for @authPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Number'**
+  String get authPhoneLabel;
+
+  /// No description provided for @authPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'98765 43210'**
+  String get authPhoneHint;
+
+  /// No description provided for @authGetOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Verification OTP'**
+  String get authGetOtp;
+
+  /// No description provided for @authSendingOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending SMS OTP...'**
+  String get authSendingOtp;
+
+  /// No description provided for @authTestChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Test Worker (9999999999)'**
+  String get authTestChip;
+
+  /// No description provided for @authRestrictedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Authorized Municipal Staff Only • Self-registration is disabled.'**
+  String get authRestrictedNotice;
+
+  /// No description provided for @authVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify One-Time Password'**
+  String get authVerifyTitle;
+
+  /// No description provided for @authVerifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code sent to {phone}'**
+  String authVerifySubtitle(String phone);
+
+  /// No description provided for @authEditPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Phone Number'**
+  String get authEditPhone;
+
+  /// No description provided for @authVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify & Sign In'**
+  String get authVerifyButton;
+
+  /// No description provided for @authVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying Identity...'**
+  String get authVerifying;
+
+  /// No description provided for @authResendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP in {seconds}s'**
+  String authResendIn(int seconds);
+
+  /// No description provided for @authResendButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP Code'**
+  String get authResendButton;
+
+  /// No description provided for @authTestModeBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Mode: Use verification code 123456'**
+  String get authTestModeBanner;
+
+  /// No description provided for @authUnregisteredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Restricted: Not Provisioned'**
+  String get authUnregisteredTitle;
+
+  /// No description provided for @authUnregisteredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The mobile number {phone} is not listed in municipal field records. Contact your supervisor to activate your account.'**
+  String authUnregisteredMessage(String phone);
+
+  /// No description provided for @authCallSupervisor.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Municipal Helpline'**
+  String get authCallSupervisor;
+
+  /// No description provided for @authBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Sign In'**
+  String get authBackToLogin;
+
+  /// No description provided for @authSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get authSignOut;
+
+  /// No description provided for @authSignOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Sign Out'**
+  String get authSignOutConfirmTitle;
+
+  /// No description provided for @authSignOutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out? Your session on this device will end.'**
+  String get authSignOutConfirmMessage;
+
+  /// No description provided for @authCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get authCancel;
 }
 
 class _AppLocalizationsDelegate

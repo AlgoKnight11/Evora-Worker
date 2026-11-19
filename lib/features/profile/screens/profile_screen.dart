@@ -4,9 +4,10 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/localization/locale_provider.dart';
 import '../../../core/theme/evora_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../auth/providers/auth_provider.dart';
 
-/// Profile & Help (`/profile`): Worker details, runtime Hindi/English switcher,
-/// supervisor contact, and offline-accessible safety & emergency dispatch guidance.
+/// Profile & Help (`/profile`): Worker identity, department and ward assignments,
+/// runtime Hindi/English switcher, emergency guidance, and secure sign-out.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -30,16 +31,86 @@ class ProfileScreen extends ConsumerWidget {
       );
   }
 
+  void _showSignOutDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          l10n?.authSignOutConfirmTitle ?? 'Confirm Sign Out',
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: EvoraColors.slateCharcoal,
+          ),
+        ),
+        content: Text(
+          l10n?.authSignOutConfirmMessage ??
+              'Are you sure you want to sign out? Your session on this device will end.',
+          style: const TextStyle(
+            fontSize: 14,
+            color: EvoraColors.slateMuted,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              l10n?.authCancel ?? 'Cancel',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: EvoraColors.slateMuted,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              ref.read(authNotifierProvider.notifier).signOut();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              l10n?.authSignOut ?? 'Sign Out',
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final localeState = ref.watch(localeProvider);
+    final authState = ref.watch(authNotifierProvider);
+    final profile = authState.profile;
+
+    final displayName = profile?.displayName ?? 'Field Worker';
+    final employeeCode = profile?.employeeCode ?? 'EVR-MUNICIPAL';
+    final department = profile?.departmentName ??
+        profile?.departmentId ??
+        l10n.profileDepartmentPending;
+    final crew = profile?.teamName ?? profile?.teamId ?? 'Municipal Quick Response';
+    final supervisor = profile?.supervisorName ?? l10n.profileSupervisorPending;
+    final supervisorPhone = profile?.supervisorPhone ?? '112';
+    final serviceAreas = (profile?.authorizedServiceAreaIds.isNotEmpty == true)
+        ? profile!.authorizedServiceAreaIds.join(', ')
+        : 'Assigned Municipal Wards';
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        // Worker Brand & Identity Card
+        // Worker Identity Card
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -48,8 +119,8 @@ class ProfileScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Container(
-                      width: 52,
-                      height: 52,
+                      width: 56,
+                      height: 56,
                       decoration: const BoxDecoration(
                         color: EvoraColors.successContainer,
                         shape: BoxShape.circle,
@@ -62,6 +133,7 @@ class ProfileScreen extends ConsumerWidget {
                           errorBuilder: (_, _, _) => const Icon(
                             Icons.person_rounded,
                             color: EvoraColors.primary,
+                            size: 28,
                           ),
                         ),
                       ),
@@ -71,17 +143,44 @@ class ProfileScreen extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            AppConstants.appName,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  displayName,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: EvoraColors.emeraldAccent.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text(
+                                  'ACTIVE',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                    color: EvoraColors.pinePrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            l10n.appSubtitle,
+                            'ID: $employeeCode • ${profile?.phoneNumber ?? ""}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: EvoraColors.onSurfaceVariant,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
@@ -91,15 +190,21 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 const Divider(height: 24),
                 _InfoRow(
-                  icon: Icons.groups_outlined,
+                  icon: Icons.business_outlined,
                   label: l10n.profileDepartmentLabel,
-                  value: l10n.profileDepartmentPending,
+                  value: '$department ($crew)',
+                ),
+                const SizedBox(height: 12),
+                _InfoRow(
+                  icon: Icons.map_outlined,
+                  label: 'Authorized Service Area',
+                  value: serviceAreas,
                 ),
                 const SizedBox(height: 12),
                 _InfoRow(
                   icon: Icons.support_agent_rounded,
                   label: l10n.profileSupervisorLabel,
-                  value: l10n.profileSupervisorPending,
+                  value: '$supervisor ($supervisorPhone)',
                 ),
               ],
             ),
@@ -178,7 +283,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
 
-        // Field Safety & Offline Emergency Guidance Card (Always Accessible)
+        // Field Safety & Offline Emergency Guidance Card
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -248,7 +353,31 @@ class ProfileScreen extends ConsumerWidget {
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
+
+        // Sign Out Button
+        SizedBox(
+          height: AppConstants.minTouchTargetSize,
+          child: OutlinedButton.icon(
+            onPressed: () => _showSignOutDialog(context, ref),
+            icon: const Icon(Icons.logout_rounded, color: Colors.red),
+            label: Text(
+              l10n.authSignOut,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Colors.red,
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Colors.red.shade300),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
 
         Text(
           l10n.profileVersionLabel,

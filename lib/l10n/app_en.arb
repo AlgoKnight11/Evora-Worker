@@ -124,5 +124,51 @@
   "profileSafetyTitle": "Field Safety & Emergency",
   "profileSafetyDesc": "Never enter unsafe areas or work beyond assigned scope. Emergency numbers remain accessible offline.",
   "profileEmergencyHelpline": "Emergency Dispatch: 112",
-  "profileVersionLabel": "Evora-Workers v1.0.0 • Phase 1 Baseline"
+  "profileVersionLabel": "Evora-Workers v1.0.0 • Phase 2 Production",
+
+  "authLoginTitle": "Municipal Field Worker Sign In",
+  "authLoginSubtitle": "Enter your registered mobile number to receive a secure login OTP.",
+  "authPhoneLabel": "Mobile Number",
+  "authPhoneHint": "98765 43210",
+  "authGetOtp": "Get Verification OTP",
+  "authSendingOtp": "Sending SMS OTP...",
+  "authTestChip": "Quick Test Worker (9999999999)",
+  "authRestrictedNotice": "Authorized Municipal Staff Only • Self-registration is disabled.",
+  "authVerifyTitle": "Verify One-Time Password",
+  "authVerifySubtitle": "Enter the 6-digit code sent to {phone}",
+  "@authVerifySubtitle": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authEditPhone": "Change Phone Number",
+  "authVerifyButton": "Verify & Sign In",
+  "authVerifying": "Verifying Identity...",
+  "authResendIn": "Resend OTP in {seconds}s",
+  "@authResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResendButton": "Resend OTP Code",
+  "authTestModeBanner": "Test Mode: Use verification code 123456",
+  "authUnregisteredTitle": "Access Restricted: Not Provisioned",
+  "authUnregisteredMessage": "The mobile number {phone} is not listed in municipal field records. Contact your supervisor to activate your account.",
+  "@authUnregisteredMessage": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authCallSupervisor": "Call Municipal Helpline",
+  "authBackToLogin": "Back to Sign In",
+  "authSignOut": "Sign Out",
+  "authSignOutConfirmTitle": "Confirm Sign Out",
+  "authSignOutConfirmMessage": "Are you sure you want to sign out? Your session on this device will end.",
+  "authCancel": "Cancel"
 }

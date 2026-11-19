@@ -10,6 +10,7 @@ abstract class AuthRepository {
   Future<WorkerProfile> verifyOtp({
     required String phoneNumber,
     required String otpCode,
+    String? verificationId,
   });
 
   /// Verifies server-side tenant membership and active status (immediate revocation check).

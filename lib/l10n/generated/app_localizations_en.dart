@@ -297,5 +297,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEmergencyHelpline => 'Emergency Dispatch: 112';
 
   @override
-  String get profileVersionLabel => 'Evora-Workers v1.0.0 • Phase 1 Baseline';
+  String get profileVersionLabel => 'Evora-Workers v1.0.0 • Phase 2 Production';
+
+  @override
+  String get authLoginTitle => 'Municipal Field Worker Sign In';
+
+  @override
+  String get authLoginSubtitle =>
+      'Enter your registered mobile number to receive a secure login OTP.';
+
+  @override
+  String get authPhoneLabel => 'Mobile Number';
+
+  @override
+  String get authPhoneHint => '98765 43210';
+
+  @override
+  String get authGetOtp => 'Get Verification OTP';
+
+  @override
+  String get authSendingOtp => 'Sending SMS OTP...';
+
+  @override
+  String get authTestChip => 'Quick Test Worker (9999999999)';
+
+  @override
+  String get authRestrictedNotice =>
+      'Authorized Municipal Staff Only • Self-registration is disabled.';
+
+  @override
+  String get authVerifyTitle => 'Verify One-Time Password';
+
+  @override
+  String authVerifySubtitle(String phone) {
+    return 'Enter the 6-digit code sent to $phone';
+  }
+
+  @override
+  String get authEditPhone => 'Change Phone Number';
+
+  @override
+  String get authVerifyButton => 'Verify & Sign In';
+
+  @override
+  String get authVerifying => 'Verifying Identity...';
+
+  @override
+  String authResendIn(int seconds) {
+    return 'Resend OTP in ${seconds}s';
+  }
+
+  @override
+  String get authResendButton => 'Resend OTP Code';
+
+  @override
+  String get authTestModeBanner => 'Test Mode: Use verification code 123456';
+
+  @override
+  String get authUnregisteredTitle => 'Access Restricted: Not Provisioned';
+
+  @override
+  String authUnregisteredMessage(String phone) {
+    return 'The mobile number $phone is not listed in municipal field records. Contact your supervisor to activate your account.';
+  }
+
+  @override
+  String get authCallSupervisor => 'Call Municipal Helpline';
+
+  @override
+  String get authBackToLogin => 'Back to Sign In';
+
+  @override
+  String get authSignOut => 'Sign Out';
+
+  @override
+  String get authSignOutConfirmTitle => 'Confirm Sign Out';
+
+  @override
+  String get authSignOutConfirmMessage =>
+      'Are you sure you want to sign out? Your session on this device will end.';
+
+  @override
+  String get authCancel => 'Cancel';
 }

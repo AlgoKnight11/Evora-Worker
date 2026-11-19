@@ -52,4 +52,13 @@ class EvoraColors {
   static const Color infoBlueContainer = Color(0xFFDBEAFE);
   static const Color warningContainer = Color(0xFFFEF3C7);
   static const Color successContainer = Color(0xFFD1FAE5);
+
+  // Semantic Himalayan Modernism Aliases
+  static const Color pinePrimary = primary;
+  static const Color emeraldAccent = secondary;
+  static const Color amberAlert = warmOchre;
+  static const Color cloudSurface = surfaceContainerLow;
+  static const Color cloudBorder = outlineVariant;
+  static const Color slateCharcoal = onSurface;
+  static const Color slateMuted = onSurfaceVariant;
 }

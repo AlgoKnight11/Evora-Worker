@@ -7,6 +7,8 @@ import 'package:evora_workers/domain/models/safety_alert.dart';
 import 'package:evora_workers/domain/models/task_evidence.dart';
 import 'package:evora_workers/domain/models/worker_profile.dart';
 import 'package:evora_workers/domain/models/worker_task.dart';
+import 'package:evora_workers/features/auth/providers/auth_provider.dart';
+import 'package:evora_workers/features/auth/services/mock_auth_service.dart';
 import 'package:evora_workers/l10n/generated/app_localizations.dart';
 import 'package:evora_workers/main.dart';
 import 'package:flutter/material.dart';
@@ -217,9 +219,9 @@ void main() {
       expect(prefs.getString(AppConstants.prefLocaleCode), 'hi');
       expect(prefs.getBool(AppConstants.prefHasSelectedLanguage), isTrue);
 
-      // Navigated to My Overview in Hindi
-      expect(find.text('मेरा अवलोकन'), findsOneWidget);
-      expect(find.text('आज के कार्य'), findsOneWidget);
+      // With Phase 2 auth guards, navigates to Login in Hindi
+      expect(find.text('नगर निगम फ़ील्ड कार्यकर्ता साइन इन'), findsOneWidget);
+      expect(find.text('सत्यापन ओटीपी प्राप्त करें'), findsOneWidget);
     });
 
     testWidgets(
@@ -230,10 +232,18 @@ void main() {
         AppConstants.prefHasSelectedLanguage: true,
       });
       final prefs = await SharedPreferences.getInstance();
+      final testWorker = MockAuthService.mockDirectory['+919999999999']!;
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            authNotifierProvider.overrideWith((ref) {
+              final notifier = AuthNotifier(ref.watch(authRepositoryProvider));
+              notifier.setAuthenticatedWorker(testWorker);
+              return notifier;
+            }),
+          ],
           child: const EvoraWorkersApp(),
         ),
       );
