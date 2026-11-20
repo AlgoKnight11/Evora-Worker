@@ -35,11 +35,11 @@ class AppConstants {
   static const String logoFullAsset = 'assets/images/evora_worker_logo_light_transparent.png';
   static const String logoCroppedAsset = 'assets/images/evora_worker_logo_light_transparent.png';
   static const String logoDarkSurfaceAsset = 'assets/images/evora_worker_logo_dark_transparent.png';
-  static const String leafBadgeAsset = 'assets/images/evora_worker_badge_dark.png';
+  static const String leafBadgeAsset = 'assets/images/evora_worker_badge_round.png';
 
   // Dedicated worker app logo assets (featuring municipal engineering leaf + gear + wrench)
   static const String workerLogoDarkSurfaceAsset = 'assets/images/evora_worker_logo_dark_transparent.png';
   static const String workerLogoLightSurfaceAsset = 'assets/images/evora_worker_logo_light_transparent.png';
-  static const String workerBadgeDarkAsset = 'assets/images/evora_worker_badge_dark.png';
+  static const String workerBadgeDarkAsset = 'assets/images/evora_worker_badge_round.png';
   static const String workerBadgeLightAsset = 'assets/images/evora_worker_badge_light_transparent.png';
 }
