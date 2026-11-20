@@ -34,5 +34,6 @@ class AppConstants {
   // Brand logo asset paths (transparent, matched to EVORA Himalayan Modernism light UI)
   static const String logoFullAsset = 'assets/images/evora_logo_cropped_transparent.png';
   static const String logoCroppedAsset = 'assets/images/evora_logo_cropped_transparent.png';
+  static const String logoDarkSurfaceAsset = 'assets/images/evora_logo_transparent_clean.png';
   static const String leafBadgeAsset = 'assets/images/evora_leaf_badge.png';
 }

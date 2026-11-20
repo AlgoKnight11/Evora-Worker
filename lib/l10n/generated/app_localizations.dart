@@ -116,6 +116,24 @@ abstract class AppLocalizations {
   /// **'Greener Choices. Healthier Cities.'**
   String get brandTagline;
 
+  /// No description provided for @splashBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'MUNICIPAL FIELD OPERATIONS'**
+  String get splashBadge;
+
+  /// No description provided for @splashMission.
+  ///
+  /// In en, this message translates to:
+  /// **'Civic Resolution • Rapid Response • Sustainable Cities'**
+  String get splashMission;
+
+  /// No description provided for @splashInitializing.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to Municipal Dispatch...'**
+  String get splashInitializing;
+
   /// No description provided for @languageSelectTitle.
   ///
   /// In en, this message translates to:

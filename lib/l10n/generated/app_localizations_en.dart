@@ -18,6 +18,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get brandTagline => 'Greener Choices. Healthier Cities.';
 
   @override
+  String get splashBadge => 'MUNICIPAL FIELD OPERATIONS';
+
+  @override
+  String get splashMission =>
+      'Civic Resolution • Rapid Response • Sustainable Cities';
+
+  @override
+  String get splashInitializing => 'Connecting to Municipal Dispatch...';
+
+  @override
   String get languageSelectTitle => 'Choose Your Language';
 
   @override

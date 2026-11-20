@@ -18,6 +18,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get brandTagline => 'हरित विकल्प। स्वस्थ शहर।';
 
   @override
+  String get splashBadge => 'नगर निगम फ़ील्ड संचालन';
+
+  @override
+  String get splashMission =>
+      'नागरिक समाधान • त्वरित प्रतिक्रिया • संधारणीय शहर';
+
+  @override
+  String get splashInitializing => 'नगर निगम डिस्पैच से जुड़ रहा है...';
+
+  @override
   String get languageSelectTitle => 'अपनी भाषा चुनें';
 
   @override

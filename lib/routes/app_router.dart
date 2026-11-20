@@ -13,12 +13,14 @@ import '../features/onboarding/screens/language_selection_screen.dart';
 import '../features/overview/screens/overview_screen.dart';
 import '../features/profile/screens/profile_screen.dart';
 import '../features/shell/worker_shell_screen.dart';
+import '../features/splash/screens/splash_screen.dart';
 import '../features/tasks/screens/tasks_screen.dart';
 
 /// Named route paths for Evora-Workers.
 class WorkerRoutes {
   WorkerRoutes._();
 
+  static const String splash = '/splash';
   static const String languageSelect = '/language-select';
   static const String login = '/login';
   static const String otpVerify = '/otp-verify';
@@ -35,6 +37,12 @@ class WorkerRoutes {
 class _RouterRefreshNotifier extends ChangeNotifier {
   void trigger() => notifyListeners();
 }
+
+/// Provider for GoRouter's initial location (defaults to [WorkerRoutes.splash]).
+/// Tests can override this provider to bypass splash when testing child screens directly.
+final appRouterInitialLocationProvider = Provider<String>((ref) {
+  return WorkerRoutes.splash;
+});
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = _RouterRefreshNotifier();
@@ -53,19 +61,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
   ref.onDispose(refreshNotifier.dispose);
 
-  final initialHasSelectedLanguage =
-      ref.read(localeProvider).hasSelectedLanguage;
-  final initialIsAuthenticated =
-      ref.read(authNotifierProvider).isAuthenticated;
-
-  String determineInitialLocation() {
-    if (!initialHasSelectedLanguage) return WorkerRoutes.languageSelect;
-    if (!initialIsAuthenticated) return WorkerRoutes.login;
-    return WorkerRoutes.overview;
-  }
+  final initialLocation = ref.watch(appRouterInitialLocationProvider);
 
   return GoRouter(
-    initialLocation: determineInitialLocation(),
+    initialLocation: initialLocation,
     refreshListenable: refreshNotifier,
     redirect: (context, state) {
       final hasSelectedLanguage =
@@ -74,10 +73,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final isAuthenticated = authState.isAuthenticated;
       final location = state.matchedLocation;
 
+      final isOnSplash = location == WorkerRoutes.splash;
       final isOnLanguageSelect = location == WorkerRoutes.languageSelect;
       final isOnLogin = location == WorkerRoutes.login;
       final isOnOtpVerify = location == WorkerRoutes.otpVerify;
       final isAuthRoute = isOnLogin || isOnOtpVerify;
+
+      // 0. Splash screen controls its own animation and timed transition
+      if (isOnSplash) {
+        return null;
+      }
 
       // 1. Language must be selected first
       if (!hasSelectedLanguage && !isOnLanguageSelect) {
@@ -99,6 +104,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: WorkerRoutes.splash,
+        name: 'splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: WorkerRoutes.languageSelect,
         name: 'language-select',
