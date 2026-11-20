@@ -224,30 +224,30 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                               ),
                             ),
 
-                            // Official EVORA Clean Logo for Dark Surfaces
+                            // Official EVORA Worker Logo for Dark Surfaces
                             Transform.scale(
                               scale: _logoScale.value,
                               child: Opacity(
                                 opacity: _logoOpacity.value,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 36),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24),
                                   child: Image.asset(
-                                    AppConstants.logoDarkSurfaceAsset,
-                                    width: 280,
+                                    AppConstants.workerLogoDarkSurfaceAsset,
+                                    width: 320,
                                     fit: BoxFit.contain,
                                     errorBuilder: (_, _, _) => Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Image.asset(
-                                          AppConstants.leafBadgeAsset,
+                                          AppConstants.workerBadgeDarkAsset,
                                           height: 72,
                                           fit: BoxFit.contain,
                                         ),
                                         const SizedBox(height: 12),
                                         const Text(
-                                          'EVORA',
+                                          'EVORA WORKERS',
                                           style: TextStyle(
-                                            fontSize: 32,
+                                            fontSize: 28,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 2.0,
                                             color: Colors.white,

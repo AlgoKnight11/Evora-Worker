@@ -31,9 +31,15 @@ class AppConstants {
   // Accessibility minimum touch target
   static const double minTouchTargetSize = 48.0;
 
-  // Brand logo asset paths (transparent, matched to EVORA Himalayan Modernism light UI)
-  static const String logoFullAsset = 'assets/images/evora_logo_cropped_transparent.png';
-  static const String logoCroppedAsset = 'assets/images/evora_logo_cropped_transparent.png';
-  static const String logoDarkSurfaceAsset = 'assets/images/evora_logo_transparent_clean.png';
-  static const String leafBadgeAsset = 'assets/images/evora_leaf_badge.png';
+  // Brand logo asset paths (Himalayan Modernism tailored for municipal field operations)
+  static const String logoFullAsset = 'assets/images/evora_worker_logo_light_transparent.png';
+  static const String logoCroppedAsset = 'assets/images/evora_worker_logo_light_transparent.png';
+  static const String logoDarkSurfaceAsset = 'assets/images/evora_worker_logo_dark_transparent.png';
+  static const String leafBadgeAsset = 'assets/images/evora_worker_badge_dark.png';
+
+  // Dedicated worker app logo assets (featuring municipal engineering leaf + gear + wrench)
+  static const String workerLogoDarkSurfaceAsset = 'assets/images/evora_worker_logo_dark_transparent.png';
+  static const String workerLogoLightSurfaceAsset = 'assets/images/evora_worker_logo_light_transparent.png';
+  static const String workerBadgeDarkAsset = 'assets/images/evora_worker_badge_dark.png';
+  static const String workerBadgeLightAsset = 'assets/images/evora_worker_badge_light_transparent.png';
 }
