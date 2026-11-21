@@ -112,6 +112,39 @@ void main() {
 
       notifier.dispose();
     });
+
+    test('Persists worker profile to SharedPreferences and automatically restores session on app boot',
+        () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final mockAuth = MockAuthService();
+
+      // Session 1: User logs in
+      final notifier1 = AuthNotifier(mockAuth, prefs);
+      expect(notifier1.state.isAuthenticated, isFalse);
+
+      await notifier1.sendOtp('9999999999');
+      final success = await notifier1.verifyOtp('123456');
+      expect(success, isTrue);
+      expect(notifier1.state.isAuthenticated, isTrue);
+      expect(notifier1.state.profile?.displayName, 'Rajesh Kumar');
+
+      // Verify stored in SharedPreferences
+      expect(prefs.getString(AppConstants.prefWorkerProfileJson), isNotNull);
+      notifier1.dispose();
+
+      // Session 2: User opens app next time (new AuthNotifier created on app launch)
+      final notifier2 = AuthNotifier(mockAuth, prefs);
+      expect(notifier2.state.isAuthenticated, isTrue);
+      expect(notifier2.state.profile?.displayName, 'Rajesh Kumar');
+      expect(notifier2.state.phoneNumber, '+919999999999');
+
+      // Sign out clears persistence
+      await notifier2.signOut();
+      expect(notifier2.state.isAuthenticated, isFalse);
+      expect(prefs.getString(AppConstants.prefWorkerProfileJson), isNull);
+      notifier2.dispose();
+    });
   });
 
   group('Phase 2.3: UI Widget Rendering & Verification Flow', () {

@@ -424,7 +424,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskDetailLocationSection => 'Location & Coordinates';
 
   @override
-  String get taskDetailOpenMaps => 'Open in Maps';
+  String get taskDetailOpenMaps => 'Show Route on Maps';
 
   @override
   String get taskDetailInstructionsSection => 'Work Order Instructions';

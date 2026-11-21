@@ -139,7 +139,7 @@
   "taskDetailNotFoundSubtitle": "अनुरोधित नगरपालिका कार्य नहीं मिला या पुनः सौंपा गया हो सकता है।",
   "taskDetailBackToList": "कार्यों पर वापस",
   "taskDetailLocationSection": "स्थान एवं निर्देशांक",
-  "taskDetailOpenMaps": "मानचित्र में खोलें",
+  "taskDetailOpenMaps": "मानचित्र पर रूट देखें",
   "taskDetailInstructionsSection": "कार्य आदेश निर्देश",
   "taskDetailSafetySection": "सुरक्षा सावधानियां",
   "taskDetailEvidenceSection": "आवश्यक साक्ष्य",

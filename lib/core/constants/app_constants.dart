@@ -8,6 +8,7 @@ class AppConstants {
   // Local persistence keys (SharedPreferences)
   static const String prefLocaleCode = 'evora_workers_locale_code';
   static const String prefHasSelectedLanguage = 'evora_workers_has_selected_language';
+  static const String prefWorkerProfileJson = 'evora_workers_worker_profile_json';
 
   // Evidence constraints (Part IV Decisions)
   static const int maxPhotoSizeBytes = 10 * 1024 * 1024; // 10 MB

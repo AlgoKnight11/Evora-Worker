@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/evora_colors.dart';
 import '../../../core/widgets/evora_status_badge.dart';
 import '../../../domain/enums/worker_enums.dart';
@@ -144,16 +145,45 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     }
   }
 
-  void _openInMaps(WorkerTask task) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Opening coordinates (${task.location.latitude.toStringAsFixed(4)}, ${task.location.longitude.toStringAsFixed(4)}) in Maps',
+  Future<void> _openInMaps(WorkerTask task) async {
+    final lat = task.location.latitude;
+    final lng = task.location.longitude;
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Opening coordinates (${lat.toStringAsFixed(4)}, ${lng.toStringAsFixed(4)}) in Google Maps...',
+          ),
+          backgroundColor: EvoraColors.primary,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
         ),
-        backgroundColor: EvoraColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
+      );
+    }
+
+    final googleMapsDirectionsUri = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng',
     );
+    final geoUri = Uri.parse('geo:$lat,$lng?q=$lat,$lng');
+
+    try {
+      if (await canLaunchUrl(googleMapsDirectionsUri)) {
+        await launchUrl(
+          googleMapsDirectionsUri,
+          mode: LaunchMode.externalApplication,
+        );
+      } else if (await canLaunchUrl(geoUri)) {
+        await launchUrl(geoUri, mode: LaunchMode.externalApplication);
+      } else {
+        await launchUrl(
+          googleMapsDirectionsUri,
+          mode: LaunchMode.platformDefault,
+        );
+      }
+    } catch (e) {
+      debugPrint('[TaskDetailScreen] Failed to launch Google Maps: $e');
+    }
   }
 
   @override

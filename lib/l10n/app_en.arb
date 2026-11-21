@@ -163,7 +163,7 @@
   "taskDetailNotFoundSubtitle": "The requested municipal task could not be located or may have been reassigned.",
   "taskDetailBackToList": "Back to Tasks",
   "taskDetailLocationSection": "Location & Coordinates",
-  "taskDetailOpenMaps": "Open in Maps",
+  "taskDetailOpenMaps": "Show Route on Maps",
   "taskDetailInstructionsSection": "Work Order Instructions",
   "taskDetailSafetySection": "Safety Precautions",
   "taskDetailEvidenceSection": "Required Completion Evidence",

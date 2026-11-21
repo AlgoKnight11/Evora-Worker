@@ -424,7 +424,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get taskDetailLocationSection => 'स्थान एवं निर्देशांक';
 
   @override
-  String get taskDetailOpenMaps => 'मानचित्र में खोलें';
+  String get taskDetailOpenMaps => 'मानचित्र पर रूट देखें';
 
   @override
   String get taskDetailInstructionsSection => 'कार्य आदेश निर्देश';

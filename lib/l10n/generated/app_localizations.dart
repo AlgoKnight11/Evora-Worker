@@ -881,7 +881,7 @@ abstract class AppLocalizations {
   /// No description provided for @taskDetailOpenMaps.
   ///
   /// In en, this message translates to:
-  /// **'Open in Maps'**
+  /// **'Show Route on Maps'**
   String get taskDetailOpenMaps;
 
   /// No description provided for @taskDetailInstructionsSection.

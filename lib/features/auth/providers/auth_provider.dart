@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../core/localization/locale_provider.dart';
 import '../../../domain/models/worker_profile.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../models/auth_state.dart';
@@ -24,7 +29,11 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 final authNotifierProvider =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepo = ref.watch(authRepositoryProvider);
-  return AuthNotifier(authRepo);
+  SharedPreferences? prefs;
+  try {
+    prefs = ref.watch(sharedPreferencesProvider);
+  } catch (_) {}
+  return AuthNotifier(authRepo, prefs);
 });
 
 /// Convenience provider for reading the authenticated WorkerProfile
@@ -34,9 +43,17 @@ final currentWorkerProfileProvider = Provider<WorkerProfile?>((ref) {
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _authRepo;
+  final SharedPreferences? _prefs;
   Timer? _countdownTimer;
 
-  AuthNotifier(this._authRepo) : super(const AuthState()) {
+  AuthNotifier(this._authRepo, [this._prefs]) : super(_initialState(_prefs)) {
+    // If state is already authenticated from persistent storage, sync with repository
+    if (state.isAuthenticated && state.profile != null) {
+      if (_authRepo is FirebaseAuthService) {
+        _authRepo.setRestoredProfile(state.profile!);
+      }
+    }
+
     // Listen to worker stream if available
     _authRepo.watchActiveWorker().listen((profile) {
       if (profile != null) {
@@ -44,8 +61,42 @@ class AuthNotifier extends StateNotifier<AuthState> {
           status: AuthStatus.authenticated,
           profile: profile,
         );
+        _persistProfile(profile);
       }
     });
+  }
+
+  static AuthState _initialState(SharedPreferences? prefs) {
+    if (prefs != null) {
+      final savedJson = prefs.getString(AppConstants.prefWorkerProfileJson);
+      if (savedJson != null && savedJson.isNotEmpty) {
+        try {
+          final map = jsonDecode(savedJson) as Map<String, dynamic>;
+          final profile = WorkerProfile.fromJson(map);
+          if (profile.isActive) {
+            return AuthState(
+              status: AuthStatus.authenticated,
+              profile: profile,
+              phoneNumber: profile.phoneNumber,
+            );
+          }
+        } catch (e) {
+          debugPrint('[AuthNotifier] Error restoring saved worker profile: $e');
+        }
+      }
+    }
+    return const AuthState();
+  }
+
+  void _persistProfile(WorkerProfile profile) {
+    _prefs?.setString(
+      AppConstants.prefWorkerProfileJson,
+      jsonEncode(profile.toJson()),
+    );
+  }
+
+  void _clearPersistedProfile() {
+    _prefs?.remove(AppConstants.prefWorkerProfileJson);
   }
 
   void _startCountdown() {
@@ -142,6 +193,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
 
       _countdownTimer?.cancel();
+      _persistProfile(profile);
       state = state.copyWith(
         status: AuthStatus.authenticated,
         profile: profile,
@@ -167,6 +219,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Sets worker profile directly (used by tests and seed actions)
   void setAuthenticatedWorker(WorkerProfile profile) {
     _countdownTimer?.cancel();
+    _persistProfile(profile);
     state = state.copyWith(
       status: AuthStatus.authenticated,
       profile: profile,
@@ -197,6 +250,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Re-sets back to phone number entry step
   void resetToPhoneInput() {
     _countdownTimer?.cancel();
+    _clearPersistedProfile();
     state = state.copyWith(
       status: AuthStatus.unauthenticated,
       clearVerification: true,
@@ -208,6 +262,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Signs out and resets state
   Future<void> signOut() async {
     _countdownTimer?.cancel();
+    _clearPersistedProfile();
     await _authRepo.signOutAndPurgeCache();
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
