@@ -1,12 +1,10 @@
 import 'package:evora_workers/domain/enums/worker_enums.dart';
-import 'package:evora_workers/features/auth/models/auth_state.dart';
 import 'package:evora_workers/features/auth/providers/auth_provider.dart';
 import 'package:evora_workers/features/auth/services/mock_auth_service.dart';
 import 'package:evora_workers/features/tasks/models/task_filter.dart';
 import 'package:evora_workers/features/tasks/providers/task_providers.dart';
 import 'package:evora_workers/features/tasks/repositories/task_repository.dart';
 import 'package:evora_workers/features/tasks/services/mock_task_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

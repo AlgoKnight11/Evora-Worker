@@ -488,6 +488,96 @@ abstract class AppLocalizations {
   /// **'Pending Sync'**
   String get overviewPendingSync;
 
+  /// No description provided for @overviewAssignedAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get overviewAssignedAction;
+
+  /// No description provided for @overviewInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get overviewInProgress;
+
+  /// No description provided for @overviewBlockedAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked'**
+  String get overviewBlockedAlert;
+
+  /// No description provided for @overviewUrgentDispatchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent Dispatch Queue'**
+  String get overviewUrgentDispatchTitle;
+
+  /// No description provided for @overviewUrgentEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All Clear — No Urgent Bottlenecks'**
+  String get overviewUrgentEmptyTitle;
+
+  /// No description provided for @overviewUrgentEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All assigned field work is currently within operational SLA limits.'**
+  String get overviewUrgentEmptySubtitle;
+
+  /// No description provided for @overviewQuickActionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Field Shortcuts & Navigation'**
+  String get overviewQuickActionsTitle;
+
+  /// No description provided for @overviewActionViewTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Tasks Inbox'**
+  String get overviewActionViewTasks;
+
+  /// No description provided for @overviewActionOpenMap.
+  ///
+  /// In en, this message translates to:
+  /// **'View Work Route on Map'**
+  String get overviewActionOpenMap;
+
+  /// No description provided for @overviewClaimPoolTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Pool Task'**
+  String get overviewClaimPoolTag;
+
+  /// No description provided for @overviewClaimAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim Task'**
+  String get overviewClaimAction;
+
+  /// No description provided for @overviewAcceptAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Task'**
+  String get overviewAcceptAction;
+
+  /// No description provided for @overviewViewDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get overviewViewDetail;
+
+  /// No description provided for @overviewControlRoomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Municipal Control Room: 112'**
+  String get overviewControlRoomTitle;
+
+  /// No description provided for @overviewControlRoomSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Toll-free emergency dispatch line for field hazards and equipment failure.'**
+  String get overviewControlRoomSubtitle;
+
   /// No description provided for @overviewNoticesTitle.
   ///
   /// In en, this message translates to:
@@ -499,12 +589,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No active operational notices for your ward or team.'**
   String get overviewNoticesEmpty;
-
-  /// No description provided for @overviewPhaseBanner.
-  ///
-  /// In en, this message translates to:
-  /// **'Phase 1 Foundation Ready — Live task queues & OTP auth connect in Phases 2–3.'**
-  String get overviewPhaseBanner;
 
   /// No description provided for @tasksSubtitle.
   ///

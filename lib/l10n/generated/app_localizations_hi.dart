@@ -217,15 +217,59 @@ class AppLocalizationsHi extends AppLocalizations {
   String get overviewPendingSync => 'सिंक लंबित';
 
   @override
+  String get overviewAssignedAction => 'आवंटित';
+
+  @override
+  String get overviewInProgress => 'प्रगति पर';
+
+  @override
+  String get overviewBlockedAlert => 'अवरुद्ध';
+
+  @override
+  String get overviewUrgentDispatchTitle => 'अति आवश्यक डिस्पैच कतार';
+
+  @override
+  String get overviewUrgentEmptyTitle =>
+      'सब सामान्य — कोई अति आवश्यक रुकावट नहीं';
+
+  @override
+  String get overviewUrgentEmptySubtitle =>
+      'सभी आवंटित कार्य वर्तमान में परिचालन समय सीमा के भीतर हैं।';
+
+  @override
+  String get overviewQuickActionsTitle => 'त्वरित शॉर्टकट और नेविगेशन';
+
+  @override
+  String get overviewActionViewTasks => 'कार्य इनबॉक्स खोलें';
+
+  @override
+  String get overviewActionOpenMap => 'मानचित्र पर मार्ग देखें';
+
+  @override
+  String get overviewClaimPoolTag => 'टीम पूल कार्य';
+
+  @override
+  String get overviewClaimAction => 'कार्य का दावा करें';
+
+  @override
+  String get overviewAcceptAction => 'कार्य स्वीकार करें';
+
+  @override
+  String get overviewViewDetail => 'विवरण देखें';
+
+  @override
+  String get overviewControlRoomTitle => 'नगर निगम कंट्रोल रूम: 112';
+
+  @override
+  String get overviewControlRoomSubtitle =>
+      'फ़ील्ड खतरों और मशीनरी खराबी के लिए टोल-फ्री आपातकालीन डिस्पैच लाइन।';
+
+  @override
   String get overviewNoticesTitle => 'संचालन सूचनाएँ';
 
   @override
   String get overviewNoticesEmpty =>
       'आपके वार्ड या टीम के लिए कोई सक्रिय सूचना नहीं है।';
-
-  @override
-  String get overviewPhaseBanner =>
-      'फ़ेज़ 1 आधार तैयार — लाइव कार्य कतार और OTP लॉगिन फ़ेज़ 2–3 में जुड़ेंगे।';
 
   @override
   String get tasksSubtitle =>

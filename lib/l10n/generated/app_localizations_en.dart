@@ -218,15 +218,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get overviewPendingSync => 'Pending Sync';
 
   @override
+  String get overviewAssignedAction => 'Assigned';
+
+  @override
+  String get overviewInProgress => 'In Progress';
+
+  @override
+  String get overviewBlockedAlert => 'Blocked';
+
+  @override
+  String get overviewUrgentDispatchTitle => 'Urgent Dispatch Queue';
+
+  @override
+  String get overviewUrgentEmptyTitle => 'All Clear — No Urgent Bottlenecks';
+
+  @override
+  String get overviewUrgentEmptySubtitle =>
+      'All assigned field work is currently within operational SLA limits.';
+
+  @override
+  String get overviewQuickActionsTitle => 'Field Shortcuts & Navigation';
+
+  @override
+  String get overviewActionViewTasks => 'Open Tasks Inbox';
+
+  @override
+  String get overviewActionOpenMap => 'View Work Route on Map';
+
+  @override
+  String get overviewClaimPoolTag => 'Team Pool Task';
+
+  @override
+  String get overviewClaimAction => 'Claim Task';
+
+  @override
+  String get overviewAcceptAction => 'Accept Task';
+
+  @override
+  String get overviewViewDetail => 'View Details';
+
+  @override
+  String get overviewControlRoomTitle => 'Municipal Control Room: 112';
+
+  @override
+  String get overviewControlRoomSubtitle =>
+      'Toll-free emergency dispatch line for field hazards and equipment failure.';
+
+  @override
   String get overviewNoticesTitle => 'Operational Notices';
 
   @override
   String get overviewNoticesEmpty =>
       'No active operational notices for your ward or team.';
-
-  @override
-  String get overviewPhaseBanner =>
-      'Phase 1 Foundation Ready — Live task queues & OTP auth connect in Phases 2–3.';
 
   @override
   String get tasksSubtitle =>
