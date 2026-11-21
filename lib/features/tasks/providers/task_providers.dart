@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/enums/worker_enums.dart';
@@ -7,16 +8,37 @@ import '../models/task_filter.dart';
 import '../repositories/task_repository.dart';
 import '../services/firestore_task_service.dart';
 import '../services/mock_task_service.dart';
+import '../services/resilient_task_service.dart';
 
 /// Provider for the TaskRepository implementation.
-/// Defaults to [FirestoreTaskService] if Firebase is initialized, otherwise falls back to [MockTaskService].
+///
+/// Selects [MockTaskService] when:
+/// 1. Firebase is not initialized (e.g. tests or offline sandbox)
+/// 2. User is logged in as a test/demo worker (e.g. +91 99999 99999 / test-rajesh-001)
+/// 3. FirebaseAuth.instance.currentUser is null (preventing unauthenticated Firestore permission denied crashes)
+///
+/// Selects [ResilientTaskService] with [FirestoreTaskService] as primary and [MockTaskService]
+/// as fallback when signed in with real Firebase credentials.
 final taskRepositoryProvider = Provider<TaskRepository>((ref) {
-  try {
-    if (Firebase.apps.isNotEmpty) {
-      return FirestoreTaskService();
-    }
-  } catch (_) {}
-  return MockTaskService();
+  final profile = ref.watch(authNotifierProvider).profile;
+
+  final bool firebaseReady = Firebase.apps.isNotEmpty;
+  final bool hasRealAuthUser =
+      firebaseReady && FirebaseAuth.instance.currentUser != null;
+  final bool isTestWorker = profile == null ||
+      profile.uid.startsWith('test-') ||
+      profile.uid.startsWith('mock-');
+
+  // If using test worker, unauthenticated in Firebase Auth, or Firebase not ready:
+  if (!firebaseReady || !hasRealAuthUser || isTestWorker) {
+    return MockTaskService();
+  }
+
+  // Production path with automatic fallback
+  return ResilientTaskService(
+    primary: FirestoreTaskService(),
+    fallback: MockTaskService(),
+  );
 });
 
 /// Real-time stream of all active municipal tasks dispatched to the logged-in worker & crew.

@@ -327,10 +327,41 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                 error: (err, _) => Center(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
-                    child: Text(
-                      'Failed to load tasks: $err',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: EvoraColors.error),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.sync_problem_rounded, size: 48, color: EvoraColors.error),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Unable to load dispatch tasks',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: isDark ? Colors.white : EvoraColors.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          err.toString().contains('permission-denied')
+                              ? 'Dispatch access restricted. Operating in local crew mode.'
+                              : '$err',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: isDark ? Colors.white70 : EvoraColors.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          onPressed: () => ref.refresh(tasksStreamProvider),
+                          icon: const Icon(Icons.refresh_rounded, size: 18),
+                          label: const Text('Retry Connection'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: EvoraColors.primary,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
