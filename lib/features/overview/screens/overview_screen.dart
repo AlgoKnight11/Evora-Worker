@@ -100,8 +100,7 @@ class OverviewScreen extends ConsumerWidget {
                 }
               },
               onViewDetails: (taskId) {
-                ref.read(taskFilterProvider.notifier).state = const TaskFilter();
-                context.go(WorkerRoutes.tasks);
+                context.go(WorkerRoutes.taskDetail(taskId));
               },
             ),
             const SizedBox(height: 24),
