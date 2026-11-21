@@ -14,6 +14,7 @@ import '../features/overview/screens/overview_screen.dart';
 import '../features/profile/screens/profile_screen.dart';
 import '../features/shell/worker_shell_screen.dart';
 import '../features/splash/screens/splash_screen.dart';
+import '../features/tasks/screens/task_detail_screen.dart';
 import '../features/tasks/screens/tasks_screen.dart';
 
 /// Named route paths for Evora-Workers.
@@ -153,10 +154,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     name: 'task-detail',
                     builder: (context, state) {
                       final taskId = state.pathParameters['taskId'] ?? '';
-                      return Scaffold(
-                        appBar: AppBar(title: Text('Task $taskId')),
-                        body: Center(child: Text('Task Detail: $taskId')),
-                      );
+                      return TaskDetailScreen(taskId: taskId);
                     },
                   ),
                 ],

@@ -408,6 +408,76 @@ class AppLocalizationsEn extends AppLocalizations {
       'Try adjusting your search query or clearing active filters.';
 
   @override
+  String get taskDetailTitle => 'Task Details';
+
+  @override
+  String get taskDetailNotFound => 'Task Not Found';
+
+  @override
+  String get taskDetailNotFoundSubtitle =>
+      'The requested municipal task could not be located or may have been reassigned.';
+
+  @override
+  String get taskDetailBackToList => 'Back to Tasks';
+
+  @override
+  String get taskDetailLocationSection => 'Location & Coordinates';
+
+  @override
+  String get taskDetailOpenMaps => 'Open in Maps';
+
+  @override
+  String get taskDetailInstructionsSection => 'Work Order Instructions';
+
+  @override
+  String get taskDetailSafetySection => 'Safety Precautions';
+
+  @override
+  String get taskDetailEvidenceSection => 'Required Completion Evidence';
+
+  @override
+  String get taskDetailTimelineSection => 'Timeline & Custody';
+
+  @override
+  String get taskDetailAssignedBy => 'Assigned By';
+
+  @override
+  String get taskDetailAssignedAt => 'Assigned At';
+
+  @override
+  String get taskDetailDueAt => 'Resolution Deadline';
+
+  @override
+  String get taskDetailUpdatedAt => 'Last Updated';
+
+  @override
+  String get taskDetailSourceCivicFlow => 'CivicFlow Grievance';
+
+  @override
+  String get taskDetailSourceStandalone => 'Municipal Work Order';
+
+  @override
+  String get taskDetailWard => 'Ward';
+
+  @override
+  String get taskDetailCoordinates => 'Coordinates';
+
+  @override
+  String get taskDetailActionReady => 'Task Accepted • Ready for Field Work';
+
+  @override
+  String get taskDetailActionInProgress =>
+      'Task In Progress • Field Execution Active';
+
+  @override
+  String get taskDetailActionBlocked =>
+      'Task Blocked • Operational Delay Logged';
+
+  @override
+  String get taskDetailActionReview =>
+      'Task Submitted • Awaiting Supervisor Review';
+
+  @override
   String get mapSubtitle =>
       'Assigned task pins, approved service area, and offline navigation fallback';
 

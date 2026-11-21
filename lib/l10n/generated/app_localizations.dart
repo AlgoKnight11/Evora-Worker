@@ -848,6 +848,138 @@ abstract class AppLocalizations {
   /// **'Try adjusting your search query or clearing active filters.'**
   String get tasksNoMatchingSubtitle;
 
+  /// No description provided for @taskDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Details'**
+  String get taskDetailTitle;
+
+  /// No description provided for @taskDetailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Not Found'**
+  String get taskDetailNotFound;
+
+  /// No description provided for @taskDetailNotFoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The requested municipal task could not be located or may have been reassigned.'**
+  String get taskDetailNotFoundSubtitle;
+
+  /// No description provided for @taskDetailBackToList.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Tasks'**
+  String get taskDetailBackToList;
+
+  /// No description provided for @taskDetailLocationSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Location & Coordinates'**
+  String get taskDetailLocationSection;
+
+  /// No description provided for @taskDetailOpenMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps'**
+  String get taskDetailOpenMaps;
+
+  /// No description provided for @taskDetailInstructionsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Work Order Instructions'**
+  String get taskDetailInstructionsSection;
+
+  /// No description provided for @taskDetailSafetySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Precautions'**
+  String get taskDetailSafetySection;
+
+  /// No description provided for @taskDetailEvidenceSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Completion Evidence'**
+  String get taskDetailEvidenceSection;
+
+  /// No description provided for @taskDetailTimelineSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline & Custody'**
+  String get taskDetailTimelineSection;
+
+  /// No description provided for @taskDetailAssignedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned By'**
+  String get taskDetailAssignedBy;
+
+  /// No description provided for @taskDetailAssignedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned At'**
+  String get taskDetailAssignedAt;
+
+  /// No description provided for @taskDetailDueAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution Deadline'**
+  String get taskDetailDueAt;
+
+  /// No description provided for @taskDetailUpdatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Updated'**
+  String get taskDetailUpdatedAt;
+
+  /// No description provided for @taskDetailSourceCivicFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'CivicFlow Grievance'**
+  String get taskDetailSourceCivicFlow;
+
+  /// No description provided for @taskDetailSourceStandalone.
+  ///
+  /// In en, this message translates to:
+  /// **'Municipal Work Order'**
+  String get taskDetailSourceStandalone;
+
+  /// No description provided for @taskDetailWard.
+  ///
+  /// In en, this message translates to:
+  /// **'Ward'**
+  String get taskDetailWard;
+
+  /// No description provided for @taskDetailCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get taskDetailCoordinates;
+
+  /// No description provided for @taskDetailActionReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Accepted • Ready for Field Work'**
+  String get taskDetailActionReady;
+
+  /// No description provided for @taskDetailActionInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Task In Progress • Field Execution Active'**
+  String get taskDetailActionInProgress;
+
+  /// No description provided for @taskDetailActionBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Blocked • Operational Delay Logged'**
+  String get taskDetailActionBlocked;
+
+  /// No description provided for @taskDetailActionReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Submitted • Awaiting Supervisor Review'**
+  String get taskDetailActionReview;
+
   /// No description provided for @mapSubtitle.
   ///
   /// In en, this message translates to:

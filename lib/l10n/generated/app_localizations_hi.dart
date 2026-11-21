@@ -408,6 +408,75 @@ class AppLocalizationsHi extends AppLocalizations {
       'अपने खोज शब्दों या सक्रिय फ़िल्टर को बदलने का प्रयास करें।';
 
   @override
+  String get taskDetailTitle => 'कार्य विवरण';
+
+  @override
+  String get taskDetailNotFound => 'कार्य नहीं मिला';
+
+  @override
+  String get taskDetailNotFoundSubtitle =>
+      'अनुरोधित नगरपालिका कार्य नहीं मिला या पुनः सौंपा गया हो सकता है।';
+
+  @override
+  String get taskDetailBackToList => 'कार्यों पर वापस';
+
+  @override
+  String get taskDetailLocationSection => 'स्थान एवं निर्देशांक';
+
+  @override
+  String get taskDetailOpenMaps => 'मानचित्र में खोलें';
+
+  @override
+  String get taskDetailInstructionsSection => 'कार्य आदेश निर्देश';
+
+  @override
+  String get taskDetailSafetySection => 'सुरक्षा सावधानियां';
+
+  @override
+  String get taskDetailEvidenceSection => 'आवश्यक साक्ष्य';
+
+  @override
+  String get taskDetailTimelineSection => 'समयरेखा एवं आवंटन';
+
+  @override
+  String get taskDetailAssignedBy => 'द्वारा सौंपा गया';
+
+  @override
+  String get taskDetailAssignedAt => 'सौंपने की तिथि';
+
+  @override
+  String get taskDetailDueAt => 'समाधान समय सीमा';
+
+  @override
+  String get taskDetailUpdatedAt => 'अंतिम अद्यतन';
+
+  @override
+  String get taskDetailSourceCivicFlow => 'सिविकफ्लो शिकायत';
+
+  @override
+  String get taskDetailSourceStandalone => 'नगरपालिका कार्य आदेश';
+
+  @override
+  String get taskDetailWard => 'वार्ड';
+
+  @override
+  String get taskDetailCoordinates => 'निर्देशांक';
+
+  @override
+  String get taskDetailActionReady => 'कार्य स्वीकृत • फ़ील्ड कार्य हेतु तैयार';
+
+  @override
+  String get taskDetailActionInProgress =>
+      'कार्य प्रगति पर • फ़ील्ड कार्य सक्रिय';
+
+  @override
+  String get taskDetailActionBlocked => 'कार्य अवरुद्ध • परिचालन विलंब दर्ज';
+
+  @override
+  String get taskDetailActionReview =>
+      'कार्य जमा किया गया • सुपरवाइज़र समीक्षा की प्रतीक्षा';
+
+  @override
   String get mapSubtitle =>
       'आवंटित कार्य स्थान, स्वीकृत सेवा क्षेत्र और ऑफ़लाइन दिशा-निर्देश';
 

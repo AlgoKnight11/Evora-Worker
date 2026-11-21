@@ -53,6 +53,23 @@ final filteredTasksProvider = Provider<List<WorkerTask>>((ref) {
   );
 });
 
+/// Provider for a single task by ID.
+/// Checks the active [tasksStreamProvider] first for immediate cache retrieval,
+/// falling back to [TaskRepository.getTaskById].
+final taskDetailProvider = FutureProvider.family<WorkerTask?, String>((ref, taskId) async {
+  final activeTasks = ref.watch(tasksStreamProvider).valueOrNull;
+  if (activeTasks != null) {
+    for (final task in activeTasks) {
+      if (task.id == taskId) return task;
+    }
+  }
+
+  final repo = ref.watch(taskRepositoryProvider);
+  final profile = ref.watch(authNotifierProvider).profile;
+  final tenantId = profile?.tenantId ?? 'tenant-shimla-01';
+  return repo.getTaskById(tenantId: tenantId, taskId: taskId);
+});
+
 /// Metrics for the Overview dashboard (`/overview`).
 class OverviewMetrics {
   final int totalToday;
