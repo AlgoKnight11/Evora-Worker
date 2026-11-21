@@ -599,13 +599,13 @@ abstract class AppLocalizations {
   /// No description provided for @tasksFilterAll.
   ///
   /// In en, this message translates to:
-  /// **'All'**
+  /// **'All Work'**
   String get tasksFilterAll;
 
   /// No description provided for @tasksFilterIndividual.
   ///
   /// In en, this message translates to:
-  /// **'My Assigned'**
+  /// **'Individual'**
   String get tasksFilterIndividual;
 
   /// No description provided for @tasksFilterTeamPool.
@@ -625,6 +625,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tasks assigned to you or your crew pool will appear here once authenticated.'**
   String get tasksEmptySubtitle;
+
+  /// No description provided for @tasksSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title, landmark, or case ID...'**
+  String get tasksSearchPlaceholder;
+
+  /// No description provided for @tasksFilterSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Tasks'**
+  String get tasksFilterSheetTitle;
+
+  /// No description provided for @tasksFilterPriorityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority Level'**
+  String get tasksFilterPriorityLabel;
+
+  /// No description provided for @tasksFilterWardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ward / Service Area'**
+  String get tasksFilterWardLabel;
+
+  /// No description provided for @tasksFilterOverdueOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Overdue Only'**
+  String get tasksFilterOverdueOnly;
+
+  /// No description provided for @tasksFilterReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Filters'**
+  String get tasksFilterReset;
+
+  /// No description provided for @tasksFilterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get tasksFilterApply;
+
+  /// No description provided for @tasksTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get tasksTabAll;
+
+  /// No description provided for @tasksTabAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get tasksTabAssigned;
+
+  /// No description provided for @tasksTabAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get tasksTabAccepted;
+
+  /// No description provided for @tasksTabInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get tasksTabInProgress;
+
+  /// No description provided for @tasksTabBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked'**
+  String get tasksTabBlocked;
+
+  /// No description provided for @tasksTabReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get tasksTabReview;
+
+  /// No description provided for @tasksActionStartWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Work'**
+  String get tasksActionStartWork;
+
+  /// No description provided for @tasksActionContinueWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Work'**
+  String get tasksActionContinueWork;
+
+  /// No description provided for @tasksActionAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get tasksActionAccept;
+
+  /// No description provided for @tasksActionDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get tasksActionDecline;
+
+  /// No description provided for @tasksActionDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get tasksActionDismiss;
+
+  /// No description provided for @tasksActionClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim Task'**
+  String get tasksActionClaim;
+
+  /// No description provided for @tasksDeclineDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline Assignment'**
+  String get tasksDeclineDialogTitle;
+
+  /// No description provided for @tasksDeclineDialogDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Declining returns this work order to municipal dispatch for immediate reallocation. Please select a reason:'**
+  String get tasksDeclineDialogDesc;
+
+  /// No description provided for @tasksDeclineReasonOutOfArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of assigned ward/area'**
+  String get tasksDeclineReasonOutOfArea;
+
+  /// No description provided for @tasksDeclineReasonSkillMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires specialized equipment/skill'**
+  String get tasksDeclineReasonSkillMismatch;
+
+  /// No description provided for @tasksDeclineReasonWorkload.
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy active task workload'**
+  String get tasksDeclineReasonWorkload;
+
+  /// No description provided for @tasksDeclineReasonEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipment/materials unavailable'**
+  String get tasksDeclineReasonEquipment;
+
+  /// No description provided for @tasksDeclineReasonSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Active safety hazard at site'**
+  String get tasksDeclineReasonSafety;
+
+  /// No description provided for @tasksDeclineReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other operational reason'**
+  String get tasksDeclineReasonOther;
+
+  /// No description provided for @tasksDeclineNotePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional notes (optional)...'**
+  String get tasksDeclineNotePlaceholder;
+
+  /// No description provided for @tasksDeclineConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Decline'**
+  String get tasksDeclineConfirm;
+
+  /// No description provided for @tasksCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get tasksCancel;
+
+  /// No description provided for @tasksClaimSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Task successfully claimed into your queue'**
+  String get tasksClaimSuccess;
+
+  /// No description provided for @tasksAcceptSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Task accepted and ready for field execution'**
+  String get tasksAcceptSuccess;
+
+  /// No description provided for @tasksDeclineSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Task declined and returned to dispatch'**
+  String get tasksDeclineSuccess;
+
+  /// No description provided for @tasksDismissSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Pool task dismissed from your feed'**
+  String get tasksDismissSuccess;
+
+  /// No description provided for @tasksSlaOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'SLA Breached'**
+  String get tasksSlaOverdue;
+
+  /// No description provided for @tasksNoMatchingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching tasks found'**
+  String get tasksNoMatchingTitle;
+
+  /// No description provided for @tasksNoMatchingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search query or clearing active filters.'**
+  String get tasksNoMatchingSubtitle;
 
   /// No description provided for @mapSubtitle.
   ///

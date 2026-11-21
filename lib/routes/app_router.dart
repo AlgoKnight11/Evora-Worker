@@ -26,6 +26,7 @@ class WorkerRoutes {
   static const String otpVerify = '/otp-verify';
   static const String overview = '/overview';
   static const String tasks = '/tasks';
+  static String taskDetail(String taskId) => '/tasks/$taskId';
   static const String map = '/map';
   static const String notifications = '/notifications';
   static const String history = '/history';
@@ -146,6 +147,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: WorkerRoutes.tasks,
                 name: 'tasks',
                 builder: (context, state) => const TasksScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':taskId',
+                    name: 'task-detail',
+                    builder: (context, state) {
+                      final taskId = state.pathParameters['taskId'] ?? '';
+                      return Scaffold(
+                        appBar: AppBar(title: Text('Task $taskId')),
+                        body: Center(child: Text('Task Detail: $taskId')),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

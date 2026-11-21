@@ -276,10 +276,10 @@ class AppLocalizationsHi extends AppLocalizations {
       'आवंटित, स्वीकृत, प्रगति पर, अवरुद्ध और समीक्षा हेतु लंबित कार्य';
 
   @override
-  String get tasksFilterAll => 'सभी';
+  String get tasksFilterAll => 'सभी कार्य';
 
   @override
-  String get tasksFilterIndividual => 'मेरे आवंटित';
+  String get tasksFilterIndividual => 'व्यक्तिगत';
 
   @override
   String get tasksFilterTeamPool => 'टीम पूल';
@@ -290,6 +290,122 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get tasksEmptySubtitle =>
       'सत्यापन के बाद आपको या आपकी टीम को सौंपे गए कार्य यहाँ दिखाई देंगे।';
+
+  @override
+  String get tasksSearchPlaceholder =>
+      'शीर्षक, लैंडमार्क या केस आईडी से खोजें...';
+
+  @override
+  String get tasksFilterSheetTitle => 'कार्य फ़िल्टर करें';
+
+  @override
+  String get tasksFilterPriorityLabel => 'प्राथमिकता स्तर';
+
+  @override
+  String get tasksFilterWardLabel => 'वार्ड / सेवा क्षेत्र';
+
+  @override
+  String get tasksFilterOverdueOnly => 'केवल समय सीमा समाप्त दिखाएं';
+
+  @override
+  String get tasksFilterReset => 'फ़िल्टर रीसेट करें';
+
+  @override
+  String get tasksFilterApply => 'फ़िल्टर लागू करें';
+
+  @override
+  String get tasksTabAll => 'सभी';
+
+  @override
+  String get tasksTabAssigned => 'सौंपा गया';
+
+  @override
+  String get tasksTabAccepted => 'स्वीकृत';
+
+  @override
+  String get tasksTabInProgress => 'प्रगति पर';
+
+  @override
+  String get tasksTabBlocked => 'अवरुद्ध';
+
+  @override
+  String get tasksTabReview => 'समीक्षा';
+
+  @override
+  String get tasksActionStartWork => 'कार्य शुरू करें';
+
+  @override
+  String get tasksActionContinueWork => 'कार्य जारी रखें';
+
+  @override
+  String get tasksActionAccept => 'स्वीकार करें';
+
+  @override
+  String get tasksActionDecline => 'अस्वीकार करें';
+
+  @override
+  String get tasksActionDismiss => 'खारिज करें';
+
+  @override
+  String get tasksActionClaim => 'दावा करें';
+
+  @override
+  String get tasksDeclineDialogTitle => 'कार्य आवंटन अस्वीकार करें';
+
+  @override
+  String get tasksDeclineDialogDesc =>
+      'अस्वीकार करने पर यह कार्य आदेश नगर निगम डिस्पैच को पुनः आवंटन हेतु लौटा दिया जाएगा। कृपया कारण चुनें:';
+
+  @override
+  String get tasksDeclineReasonOutOfArea => 'आवंटित वार्ड/क्षेत्र से बाहर';
+
+  @override
+  String get tasksDeclineReasonSkillMismatch => 'विशेष उपकरण/कौशल की आवश्यकता';
+
+  @override
+  String get tasksDeclineReasonWorkload => 'सक्रिय कार्यों का भारी कार्यभार';
+
+  @override
+  String get tasksDeclineReasonEquipment => 'उपकरण/सामग्री अनुपलब्ध';
+
+  @override
+  String get tasksDeclineReasonSafety => 'साइट पर सक्रिय सुरक्षा खतरा';
+
+  @override
+  String get tasksDeclineReasonOther => 'अन्य परिचालन कारण';
+
+  @override
+  String get tasksDeclineNotePlaceholder => 'अतिरिक्त विवरण (वैकल्पिक)...';
+
+  @override
+  String get tasksDeclineConfirm => 'अस्वीकृति की पुष्टि करें';
+
+  @override
+  String get tasksCancel => 'रद्द करें';
+
+  @override
+  String get tasksClaimSuccess =>
+      'कार्य सफलतापूर्वक आपकी कतार में जोड़ दिया गया';
+
+  @override
+  String get tasksAcceptSuccess => 'कार्य स्वीकृत और फ़ील्ड कार्य हेतु तैयार';
+
+  @override
+  String get tasksDeclineSuccess =>
+      'कार्य अस्वीकार कर डिस्पैच को लौटा दिया गया';
+
+  @override
+  String get tasksDismissSuccess => 'पूल कार्य आपकी फ़ीड से हटा दिया गया';
+
+  @override
+  String get tasksSlaOverdue => 'समय सीमा समाप्त';
+
+  @override
+  String get tasksNoMatchingTitle => 'कोई मेल खाता कार्य नहीं मिला';
+
+  @override
+  String get tasksNoMatchingSubtitle =>
+      'अपने खोज शब्दों या सक्रिय फ़िल्टर को बदलने का प्रयास करें।';
 
   @override
   String get mapSubtitle =>

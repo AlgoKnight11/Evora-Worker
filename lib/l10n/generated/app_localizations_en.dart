@@ -276,10 +276,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Assigned, accepted, in-progress, blocked, and pending-review work';
 
   @override
-  String get tasksFilterAll => 'All';
+  String get tasksFilterAll => 'All Work';
 
   @override
-  String get tasksFilterIndividual => 'My Assigned';
+  String get tasksFilterIndividual => 'Individual';
 
   @override
   String get tasksFilterTeamPool => 'Team Pool';
@@ -290,6 +290,122 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tasksEmptySubtitle =>
       'Tasks assigned to you or your crew pool will appear here once authenticated.';
+
+  @override
+  String get tasksSearchPlaceholder =>
+      'Search by title, landmark, or case ID...';
+
+  @override
+  String get tasksFilterSheetTitle => 'Filter Tasks';
+
+  @override
+  String get tasksFilterPriorityLabel => 'Priority Level';
+
+  @override
+  String get tasksFilterWardLabel => 'Ward / Service Area';
+
+  @override
+  String get tasksFilterOverdueOnly => 'Show Overdue Only';
+
+  @override
+  String get tasksFilterReset => 'Reset Filters';
+
+  @override
+  String get tasksFilterApply => 'Apply Filters';
+
+  @override
+  String get tasksTabAll => 'All';
+
+  @override
+  String get tasksTabAssigned => 'Assigned';
+
+  @override
+  String get tasksTabAccepted => 'Accepted';
+
+  @override
+  String get tasksTabInProgress => 'In Progress';
+
+  @override
+  String get tasksTabBlocked => 'Blocked';
+
+  @override
+  String get tasksTabReview => 'Review';
+
+  @override
+  String get tasksActionStartWork => 'Start Work';
+
+  @override
+  String get tasksActionContinueWork => 'Continue Work';
+
+  @override
+  String get tasksActionAccept => 'Accept';
+
+  @override
+  String get tasksActionDecline => 'Decline';
+
+  @override
+  String get tasksActionDismiss => 'Dismiss';
+
+  @override
+  String get tasksActionClaim => 'Claim Task';
+
+  @override
+  String get tasksDeclineDialogTitle => 'Decline Assignment';
+
+  @override
+  String get tasksDeclineDialogDesc =>
+      'Declining returns this work order to municipal dispatch for immediate reallocation. Please select a reason:';
+
+  @override
+  String get tasksDeclineReasonOutOfArea => 'Out of assigned ward/area';
+
+  @override
+  String get tasksDeclineReasonSkillMismatch =>
+      'Requires specialized equipment/skill';
+
+  @override
+  String get tasksDeclineReasonWorkload => 'Heavy active task workload';
+
+  @override
+  String get tasksDeclineReasonEquipment => 'Equipment/materials unavailable';
+
+  @override
+  String get tasksDeclineReasonSafety => 'Active safety hazard at site';
+
+  @override
+  String get tasksDeclineReasonOther => 'Other operational reason';
+
+  @override
+  String get tasksDeclineNotePlaceholder => 'Additional notes (optional)...';
+
+  @override
+  String get tasksDeclineConfirm => 'Confirm Decline';
+
+  @override
+  String get tasksCancel => 'Cancel';
+
+  @override
+  String get tasksClaimSuccess => 'Task successfully claimed into your queue';
+
+  @override
+  String get tasksAcceptSuccess =>
+      'Task accepted and ready for field execution';
+
+  @override
+  String get tasksDeclineSuccess => 'Task declined and returned to dispatch';
+
+  @override
+  String get tasksDismissSuccess => 'Pool task dismissed from your feed';
+
+  @override
+  String get tasksSlaOverdue => 'SLA Breached';
+
+  @override
+  String get tasksNoMatchingTitle => 'No matching tasks found';
+
+  @override
+  String get tasksNoMatchingSubtitle =>
+      'Try adjusting your search query or clearing active filters.';
 
   @override
   String get mapSubtitle =>
