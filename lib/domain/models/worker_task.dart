@@ -92,6 +92,12 @@ class WorkerTask {
   final DateTime? blockedAt;
   final String? blockerPhotoPath;
 
+  /// Optional supervisor help request fields (Phase 4.3)
+  final bool helpRequested;
+  final String? helpRequestType;
+  final String? helpRequestMessage;
+  final DateTime? helpRequestedAt;
+
   const WorkerTask({
     required this.id,
     required this.tenantId,
@@ -127,6 +133,10 @@ class WorkerTask {
     this.blockNote,
     this.blockedAt,
     this.blockerPhotoPath,
+    this.helpRequested = false,
+    this.helpRequestType,
+    this.helpRequestMessage,
+    this.helpRequestedAt,
   });
 
   /// True if the task is currently unclaimed in a team pool.
@@ -142,6 +152,9 @@ class WorkerTask {
 
   /// True if the task is actively blocked by an operational obstacle.
   bool get isBlocked => status == TaskStatus.blocked;
+
+  /// True if worker has requested supervisor advisory or equipment assistance.
+  bool get isHelpRequested => helpRequested;
 
   bool get isOverdue =>
       status.isActiveQueue &&
@@ -164,6 +177,11 @@ class WorkerTask {
     DateTime? blockedAt,
     String? blockerPhotoPath,
     bool clearBlocked = false,
+    bool? helpRequested,
+    String? helpRequestType,
+    String? helpRequestMessage,
+    DateTime? helpRequestedAt,
+    bool clearHelp = false,
   }) {
     return WorkerTask(
       id: id,
@@ -200,6 +218,10 @@ class WorkerTask {
       blockNote: clearBlocked ? null : (blockNote ?? this.blockNote),
       blockedAt: clearBlocked ? null : (blockedAt ?? this.blockedAt),
       blockerPhotoPath: clearBlocked ? null : (blockerPhotoPath ?? this.blockerPhotoPath),
+      helpRequested: clearHelp ? false : (helpRequested ?? this.helpRequested),
+      helpRequestType: clearHelp ? null : (helpRequestType ?? this.helpRequestType),
+      helpRequestMessage: clearHelp ? null : (helpRequestMessage ?? this.helpRequestMessage),
+      helpRequestedAt: clearHelp ? null : (helpRequestedAt ?? this.helpRequestedAt),
     );
   }
 
@@ -258,6 +280,12 @@ class WorkerTask {
           ? DateTime.tryParse(json['blockedAt'] as String)
           : null,
       blockerPhotoPath: json['blockerPhotoPath'] as String?,
+      helpRequested: json['helpRequested'] as bool? ?? false,
+      helpRequestType: json['helpRequestType'] as String?,
+      helpRequestMessage: json['helpRequestMessage'] as String?,
+      helpRequestedAt: json['helpRequestedAt'] != null
+          ? DateTime.tryParse(json['helpRequestedAt'] as String)
+          : null,
     );
   }
 
@@ -299,6 +327,11 @@ class WorkerTask {
       if (blockNote != null) 'blockNote': blockNote,
       if (blockedAt != null) 'blockedAt': blockedAt!.toUtc().toIso8601String(),
       if (blockerPhotoPath != null) 'blockerPhotoPath': blockerPhotoPath,
+      if (helpRequested) 'helpRequested': helpRequested,
+      if (helpRequestType != null) 'helpRequestType': helpRequestType,
+      if (helpRequestMessage != null) 'helpRequestMessage': helpRequestMessage,
+      if (helpRequestedAt != null)
+        'helpRequestedAt': helpRequestedAt!.toUtc().toIso8601String(),
     };
   }
 }

@@ -346,4 +346,54 @@ class ResilientTaskService implements TaskRepository {
       );
     }
   }
+
+  @override
+  Future<void> requestSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required String helpType,
+    required String message,
+  }) async {
+    try {
+      await primary.requestSupervisorHelp(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        helpType: helpType,
+        message: message,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] requestSupervisorHelp fallback: $e');
+      await fallback.requestSupervisorHelp(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        helpType: helpType,
+        message: message,
+      );
+    }
+  }
+
+  @override
+  Future<void> cancelSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    try {
+      await primary.cancelSupervisorHelp(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] cancelSupervisorHelp fallback: $e');
+      await fallback.cancelSupervisorHelp(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+      );
+    }
+  }
 }

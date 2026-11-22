@@ -110,4 +110,20 @@ abstract class TaskRepository {
     required String taskId,
     required String workerUid,
   });
+
+  /// Request supervisor guidance, callback, manpower, or equipment assistance without pausing work.
+  Future<void> requestSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required String helpType,
+    required String message,
+  });
+
+  /// Cancel or resolve active supervisor help request on the task.
+  Future<void> cancelSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  });
 }

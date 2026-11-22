@@ -1178,6 +1178,108 @@ abstract class AppLocalizations {
   /// **'Safety Hazard: If there is immediate danger to life or property, call 112 or file an emergency Safety Alert.'**
   String get taskDetailSafetyCriticalAlert;
 
+  /// No description provided for @taskDetailActionRequestHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Help'**
+  String get taskDetailActionRequestHelp;
+
+  /// No description provided for @taskDetailActionCallSupervisor.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Supervisor'**
+  String get taskDetailActionCallSupervisor;
+
+  /// No description provided for @taskDetailActionCancelHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Request'**
+  String get taskDetailActionCancelHelp;
+
+  /// No description provided for @taskDetailHelpDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Supervisor Help'**
+  String get taskDetailHelpDialogTitle;
+
+  /// No description provided for @taskDetailHelpDialogDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Flag this task for supervisor advisory callback or equipment assistance without holding field work.'**
+  String get taskDetailHelpDialogDesc;
+
+  /// No description provided for @taskDetailHelpTypeCallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Supervisor Callback / Phone Guidance'**
+  String get taskDetailHelpTypeCallback;
+
+  /// No description provided for @taskDetailHelpTypeEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy Machinery / Equipment Assistance'**
+  String get taskDetailHelpTypeEquipment;
+
+  /// No description provided for @taskDetailHelpTypeManpower.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Crew / Manpower Reinforcement'**
+  String get taskDetailHelpTypeManpower;
+
+  /// No description provided for @taskDetailHelpTypeMaterial.
+  ///
+  /// In en, this message translates to:
+  /// **'Materials / Parts / Safety Gear Replacements'**
+  String get taskDetailHelpTypeMaterial;
+
+  /// No description provided for @taskDetailHelpTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Municipal Guidance'**
+  String get taskDetailHelpTypeOther;
+
+  /// No description provided for @taskDetailHelpNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific Details or Equipment Needed (Optional)'**
+  String get taskDetailHelpNoteLabel;
+
+  /// No description provided for @taskDetailHelpNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Requesting backhoe loader or replacement gloves...'**
+  String get taskDetailHelpNoteHint;
+
+  /// No description provided for @taskDetailHelpSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Help Request'**
+  String get taskDetailHelpSubmit;
+
+  /// No description provided for @taskDetailHelpSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Supervisor help requested. Work remains active.'**
+  String get taskDetailHelpSuccess;
+
+  /// No description provided for @taskDetailHelpCancelSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Supervisor help request cancelled.'**
+  String get taskDetailHelpCancelSuccess;
+
+  /// No description provided for @taskDetailHelpBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Supervisor Help Requested'**
+  String get taskDetailHelpBannerTitle;
+
+  /// No description provided for @taskDetailHelpBannerSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Supervisor notified • Work continues actively'**
+  String get taskDetailHelpBannerSub;
+
   /// No description provided for @mapSubtitle.
   ///
   /// In en, this message translates to:

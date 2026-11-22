@@ -342,6 +342,50 @@ class TaskOperationsNotifier extends StateNotifier<AsyncValue<void>> {
       return false;
     }
   }
+
+  Future<bool> requestSupervisorHelp(
+    String taskId, {
+    required String helpType,
+    required String message,
+  }) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.requestSupervisorHelp(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+        helpType: helpType,
+        message: message,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> cancelSupervisorHelp(String taskId) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.cancelSupervisorHelp(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
 }
 
 final taskOperationsProvider =

@@ -596,6 +596,63 @@ class MockTaskService implements TaskRepository {
     _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
   }
 
+  @override
+  Future<void> requestSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required String helpType,
+    required String message,
+  }) async {
+    await _maybeDelay();
+    final index =
+        _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid &&
+        workerUid != 'mock-worker-rajesh-001') {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      helpRequested: true,
+      helpRequestType: helpType,
+      helpRequestMessage: message,
+      helpRequestedAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
+  @override
+  Future<void> cancelSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    await _maybeDelay();
+    final index =
+        _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid &&
+        workerUid != 'mock-worker-rajesh-001') {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      clearHelp: true,
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
   void dispose() {
     _streamController.close();
   }

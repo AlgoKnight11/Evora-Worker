@@ -590,6 +590,67 @@ class AppLocalizationsEn extends AppLocalizations {
       'Safety Hazard: If there is immediate danger to life or property, call 112 or file an emergency Safety Alert.';
 
   @override
+  String get taskDetailActionRequestHelp => 'Request Help';
+
+  @override
+  String get taskDetailActionCallSupervisor => 'Call Supervisor';
+
+  @override
+  String get taskDetailActionCancelHelp => 'Cancel Request';
+
+  @override
+  String get taskDetailHelpDialogTitle => 'Request Supervisor Help';
+
+  @override
+  String get taskDetailHelpDialogDesc =>
+      'Flag this task for supervisor advisory callback or equipment assistance without holding field work.';
+
+  @override
+  String get taskDetailHelpTypeCallback =>
+      'Supervisor Callback / Phone Guidance';
+
+  @override
+  String get taskDetailHelpTypeEquipment =>
+      'Heavy Machinery / Equipment Assistance';
+
+  @override
+  String get taskDetailHelpTypeManpower =>
+      'Additional Crew / Manpower Reinforcement';
+
+  @override
+  String get taskDetailHelpTypeMaterial =>
+      'Materials / Parts / Safety Gear Replacements';
+
+  @override
+  String get taskDetailHelpTypeOther => 'Other Municipal Guidance';
+
+  @override
+  String get taskDetailHelpNoteLabel =>
+      'Specific Details or Equipment Needed (Optional)';
+
+  @override
+  String get taskDetailHelpNoteHint =>
+      'e.g., Requesting backhoe loader or replacement gloves...';
+
+  @override
+  String get taskDetailHelpSubmit => 'Send Help Request';
+
+  @override
+  String get taskDetailHelpSuccess =>
+      'Supervisor help requested. Work remains active.';
+
+  @override
+  String get taskDetailHelpCancelSuccess =>
+      'Supervisor help request cancelled.';
+
+  @override
+  String get taskDetailHelpBannerTitle => 'Supervisor Help Requested';
+
+  @override
+  String get taskDetailHelpBannerSub =>
+      'Supervisor notified • Work continues actively';
+
+  @override
   String get mapSubtitle =>
       'Assigned task pins, approved service area, and offline navigation fallback';
 

@@ -590,6 +590,65 @@ class AppLocalizationsHi extends AppLocalizations {
       'सुरक्षा जोखिम: यदि जीवन या संपत्ति को तत्काल खतरा है, तो 112 पर कॉल करें या आपातकालीन सुरक्षा अलर्ट दर्ज करें।';
 
   @override
+  String get taskDetailActionRequestHelp => 'सहायता मांगें';
+
+  @override
+  String get taskDetailActionCallSupervisor => 'सुपरवाइज़र को कॉल करें';
+
+  @override
+  String get taskDetailActionCancelHelp => 'अनुरोध रद्द करें';
+
+  @override
+  String get taskDetailHelpDialogTitle => 'सुपरवाइज़र सहायता का अनुरोध';
+
+  @override
+  String get taskDetailHelpDialogDesc =>
+      'फ़ील्ड कार्य रोके बिना सुपरवाइज़र कॉलबैक या उपकरण सहायता के लिए इस कार्य को चिह्नित करें।';
+
+  @override
+  String get taskDetailHelpTypeCallback =>
+      'सुपरवाइज़र कॉलबैक / फ़ोन मार्गदर्शन';
+
+  @override
+  String get taskDetailHelpTypeEquipment => 'भारी मशीनरी / उपकरण सहायता';
+
+  @override
+  String get taskDetailHelpTypeManpower => 'अतिरिक्त कार्यबल / जनशक्ति सहायता';
+
+  @override
+  String get taskDetailHelpTypeMaterial =>
+      'सामग्री / पुर्जे / सुरक्षा गियर आपूर्ति';
+
+  @override
+  String get taskDetailHelpTypeOther => 'अन्य नगरपालिका मार्गदर्शन';
+
+  @override
+  String get taskDetailHelpNoteLabel =>
+      'विशिष्ट विवरण या आवश्यक उपकरण (वैकल्पिक)';
+
+  @override
+  String get taskDetailHelpNoteHint =>
+      'उदा. बैकहो लोडर या नए दस्तानों की आवश्यकता है...';
+
+  @override
+  String get taskDetailHelpSubmit => 'सहायता अनुरोध भेजें';
+
+  @override
+  String get taskDetailHelpSuccess =>
+      'सुपरवाइज़र सहायता का अनुरोध भेजा गया। कार्य जारी है।';
+
+  @override
+  String get taskDetailHelpCancelSuccess =>
+      'सुपरवाइज़र सहायता अनुरोध रद्द किया गया।';
+
+  @override
+  String get taskDetailHelpBannerTitle => 'सुपरवाइज़र सहायता अनुरोध सक्रिय';
+
+  @override
+  String get taskDetailHelpBannerSub =>
+      'सुपरवाइज़र को सूचित किया गया • कार्य सामान्य रूप से जारी है';
+
+  @override
   String get mapSubtitle =>
       'आवंटित कार्य स्थान, स्वीकृत सेवा क्षेत्र और ऑफ़लाइन दिशा-निर्देश';
 

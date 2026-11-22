@@ -8,9 +8,11 @@ import '../../../domain/enums/worker_enums.dart';
 import '../../../domain/models/worker_task.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../routes/app_router.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../providers/task_providers.dart';
 import '../widgets/block_task_dialog.dart';
 import '../widgets/decline_task_dialog.dart';
+import '../widgets/supervisor_help_dialog.dart';
 
 /// Comprehensive Task Detail Screen (`/tasks/:taskId`) for field operatives.
 /// Displays detailed work instructions, outdoor GIS coordinates, safety warnings,
@@ -366,6 +368,85 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     }
   }
 
+  Future<void> _handleRequestHelp(
+      WorkerTask task, AppLocalizations? l10n) async {
+    final profile = ref.read(authNotifierProvider).profile;
+    final result = await SupervisorHelpDialog.show(
+      context,
+      taskId: task.id,
+      taskTitle: task.title,
+      supervisorName: profile?.supervisorName,
+      supervisorPhone: profile?.supervisorPhone,
+    );
+
+    if (result == null) return;
+
+    setState(() => _isProcessingAction = true);
+    final success = await ref
+        .read(taskOperationsProvider.notifier)
+        .requestSupervisorHelp(
+          task.id,
+          helpType: result.helpType,
+          message: result.message,
+        );
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(task.id));
+      ref.invalidate(tasksStreamProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n?.taskDetailHelpSuccess ??
+              'Supervisor help requested. Work remains active.'),
+          backgroundColor: const Color(0xFF0284C7),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to request supervisor help. Please try again.'),
+          backgroundColor: EvoraColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleCancelHelp(
+      WorkerTask task, AppLocalizations? l10n) async {
+    setState(() => _isProcessingAction = true);
+    final success = await ref
+        .read(taskOperationsProvider.notifier)
+        .cancelSupervisorHelp(task.id);
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(task.id));
+      ref.invalidate(tasksStreamProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n?.taskDetailHelpCancelSuccess ??
+              'Supervisor help request cancelled.'),
+          backgroundColor: EvoraColors.primary,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _callSupervisorDirect(String phone) async {
+    final cleanPhone = phone.replaceAll(RegExp(r'\s+'), '');
+    final uri = Uri.parse('tel:$cleanPhone');
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      }
+    } catch (_) {}
+  }
+
   Future<void> _openInMaps(WorkerTask task) async {
     final lat = task.location.latitude;
     final lng = task.location.longitude;
@@ -451,6 +532,22 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
             ),
           ],
         ),
+        actions: [
+          if (taskAsync.value != null)
+            IconButton(
+              key: const Key('btn_request_help_detail'),
+              icon: Icon(
+                taskAsync.value!.isHelpRequested
+                    ? Icons.support_agent_rounded
+                    : Icons.support_agent_outlined,
+                color: taskAsync.value!.isHelpRequested
+                    ? const Color(0xFF0284C7)
+                    : (isDark ? Colors.white70 : EvoraColors.onSurfaceVariant),
+              ),
+              tooltip: l10n?.taskDetailActionRequestHelp ?? 'Request Help',
+              onPressed: () => _handleRequestHelp(taskAsync.value!, l10n),
+            ),
+        ],
       ),
       body: taskAsync.when(
         loading: () => const Center(
@@ -550,6 +647,11 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
 
                 if (task.isBlocked) ...[
                   _buildBlockedBanner(context, task, isDark, l10n),
+                  const SizedBox(height: 14),
+                ],
+
+                if (task.isHelpRequested) ...[
+                  _buildSupervisorHelpBanner(context, task, isDark, l10n),
                   const SizedBox(height: 14),
                 ],
 
@@ -1392,6 +1494,145 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         l10n?.taskDetailBlockReasonSafety ?? 'Safety Risk / Unstable Site',
       BlockReason.other =>
         l10n?.taskDetailBlockReasonOther ?? 'Other Operational Issue',
+    };
+  }
+
+  Widget _buildSupervisorHelpBanner(BuildContext context, WorkerTask task,
+      bool isDark, AppLocalizations? l10n) {
+    final helpTypeLabel = _helpTypeLabel(task.helpRequestType, l10n);
+    final profile = ref.watch(authNotifierProvider).profile;
+    final supervisorPhone = profile?.supervisorPhone ?? '+919816000001';
+
+    return Container(
+      key: const Key('banner_supervisor_help'),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0F9FF),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFBAE6FD)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.support_agent_rounded,
+                color: Color(0xFF0284C7),
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n?.taskDetailHelpBannerTitle ?? 'Supervisor Help Requested',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13.5,
+                        color: Color(0xFF075985),
+                      ),
+                    ),
+                    Text(
+                      l10n?.taskDetailHelpBannerSub ??
+                          'Supervisor notified • Work continues actively',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF0369A1),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE0F2FE),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFF7DD3FC)),
+                      ),
+                      child: Text(
+                        helpTypeLabel,
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0369A1),
+                        ),
+                      ),
+                    ),
+                    if (task.helpRequestMessage != null &&
+                        task.helpRequestMessage!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        task.helpRequestMessage!,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF0C4A6E),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: const Key('btn_call_supervisor_banner'),
+                  onPressed: () => _callSupervisorDirect(supervisorPhone),
+                  icon: const Icon(Icons.phone_rounded, size: 16),
+                  label: Text(
+                    l10n?.taskDetailActionCallSupervisor ?? 'Call Supervisor',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF0284C7),
+                    side: const BorderSide(color: Color(0xFF0284C7)),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              TextButton(
+                key: const Key('btn_cancel_help_detail'),
+                onPressed: _isProcessingAction
+                    ? null
+                    : () => _handleCancelHelp(task, l10n),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF64748B),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                ),
+                child: Text(
+                  l10n?.taskDetailActionCancelHelp ?? 'Cancel Request',
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _helpTypeLabel(String? helpType, AppLocalizations? l10n) {
+    return switch (helpType) {
+      'callback' =>
+        l10n?.taskDetailHelpTypeCallback ?? 'Supervisor Callback / Guidance',
+      'equipment' =>
+        l10n?.taskDetailHelpTypeEquipment ?? 'Heavy Machinery / Equipment Assistance',
+      'manpower' =>
+        l10n?.taskDetailHelpTypeManpower ?? 'Additional Crew / Manpower Reinforcement',
+      'material' =>
+        l10n?.taskDetailHelpTypeMaterial ?? 'Materials / Parts / Safety Gear Replacements',
+      _ => l10n?.taskDetailHelpTypeOther ?? 'Other Municipal Guidance',
     };
   }
 

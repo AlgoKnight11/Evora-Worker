@@ -352,4 +352,56 @@ class FirestoreTaskService implements TaskRepository {
       'timestamp': FieldValue.serverTimestamp(),
     });
   }
+
+  @override
+  Future<void> requestSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required String helpType,
+    required String message,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    await ref.update({
+      'helpRequested': true,
+      'helpRequestType': helpType,
+      'helpRequestMessage': message,
+      'helpRequestedAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    });
+
+    await ref.collection('auditEvents').add({
+      'eventType': 'SUPERVISOR_HELP_REQUESTED',
+      'workerUid': workerUid,
+      'helpType': helpType,
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> cancelSupervisorHelp({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    await ref.update({
+      'helpRequested': false,
+      'helpRequestType': null,
+      'helpRequestMessage': null,
+      'helpRequestedAt': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    });
+
+    await ref.collection('auditEvents').add({
+      'eventType': 'SUPERVISOR_HELP_CANCELLED',
+      'workerUid': workerUid,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
 }
