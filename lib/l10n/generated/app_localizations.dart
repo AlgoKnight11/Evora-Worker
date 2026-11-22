@@ -980,6 +980,90 @@ abstract class AppLocalizations {
   /// **'Task Submitted • Awaiting Supervisor Review'**
   String get taskDetailActionReview;
 
+  /// No description provided for @taskDetailActionStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Field Work'**
+  String get taskDetailActionStart;
+
+  /// No description provided for @taskDetailActionPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Work'**
+  String get taskDetailActionPause;
+
+  /// No description provided for @taskDetailActionResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Work'**
+  String get taskDetailActionResume;
+
+  /// No description provided for @taskDetailActionPauseDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Field Work'**
+  String get taskDetailActionPauseDialogTitle;
+
+  /// No description provided for @taskDetailActionPauseDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a reason for temporarily holding work:'**
+  String get taskDetailActionPauseDialogMessage;
+
+  /// No description provided for @taskDetailPauseReasonMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal or Rest Break'**
+  String get taskDetailPauseReasonMeal;
+
+  /// No description provided for @taskDetailPauseReasonShift.
+  ///
+  /// In en, this message translates to:
+  /// **'Shift Handover / Crew Change'**
+  String get taskDetailPauseReasonShift;
+
+  /// No description provided for @taskDetailPauseReasonWeather.
+  ///
+  /// In en, this message translates to:
+  /// **'Adverse Weather Hold'**
+  String get taskDetailPauseReasonWeather;
+
+  /// No description provided for @taskDetailPauseReasonMaterial.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting Materials or Tools'**
+  String get taskDetailPauseReasonMaterial;
+
+  /// No description provided for @taskDetailPauseReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Operational Reason'**
+  String get taskDetailPauseReasonOther;
+
+  /// No description provided for @taskDetailStartedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Work started on task.'**
+  String get taskDetailStartedSuccess;
+
+  /// No description provided for @taskDetailPausedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Field work paused.'**
+  String get taskDetailPausedSuccess;
+
+  /// No description provided for @taskDetailResumedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Field work resumed.'**
+  String get taskDetailResumedSuccess;
+
+  /// No description provided for @taskDetailPausedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Work Paused'**
+  String get taskDetailPausedNotice;
+
   /// No description provided for @mapSubtitle.
   ///
   /// In en, this message translates to:

@@ -477,6 +477,49 @@ class AppLocalizationsHi extends AppLocalizations {
       'कार्य जमा किया गया • सुपरवाइज़र समीक्षा की प्रतीक्षा';
 
   @override
+  String get taskDetailActionStart => 'फ़ील्ड कार्य प्रारंभ करें';
+
+  @override
+  String get taskDetailActionPause => 'कार्य रोकें';
+
+  @override
+  String get taskDetailActionResume => 'कार्य पुनः प्रारंभ करें';
+
+  @override
+  String get taskDetailActionPauseDialogTitle => 'फ़ील्ड कार्य रोकें';
+
+  @override
+  String get taskDetailActionPauseDialogMessage =>
+      'कार्य को अस्थायी रूप से रोकने का कारण चुनें:';
+
+  @override
+  String get taskDetailPauseReasonMeal => 'भोजन या विश्राम अवकाश';
+
+  @override
+  String get taskDetailPauseReasonShift => 'पाली हस्तांतरण / दल परिवर्तन';
+
+  @override
+  String get taskDetailPauseReasonWeather => 'प्रतिकूल मौसम रोक';
+
+  @override
+  String get taskDetailPauseReasonMaterial => 'सामग्री या उपकरण की प्रतीक्षा';
+
+  @override
+  String get taskDetailPauseReasonOther => 'अन्य परिचालन कारण';
+
+  @override
+  String get taskDetailStartedSuccess => 'कार्य प्रारंभ हो गया है।';
+
+  @override
+  String get taskDetailPausedSuccess => 'फ़ील्ड कार्य रोक दिया गया है।';
+
+  @override
+  String get taskDetailResumedSuccess => 'फ़ील्ड कार्य पुनः प्रारंभ हो गया है।';
+
+  @override
+  String get taskDetailPausedNotice => 'कार्य रुका हुआ है';
+
+  @override
   String get mapSubtitle =>
       'आवंटित कार्य स्थान, स्वीकृत सेवा क्षेत्र और ऑफ़लाइन दिशा-निर्देश';
 

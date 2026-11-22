@@ -70,4 +70,28 @@ abstract class TaskRepository {
     required String taskId,
     required String workerUid,
   });
+
+  /// Transition an accepted task to `in_progress`, recording start timestamp and optional GPS location.
+  Future<void> startTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    double? latitude,
+    double? longitude,
+  });
+
+  /// Temporarily pause an in-progress task (e.g. for shift handover, weather hold, or meal break).
+  Future<void> pauseTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    String? reason,
+  });
+
+  /// Resume a previously paused task back to `in_progress`.
+  Future<void> resumeTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  });
 }

@@ -212,4 +212,86 @@ class FirestoreTaskService implements TaskRepository {
       'dismissedAt': FieldValue.serverTimestamp(),
     });
   }
+
+  @override
+  Future<void> startTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    double? latitude,
+    double? longitude,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    final updateData = <String, dynamic>{
+      'status': TaskStatus.inProgress.value,
+      'startedAt': FieldValue.serverTimestamp(),
+      'pausedAt': null,
+      'pauseReason': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    };
+    if (latitude != null) updateData['startedLatitude'] = latitude;
+    if (longitude != null) updateData['startedLongitude'] = longitude;
+
+    await ref.update(updateData);
+
+    final auditData = <String, dynamic>{
+      'eventType': 'TASK_STARTED',
+      'workerUid': workerUid,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+    if (latitude != null) auditData['latitude'] = latitude;
+    if (longitude != null) auditData['longitude'] = longitude;
+
+    await ref.collection('auditEvents').add(auditData);
+  }
+
+  @override
+  Future<void> pauseTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    String? reason,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    await ref.update({
+      'status': TaskStatus.accepted.value,
+      'pausedAt': FieldValue.serverTimestamp(),
+      if (reason != null && reason.isNotEmpty) 'pauseReason': reason,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    });
+
+    await ref.collection('auditEvents').add({
+      'eventType': 'TASK_PAUSED',
+      'workerUid': workerUid,
+      'reason': reason,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> resumeTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    await ref.update({
+      'status': TaskStatus.inProgress.value,
+      'pausedAt': null,
+      'pauseReason': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    });
+
+    await ref.collection('auditEvents').add({
+      'eventType': 'TASK_RESUMED',
+      'workerUid': workerUid,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
 }

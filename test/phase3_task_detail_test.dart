@@ -254,8 +254,9 @@ void main() {
 
       await tester.tap(startBtn);
       await tester.pump();
+      await tester.pumpAndSettle();
 
-      expect(find.textContaining('Field execution engine unlocks in Phase 4'), findsOneWidget);
+      expect(find.textContaining('Work started on task'), findsOneWidget);
     });
 
     testWidgets('8. Non-existent task renders Not Found state with Back button',

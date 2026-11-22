@@ -79,6 +79,13 @@ class WorkerTask {
   final int version;
   final int schemaVersion;
 
+  /// Optional execution lifecycle fields (Phase 4)
+  final DateTime? startedAt;
+  final DateTime? pausedAt;
+  final String? pauseReason;
+  final double? startedLatitude;
+  final double? startedLongitude;
+
   const WorkerTask({
     required this.id,
     required this.tenantId,
@@ -105,6 +112,11 @@ class WorkerTask {
     required this.updatedAt,
     this.version = 1,
     this.schemaVersion = 1,
+    this.startedAt,
+    this.pausedAt,
+    this.pauseReason,
+    this.startedLatitude,
+    this.startedLongitude,
   });
 
   /// True if the task is currently unclaimed in a team pool.
@@ -114,6 +126,9 @@ class WorkerTask {
   /// True if the task is linked to a formal CivicFlow grievance.
   bool get isCivicFlowLinked =>
       sourceType == SourceType.civicFlowCase && civicFlowCaseId != null;
+
+  /// True if the task is temporarily paused during active work.
+  bool get isPaused => pausedAt != null && status == TaskStatus.accepted;
 
   bool get isOverdue =>
       status.isActiveQueue &&
@@ -125,6 +140,12 @@ class WorkerTask {
     TaskStatus? status,
     DateTime? updatedAt,
     int? version,
+    DateTime? startedAt,
+    DateTime? pausedAt,
+    String? pauseReason,
+    bool clearPaused = false,
+    double? startedLatitude,
+    double? startedLongitude,
   }) {
     return WorkerTask(
       id: id,
@@ -152,6 +173,11 @@ class WorkerTask {
       updatedAt: updatedAt ?? this.updatedAt,
       version: version ?? this.version,
       schemaVersion: schemaVersion,
+      startedAt: startedAt ?? this.startedAt,
+      pausedAt: clearPaused ? null : (pausedAt ?? this.pausedAt),
+      pauseReason: clearPaused ? null : (pauseReason ?? this.pauseReason),
+      startedLatitude: startedLatitude ?? this.startedLatitude,
+      startedLongitude: startedLongitude ?? this.startedLongitude,
     );
   }
 
@@ -193,6 +219,15 @@ class WorkerTask {
           DateTime.fromMillisecondsSinceEpoch(0),
       version: (json['version'] as num?)?.toInt() ?? 1,
       schemaVersion: (json['schemaVersion'] as num?)?.toInt() ?? 1,
+      startedAt: json['startedAt'] != null
+          ? DateTime.tryParse(json['startedAt'] as String)
+          : null,
+      pausedAt: json['pausedAt'] != null
+          ? DateTime.tryParse(json['pausedAt'] as String)
+          : null,
+      pauseReason: json['pauseReason'] as String?,
+      startedLatitude: (json['startedLatitude'] as num?)?.toDouble(),
+      startedLongitude: (json['startedLongitude'] as num?)?.toDouble(),
     );
   }
 
@@ -225,6 +260,11 @@ class WorkerTask {
       'updatedAt': updatedAt.toUtc().toIso8601String(),
       'version': version,
       'schemaVersion': schemaVersion,
+      if (startedAt != null) 'startedAt': startedAt!.toUtc().toIso8601String(),
+      if (pausedAt != null) 'pausedAt': pausedAt!.toUtc().toIso8601String(),
+      if (pauseReason != null) 'pauseReason': pauseReason,
+      if (startedLatitude != null) 'startedLatitude': startedLatitude,
+      if (startedLongitude != null) 'startedLongitude': startedLongitude,
     };
   }
 }

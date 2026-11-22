@@ -478,6 +478,49 @@ class AppLocalizationsEn extends AppLocalizations {
       'Task Submitted • Awaiting Supervisor Review';
 
   @override
+  String get taskDetailActionStart => 'Start Field Work';
+
+  @override
+  String get taskDetailActionPause => 'Pause Work';
+
+  @override
+  String get taskDetailActionResume => 'Resume Work';
+
+  @override
+  String get taskDetailActionPauseDialogTitle => 'Pause Field Work';
+
+  @override
+  String get taskDetailActionPauseDialogMessage =>
+      'Select a reason for temporarily holding work:';
+
+  @override
+  String get taskDetailPauseReasonMeal => 'Meal or Rest Break';
+
+  @override
+  String get taskDetailPauseReasonShift => 'Shift Handover / Crew Change';
+
+  @override
+  String get taskDetailPauseReasonWeather => 'Adverse Weather Hold';
+
+  @override
+  String get taskDetailPauseReasonMaterial => 'Awaiting Materials or Tools';
+
+  @override
+  String get taskDetailPauseReasonOther => 'Other Operational Reason';
+
+  @override
+  String get taskDetailStartedSuccess => 'Work started on task.';
+
+  @override
+  String get taskDetailPausedSuccess => 'Field work paused.';
+
+  @override
+  String get taskDetailResumedSuccess => 'Field work resumed.';
+
+  @override
+  String get taskDetailPausedNotice => 'Task Work Paused';
+
+  @override
   String get mapSubtitle =>
       'Assigned task pins, approved service area, and offline navigation fallback';
 

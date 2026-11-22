@@ -458,6 +458,88 @@ class MockTaskService implements TaskRepository {
     _emitUpdatedTasks(tenantId, workerUid, task?.teamId);
   }
 
+  @override
+  Future<void> startTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    double? latitude,
+    double? longitude,
+  }) async {
+    await _maybeDelay();
+    final index = _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid) {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      status: TaskStatus.inProgress,
+      startedAt: DateTime.now(),
+      startedLatitude: latitude,
+      startedLongitude: longitude,
+      clearPaused: true,
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
+  @override
+  Future<void> pauseTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    String? reason,
+  }) async {
+    await _maybeDelay();
+    final index = _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid) {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      status: TaskStatus.accepted,
+      pausedAt: DateTime.now(),
+      pauseReason: reason ?? 'Operational pause',
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
+  @override
+  Future<void> resumeTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    await _maybeDelay();
+    final index = _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid) {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      status: TaskStatus.inProgress,
+      clearPaused: true,
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
   void dispose() {
     _streamController.close();
   }

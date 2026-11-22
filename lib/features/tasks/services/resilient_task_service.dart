@@ -221,4 +221,79 @@ class ResilientTaskService implements TaskRepository {
       );
     }
   }
+
+  @override
+  Future<void> startTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    double? latitude,
+    double? longitude,
+  }) async {
+    try {
+      await primary.startTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        latitude: latitude,
+        longitude: longitude,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] startTask fallback: $e');
+      await fallback.startTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        latitude: latitude,
+        longitude: longitude,
+      );
+    }
+  }
+
+  @override
+  Future<void> pauseTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    String? reason,
+  }) async {
+    try {
+      await primary.pauseTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        reason: reason,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] pauseTask fallback: $e');
+      await fallback.pauseTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        reason: reason,
+      );
+    }
+  }
+
+  @override
+  Future<void> resumeTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    try {
+      await primary.resumeTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] resumeTask fallback: $e');
+      await fallback.resumeTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+      );
+    }
+  }
 }

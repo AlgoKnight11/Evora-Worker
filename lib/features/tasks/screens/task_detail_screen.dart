@@ -145,6 +145,156 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     }
   }
 
+  Future<void> _handleStartWork(WorkerTask task, AppLocalizations? l10n) async {
+    setState(() => _isProcessingAction = true);
+    final success = await ref
+        .read(taskOperationsProvider.notifier)
+        .startTask(
+          task.id,
+          latitude: task.location.latitude,
+          longitude: task.location.longitude,
+        );
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(widget.taskId));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n?.taskDetailStartedSuccess ?? 'Work started on task.',
+          ),
+          backgroundColor: EvoraColors.primary,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handlePauseWork(
+      WorkerTask task, String reason, AppLocalizations? l10n) async {
+    setState(() => _isProcessingAction = true);
+    final success = await ref
+        .read(taskOperationsProvider.notifier)
+        .pauseTask(task.id, reason: reason);
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(widget.taskId));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n?.taskDetailPausedSuccess ?? 'Field work paused.',
+          ),
+          backgroundColor: const Color(0xFFD97706),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleResumeWork(WorkerTask task, AppLocalizations? l10n) async {
+    setState(() => _isProcessingAction = true);
+    final success =
+        await ref.read(taskOperationsProvider.notifier).resumeTask(task.id);
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(widget.taskId));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n?.taskDetailResumedSuccess ?? 'Field work resumed.',
+          ),
+          backgroundColor: EvoraColors.primary,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  void _showPauseWorkSheet(WorkerTask task, AppLocalizations? l10n) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) {
+        final isDark = Theme.of(bottomSheetContext).brightness == Brightness.dark;
+        final reasons = [
+          (l10n?.taskDetailPauseReasonMeal ?? 'Meal or Rest Break', Icons.restaurant_rounded),
+          (l10n?.taskDetailPauseReasonShift ?? 'Shift Handover / Crew Change', Icons.groups_rounded),
+          (l10n?.taskDetailPauseReasonWeather ?? 'Adverse Weather Hold', Icons.cloudy_snowing),
+          (l10n?.taskDetailPauseReasonMaterial ?? 'Awaiting Materials or Tools', Icons.handyman_rounded),
+          (l10n?.taskDetailPauseReasonOther ?? 'Other Operational Reason', Icons.more_horiz_rounded),
+        ];
+
+        return Material(
+          color: isDark ? const Color(0xFF18261E) : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          clipBehavior: Clip.antiAlias,
+          child: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n?.taskDetailActionPauseDialogTitle ?? 'Pause Field Work',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? Colors.white : EvoraColors.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n?.taskDetailActionPauseDialogMessage ??
+                        'Select a reason for temporarily holding work:',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.white70 : EvoraColors.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ...reasons.map((item) {
+                    final (label, icon) = item;
+                    return Material(
+                      color: Colors.transparent,
+                      child: ListTile(
+                        leading: Icon(icon, color: const Color(0xFFD97706), size: 20),
+                        title: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        onTap: () {
+                          Navigator.pop(bottomSheetContext);
+                          _handlePauseWork(task, label, l10n);
+                        },
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _openInMaps(WorkerTask task) async {
     final lat = task.location.latitude;
     final lng = task.location.longitude;
@@ -321,6 +471,11 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 // 1. Header Card (Title, Category, Priority, SLA, Status)
                 _buildHeaderCard(context, task, isDark, l10n),
                 const SizedBox(height: 14),
+
+                if (task.isPaused) ...[
+                  _buildPausedBanner(context, task, isDark, l10n),
+                  const SizedBox(height: 14),
+                ],
 
                 // 2. Location & Dispatch Coordinates Card
                 _buildLocationCard(context, task, isDark, l10n),
@@ -1042,6 +1197,49 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     );
   }
 
+  Widget _buildPausedBanner(BuildContext context, WorkerTask task, bool isDark,
+      AppLocalizations? l10n) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFBEB),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFFDE68A)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.pause_circle_filled_rounded,
+              color: Color(0xFFD97706), size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n?.taskDetailPausedNotice ?? 'Task Work Paused',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 13.5,
+                    color: Color(0xFF92400E),
+                  ),
+                ),
+                if (task.pauseReason != null && task.pauseReason!.isNotEmpty)
+                  Text(
+                    task.pauseReason!,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFB45309),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildBottomActionBar(BuildContext context, WorkerTask task,
       bool isDark, AppLocalizations? l10n, double bottomInset) {
     return Container(
@@ -1185,23 +1383,36 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       );
     }
 
-    // 3. Accepted Task (Ready for execution)
+    // 3. Accepted Task (Ready for execution or Paused)
     if (task.status == TaskStatus.accepted) {
+      if (task.isPaused) {
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            key: const Key('btn_resume_work_detail'),
+            onPressed: () => _handleResumeWork(task, l10n),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: EvoraColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              elevation: 0,
+            ),
+            icon: const Icon(Icons.play_arrow_rounded, size: 20),
+            label: Text(
+              l10n?.taskDetailActionResume ?? 'Resume Work',
+              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+            ),
+          ),
+        );
+      }
       return SizedBox(
         width: double.infinity,
         child: ElevatedButton.icon(
           key: const Key('btn_start_work_detail'),
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Task is accepted. Field execution engine unlocks in Phase 4.',
-                ),
-                backgroundColor: EvoraColors.primary,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          },
+          onPressed: () => _handleStartWork(task, l10n),
           style: ElevatedButton.styleFrom(
             backgroundColor: EvoraColors.primary,
             foregroundColor: Colors.white,
@@ -1213,7 +1424,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
           ),
           icon: const Icon(Icons.play_arrow_rounded, size: 20),
           label: Text(
-            l10n?.tasksActionStartWork ?? 'Start Field Work',
+            l10n?.tasksActionStartWork ?? 'Start Work',
             style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
           ),
         ),
@@ -1222,30 +1433,61 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
 
     // 4. In Progress Task
     if (task.status == TaskStatus.inProgress) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: EvoraColors.primary.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: EvoraColors.primary.withValues(alpha: 0.4)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.engineering_rounded,
-                size: 20, color: EvoraColors.primary),
-            const SizedBox(width: 8),
-            Text(
-              l10n?.taskDetailActionInProgress ??
-                  'Task In Progress • Field Execution Active',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: EvoraColors.primary,
+      return Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: OutlinedButton.icon(
+              key: const Key('btn_pause_work_detail'),
+              onPressed: () => _showPauseWorkSheet(task, l10n),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFFD97706),
+                side: const BorderSide(color: Color(0xFFD97706)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+              icon: const Icon(Icons.pause_circle_outline_rounded, size: 18),
+              label: Text(
+                l10n?.taskDetailActionPause ?? 'Pause Work',
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
+              decoration: BoxDecoration(
+                color: EvoraColors.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: EvoraColors.primary.withValues(alpha: 0.4)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.engineering_rounded,
+                      size: 18, color: EvoraColors.primary),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      l10n?.taskDetailActionInProgress ?? 'In Progress',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: EvoraColors.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       );
     }
 

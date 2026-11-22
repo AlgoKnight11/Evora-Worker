@@ -238,6 +238,66 @@ class TaskOperationsNotifier extends StateNotifier<AsyncValue<void>> {
       return false;
     }
   }
+
+  Future<bool> startTask(String taskId, {double? latitude, double? longitude}) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.startTask(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+        latitude: latitude,
+        longitude: longitude,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> pauseTask(String taskId, {String? reason}) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.pauseTask(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+        reason: reason,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> resumeTask(String taskId) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.resumeTask(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
 }
 
 final taskOperationsProvider =
