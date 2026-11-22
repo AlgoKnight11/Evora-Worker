@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/enums/worker_enums.dart';
+import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../models/task_filter.dart';
@@ -55,6 +56,18 @@ final tasksStreamProvider = StreamProvider<List<WorkerTask>>((ref) {
     tenantId: profile.tenantId,
     workerUid: profile.uid,
     teamId: profile.teamId,
+  );
+});
+
+/// Real-time stream of high-priority out-of-band safety alerts reported by this worker/tenant.
+final safetyAlertsStreamProvider = StreamProvider<List<SafetyAlert>>((ref) {
+  final profile = ref.watch(authNotifierProvider).profile;
+  if (profile == null) return Stream.value(const []);
+
+  final repo = ref.watch(taskRepositoryProvider);
+  return repo.watchSafetyAlerts(
+    tenantId: profile.tenantId,
+    workerUid: profile.uid,
   );
 });
 
@@ -384,6 +397,37 @@ class TaskOperationsNotifier extends StateNotifier<AsyncValue<void>> {
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       return false;
+    }
+  }
+
+  Future<SafetyAlert?> reportSafetyIncident({
+    required String hazardType,
+    required String description,
+    String? taskId,
+    double? latitude,
+    double? longitude,
+    String? photoStoragePath,
+  }) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return null;
+
+    state = const AsyncValue.loading();
+    try {
+      final alert = await _repo.reportSafetyIncident(
+        tenantId: profile.tenantId,
+        reportedByUid: profile.uid,
+        hazardType: hazardType,
+        description: description,
+        taskId: taskId,
+        latitude: latitude,
+        longitude: longitude,
+        photoStoragePath: photoStoragePath,
+      );
+      state = const AsyncValue.data(null);
+      return alert;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return null;
     }
   }
 }

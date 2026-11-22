@@ -651,6 +651,83 @@ class AppLocalizationsEn extends AppLocalizations {
       'Supervisor notified • Work continues actively';
 
   @override
+  String get safetyDialogTitle => 'Report Safety Hazard';
+
+  @override
+  String get safetyDialogDesc =>
+      'High-priority life safety escalation. Out-of-band alert directly notifies emergency dispatch and supervisors.';
+
+  @override
+  String get safetyEmergencySpeedDial => 'Instant Emergency Speed Dial';
+
+  @override
+  String get safetyEmergencyCallPolice => 'Police / Emergency (112)';
+
+  @override
+  String get safetyEmergencyCallAmbulance => 'Ambulance (108)';
+
+  @override
+  String get safetyEmergencyCallFire => 'Fire Dispatch (101)';
+
+  @override
+  String get safetyEmergencyCallMunicipal => 'Control Room (1916)';
+
+  @override
+  String get safetyHazardTypeTitle => 'Hazard Classification';
+
+  @override
+  String get safetyHazardElectrical => 'Live Electrical Wire / High Voltage';
+
+  @override
+  String get safetyHazardStructural => 'Structural Collapse / Landslide';
+
+  @override
+  String get safetyHazardGasChemical => 'Toxic Gas Leak / Hazardous Chemical';
+
+  @override
+  String get safetyHazardViolence => 'Threat of Violence / Aggressive Crowd';
+
+  @override
+  String get safetyHazardTraffic => 'Traffic Collision / Highway Hazard';
+
+  @override
+  String get safetyHazardOther => 'Other Critical Life-Safety Risk';
+
+  @override
+  String get safetyRiskLevelTitle => 'Risk Level';
+
+  @override
+  String get safetyRiskCritical => 'Critical (Immediate Danger)';
+
+  @override
+  String get safetyRiskHigh => 'High (Severe Threat)';
+
+  @override
+  String get safetyNotesLabel => 'Incident Description & Immediate Threats';
+
+  @override
+  String get safetyNotesHint =>
+      'Describe live danger, exact location details, or trapped personnel...';
+
+  @override
+  String get safetySubmitButton => 'Transmit Safety Alert';
+
+  @override
+  String safetySubmitSuccess(Object id) {
+    return 'Safety alert #$id transmitted to emergency dispatch.';
+  }
+
+  @override
+  String get safetyActionReport => 'Report Hazard';
+
+  @override
+  String get safetyBannerTitle => 'Safety Hazard Escalated';
+
+  @override
+  String get safetyBannerSubtitle =>
+      'Emergency dispatch & supervisor alerted out-of-band';
+
+  @override
   String get mapSubtitle =>
       'Assigned task pins, approved service area, and offline navigation fallback';
 
@@ -663,6 +740,54 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mapOfflineFallbackDesc =>
       'In-app map, external directions link, and textual landmark directions will load here.';
+
+  @override
+  String get mapTotalTasks => 'Active Pins';
+
+  @override
+  String get mapCriticalTasks => 'Critical';
+
+  @override
+  String get mapOverdueTasks => 'Overdue';
+
+  @override
+  String get mapFilterAll => 'All Work';
+
+  @override
+  String get mapFilterAssigned => 'My Route';
+
+  @override
+  String get mapFilterUrgent => 'Urgent Only';
+
+  @override
+  String get mapTabVisual => 'Interactive Map';
+
+  @override
+  String get mapTabDirections => 'Turn-by-Turn Route';
+
+  @override
+  String get mapSelectPinPrompt =>
+      'Tap any task pin to preview route and instructions';
+
+  @override
+  String get mapLaunchExternalNavigation => 'Start Navigation in Google Maps';
+
+  @override
+  String get mapNoAssignedTasks =>
+      'No active tasks located in your service area.';
+
+  @override
+  String get mapWardsHeader => 'Assigned Service Wards';
+
+  @override
+  String mapStepTitle(int stop, String title) {
+    return 'Stop $stop: $title';
+  }
+
+  @override
+  String mapStepLandmark(String landmark) {
+    return 'Near: $landmark';
+  }
 
   @override
   String get notificationsSubtitle =>

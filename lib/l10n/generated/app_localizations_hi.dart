@@ -649,6 +649,83 @@ class AppLocalizationsHi extends AppLocalizations {
       'सुपरवाइज़र को सूचित किया गया • कार्य सामान्य रूप से जारी है';
 
   @override
+  String get safetyDialogTitle => 'सुरक्षा खतरे की रिपोर्ट करें';
+
+  @override
+  String get safetyDialogDesc =>
+      'उच्च-प्राथमिकता सुरक्षा सूचना। यह अलर्ट सीधे आपातकालीन नियंत्रण कक्ष और पर्यवेक्षक को भेजा जाता है।';
+
+  @override
+  String get safetyEmergencySpeedDial => 'त्वरित आपातकालीन नंबर';
+
+  @override
+  String get safetyEmergencyCallPolice => 'पुलिस / आपातकाल (112)';
+
+  @override
+  String get safetyEmergencyCallAmbulance => 'एम्बुलेंस (108)';
+
+  @override
+  String get safetyEmergencyCallFire => 'दमकल केंद्र (101)';
+
+  @override
+  String get safetyEmergencyCallMunicipal => 'कंट्रोल रूम (1916)';
+
+  @override
+  String get safetyHazardTypeTitle => 'खतरे का प्रकार';
+
+  @override
+  String get safetyHazardElectrical => 'खुला बिजली का तार / हाई वोल्टेज';
+
+  @override
+  String get safetyHazardStructural => 'ढांचा गिरना / भूस्खलन';
+
+  @override
+  String get safetyHazardGasChemical => 'जहरीली गैस रिसाव / रासायनिक रिसाव';
+
+  @override
+  String get safetyHazardViolence => 'हिंसा का खतरा / उग्र भीड़';
+
+  @override
+  String get safetyHazardTraffic => 'सड़क दुर्घटना / तेज़ यातायात';
+
+  @override
+  String get safetyHazardOther => 'अन्य गंभीर सुरक्षा जोखिम';
+
+  @override
+  String get safetyRiskLevelTitle => 'जोखिम का स्तर';
+
+  @override
+  String get safetyRiskCritical => 'अति-गंभीर (तात्कालिक जीवन खतरा)';
+
+  @override
+  String get safetyRiskHigh => 'गंभीर (उच्च जोखिम)';
+
+  @override
+  String get safetyNotesLabel => 'घटना का विवरण व तात्कालिक स्थिति';
+
+  @override
+  String get safetyNotesHint =>
+      'खतरे, सटीक स्थान और फंसे हुए कर्मियों का विवरण दें...';
+
+  @override
+  String get safetySubmitButton => 'सुरक्षा अलर्ट भेजें';
+
+  @override
+  String safetySubmitSuccess(Object id) {
+    return 'सुरक्षा अलर्ट #$id आपातकालीन डिस्पैच को भेजा गया।';
+  }
+
+  @override
+  String get safetyActionReport => 'खतरे की रिपोर्ट';
+
+  @override
+  String get safetyBannerTitle => 'सुरक्षा खतरा रिपोर्ट किया गया';
+
+  @override
+  String get safetyBannerSubtitle =>
+      'आपातकालीन नियंत्रण कक्ष व पर्यवेक्षक को तुरंत सूचित किया गया';
+
+  @override
   String get mapSubtitle =>
       'आवंटित कार्य स्थान, स्वीकृत सेवा क्षेत्र और ऑफ़लाइन दिशा-निर्देश';
 
@@ -661,6 +738,54 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get mapOfflineFallbackDesc =>
       'इन-ऐप मानचित्र, बाहरी दिशा लिंक और ऑफ़लाइन पता विवरण यहाँ लोड होंगे।';
+
+  @override
+  String get mapTotalTasks => 'सक्रिय कार्य';
+
+  @override
+  String get mapCriticalTasks => 'अति-आवश्यक';
+
+  @override
+  String get mapOverdueTasks => 'विलंबित';
+
+  @override
+  String get mapFilterAll => 'सभी कार्य';
+
+  @override
+  String get mapFilterAssigned => 'मेरा मार्ग';
+
+  @override
+  String get mapFilterUrgent => 'केवल आवश्यक';
+
+  @override
+  String get mapTabVisual => 'इंटरैक्टिव मानचित्र';
+
+  @override
+  String get mapTabDirections => 'दिशा-निर्देश (क्रमवार)';
+
+  @override
+  String get mapSelectPinPrompt =>
+      'मार्ग और विवरण देखने के लिए किसी भी पिन पर टैप करें';
+
+  @override
+  String get mapLaunchExternalNavigation => 'गूगल मैप्स में नेविगेशन शुरू करें';
+
+  @override
+  String get mapNoAssignedTasks =>
+      'आपके कार्य क्षेत्र में कोई सक्रिय कार्य नहीं है।';
+
+  @override
+  String get mapWardsHeader => 'निर्धारित सेवा वार्ड';
+
+  @override
+  String mapStepTitle(int stop, String title) {
+    return 'पड़ाव $stop: $title';
+  }
+
+  @override
+  String mapStepLandmark(String landmark) {
+    return 'समीप: $landmark';
+  }
 
   @override
   String get notificationsSubtitle =>

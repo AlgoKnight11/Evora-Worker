@@ -232,10 +232,60 @@
   "taskDetailHelpBannerTitle": "Supervisor Help Requested",
   "taskDetailHelpBannerSub": "Supervisor notified • Work continues actively",
 
+  "safetyDialogTitle": "Report Safety Hazard",
+  "safetyDialogDesc": "High-priority life safety escalation. Out-of-band alert directly notifies emergency dispatch and supervisors.",
+  "safetyEmergencySpeedDial": "Instant Emergency Speed Dial",
+  "safetyEmergencyCallPolice": "Police / Emergency (112)",
+  "safetyEmergencyCallAmbulance": "Ambulance (108)",
+  "safetyEmergencyCallFire": "Fire Dispatch (101)",
+  "safetyEmergencyCallMunicipal": "Control Room (1916)",
+  "safetyHazardTypeTitle": "Hazard Classification",
+  "safetyHazardElectrical": "Live Electrical Wire / High Voltage",
+  "safetyHazardStructural": "Structural Collapse / Landslide",
+  "safetyHazardGasChemical": "Toxic Gas Leak / Hazardous Chemical",
+  "safetyHazardViolence": "Threat of Violence / Aggressive Crowd",
+  "safetyHazardTraffic": "Traffic Collision / Highway Hazard",
+  "safetyHazardOther": "Other Critical Life-Safety Risk",
+  "safetyRiskLevelTitle": "Risk Level",
+  "safetyRiskCritical": "Critical (Immediate Danger)",
+  "safetyRiskHigh": "High (Severe Threat)",
+  "safetyNotesLabel": "Incident Description & Immediate Threats",
+  "safetyNotesHint": "Describe live danger, exact location details, or trapped personnel...",
+  "safetySubmitButton": "Transmit Safety Alert",
+  "safetySubmitSuccess": "Safety alert #{id} transmitted to emergency dispatch.",
+  "safetyActionReport": "Report Hazard",
+  "safetyBannerTitle": "Safety Hazard Escalated",
+  "safetyBannerSubtitle": "Emergency dispatch & supervisor alerted out-of-band",
+
   "mapSubtitle": "Assigned task pins, approved service area, and offline navigation fallback",
   "mapServiceAreaLabel": "Approved Service Area",
   "mapOfflineFallbackTitle": "Offline Navigation Support",
   "mapOfflineFallbackDesc": "In-app map, external directions link, and textual landmark directions will load here.",
+  "mapTotalTasks": "Active Pins",
+  "mapCriticalTasks": "Critical",
+  "mapOverdueTasks": "Overdue",
+  "mapFilterAll": "All Work",
+  "mapFilterAssigned": "My Route",
+  "mapFilterUrgent": "Urgent Only",
+  "mapTabVisual": "Interactive Map",
+  "mapTabDirections": "Turn-by-Turn Route",
+  "mapSelectPinPrompt": "Tap any task pin to preview route and instructions",
+  "mapLaunchExternalNavigation": "Start Navigation in Google Maps",
+  "mapNoAssignedTasks": "No active tasks located in your service area.",
+  "mapWardsHeader": "Assigned Service Wards",
+  "mapStepTitle": "Stop {stop}: {title}",
+  "@mapStepTitle": {
+    "placeholders": {
+      "stop": {"type": "int"},
+      "title": {"type": "String"}
+    }
+  },
+  "mapStepLandmark": "Near: {landmark}",
+  "@mapStepLandmark": {
+    "placeholders": {
+      "landmark": {"type": "String"}
+    }
+  },
 
   "notificationsSubtitle": "New assignments, SLA reminders, supervisor feedback, and schedule changes",
   "notificationsEmptyTitle": "All caught up",

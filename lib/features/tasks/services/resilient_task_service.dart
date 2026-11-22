@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../domain/enums/worker_enums.dart';
+import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
 import '../repositories/task_repository.dart';
 
@@ -395,5 +396,88 @@ class ResilientTaskService implements TaskRepository {
         workerUid: workerUid,
       );
     }
+  }
+
+  @override
+  Future<SafetyAlert> reportSafetyIncident({
+    required String tenantId,
+    required String reportedByUid,
+    required String hazardType,
+    required String description,
+    String? taskId,
+    double? latitude,
+    double? longitude,
+    String? photoStoragePath,
+  }) async {
+    try {
+      return await primary.reportSafetyIncident(
+        tenantId: tenantId,
+        reportedByUid: reportedByUid,
+        hazardType: hazardType,
+        description: description,
+        taskId: taskId,
+        latitude: latitude,
+        longitude: longitude,
+        photoStoragePath: photoStoragePath,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] reportSafetyIncident fallback: $e');
+      return await fallback.reportSafetyIncident(
+        tenantId: tenantId,
+        reportedByUid: reportedByUid,
+        hazardType: hazardType,
+        description: description,
+        taskId: taskId,
+        latitude: latitude,
+        longitude: longitude,
+        photoStoragePath: photoStoragePath,
+      );
+    }
+  }
+
+  @override
+  Stream<List<SafetyAlert>> watchSafetyAlerts({
+    required String tenantId,
+    required String workerUid,
+  }) {
+    late StreamController<List<SafetyAlert>> controller;
+    StreamSubscription<List<SafetyAlert>>? primarySub;
+    StreamSubscription<List<SafetyAlert>>? fallbackSub;
+    bool usingFallback = false;
+
+    void switchToFallback([Object? error]) {
+      if (usingFallback) return;
+      usingFallback = true;
+      debugPrint('[ResilientTaskService] watchSafetyAlerts fallback: $error');
+      primarySub?.cancel();
+      fallbackSub = fallback
+          .watchSafetyAlerts(tenantId: tenantId, workerUid: workerUid)
+          .listen(
+            controller.add,
+            onError: controller.addError,
+            onDone: controller.close,
+          );
+    }
+
+    controller = StreamController<List<SafetyAlert>>(
+      onListen: () {
+        try {
+          primarySub = primary
+              .watchSafetyAlerts(tenantId: tenantId, workerUid: workerUid)
+              .listen(
+                controller.add,
+                onError: (err) => switchToFallback(err),
+              );
+        } catch (e) {
+          switchToFallback(e);
+        }
+      },
+      onCancel: () {
+        primarySub?.cancel();
+        fallbackSub?.cancel();
+      },
+    );
+
+    return controller.stream;
   }
 }

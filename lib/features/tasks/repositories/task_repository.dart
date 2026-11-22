@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../../../domain/enums/worker_enums.dart';
+import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
 
 /// Thrown when an atomic claim collision occurs on a team-pool task.
@@ -124,6 +125,25 @@ abstract class TaskRepository {
   Future<void> cancelSupervisorHelp({
     required String tenantId,
     required String taskId,
+    required String workerUid,
+  });
+
+  /// Report a high-priority out-of-band safety hazard or life-safety incident.
+  /// Creates an unblockable record in `tenants/{tenantId}/safetyAlerts/{alertId}`.
+  Future<SafetyAlert> reportSafetyIncident({
+    required String tenantId,
+    required String reportedByUid,
+    required String hazardType,
+    required String description,
+    String? taskId,
+    double? latitude,
+    double? longitude,
+    String? photoStoragePath,
+  });
+
+  /// Real-time stream of safety alerts reported for this tenant and worker.
+  Stream<List<SafetyAlert>> watchSafetyAlerts({
+    required String tenantId,
     required String workerUid,
   });
 }

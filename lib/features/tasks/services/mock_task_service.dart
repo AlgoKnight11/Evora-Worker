@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../../../domain/enums/worker_enums.dart';
+import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
 import '../repositories/task_repository.dart';
 
@@ -8,9 +9,12 @@ import '../repositories/task_repository.dart';
 class MockTaskService implements TaskRepository {
   final bool simulateDelay;
   final List<WorkerTask> _tasks = [];
+  final List<SafetyAlert> _safetyAlerts = [];
   final Map<String, Set<String>> _dismissedPoolTasks = {}; // workerUid -> set of taskIds
   final StreamController<List<WorkerTask>> _streamController =
       StreamController<List<WorkerTask>>.broadcast();
+  final StreamController<List<SafetyAlert>> _safetyStreamController =
+      StreamController<List<SafetyAlert>>.broadcast();
 
   MockTaskService({this.simulateDelay = false}) {
     _seedDefaultTasks();
@@ -653,7 +657,50 @@ class MockTaskService implements TaskRepository {
     _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
   }
 
+  @override
+  Future<SafetyAlert> reportSafetyIncident({
+    required String tenantId,
+    required String reportedByUid,
+    required String hazardType,
+    required String description,
+    String? taskId,
+    double? latitude,
+    double? longitude,
+    String? photoStoragePath,
+  }) async {
+    await _maybeDelay();
+    final alertId = 'alert_safe_${DateTime.now().millisecondsSinceEpoch}';
+    final alert = SafetyAlert(
+      id: alertId,
+      tenantId: tenantId,
+      taskId: taskId,
+      reportedByUid: reportedByUid,
+      hazardType: hazardType,
+      description: description,
+      latitude: latitude,
+      longitude: longitude,
+      photoStoragePath: photoStoragePath,
+      escalated: true,
+      reportedAt: DateTime.now(),
+      idempotencyKey: 'idemp_${DateTime.now().millisecondsSinceEpoch}',
+    );
+
+    _safetyAlerts.insert(0, alert);
+    _safetyStreamController.add(List.unmodifiable(_safetyAlerts));
+    return alert;
+  }
+
+  @override
+  Stream<List<SafetyAlert>> watchSafetyAlerts({
+    required String tenantId,
+    required String workerUid,
+  }) async* {
+    yield List.unmodifiable(_safetyAlerts);
+    yield* _safetyStreamController.stream;
+  }
+
   void dispose() {
     _streamController.close();
+    _safetyStreamController.close();
   }
 }

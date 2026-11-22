@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/evora_colors.dart';
 import '../../../core/widgets/evora_status_badge.dart';
 import '../../../domain/enums/worker_enums.dart';
+import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../routes/app_router.dart';
@@ -12,6 +13,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../providers/task_providers.dart';
 import '../widgets/block_task_dialog.dart';
 import '../widgets/decline_task_dialog.dart';
+import '../widgets/safety_incident_dialog.dart';
 import '../widgets/supervisor_help_dialog.dart';
 
 /// Comprehensive Task Detail Screen (`/tasks/:taskId`) for field operatives.
@@ -447,6 +449,52 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     } catch (_) {}
   }
 
+  Future<void> _handleReportSafety(WorkerTask? task, AppLocalizations? l10n) async {
+    final result = await SafetyIncidentDialog.show(
+      context,
+      taskId: task?.id,
+      taskTitle: task?.title,
+      latitude: task?.location.latitude,
+      longitude: task?.location.longitude,
+    );
+
+    if (result == null) return;
+
+    setState(() => _isProcessingAction = true);
+    final alert = await ref.read(taskOperationsProvider.notifier).reportSafetyIncident(
+          hazardType: result.hazardType,
+          description: result.description,
+          taskId: task?.id,
+          latitude: task?.location.latitude,
+          longitude: task?.location.longitude,
+        );
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (alert != null) {
+      ref.invalidate(safetyAlertsStreamProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n?.safetySubmitSuccess(alert.id) ??
+                'Safety alert #${alert.id} transmitted to emergency dispatch.',
+          ),
+          backgroundColor: const Color(0xFFDC2626),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to transmit safety alert. Please call 112 directly.'),
+          backgroundColor: EvoraColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   Future<void> _openInMaps(WorkerTask task) async {
     final lat = task.location.latitude;
     final lng = task.location.longitude;
@@ -533,7 +581,16 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
           ],
         ),
         actions: [
-          if (taskAsync.value != null)
+          if (taskAsync.value != null) ...[
+            IconButton(
+              key: const Key('btn_report_safety_detail'),
+              icon: const Icon(
+                Icons.emergency_outlined,
+                color: Color(0xFFDC2626),
+              ),
+              tooltip: l10n?.safetyActionReport ?? 'Report Safety Hazard',
+              onPressed: () => _handleReportSafety(taskAsync.value, l10n),
+            ),
             IconButton(
               key: const Key('btn_request_help_detail'),
               icon: Icon(
@@ -547,6 +604,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
               tooltip: l10n?.taskDetailActionRequestHelp ?? 'Request Help',
               onPressed: () => _handleRequestHelp(taskAsync.value!, l10n),
             ),
+          ],
         ],
       ),
       body: taskAsync.when(
@@ -626,6 +684,8 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
   Widget _buildTaskDetailContent(BuildContext context, WorkerTask task,
       bool isDark, AppLocalizations? l10n) {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final safetyAlerts = ref.watch(safetyAlertsStreamProvider).valueOrNull ?? [];
+    final activeAlert = safetyAlerts.where((a) => a.taskId == task.id).firstOrNull;
 
     return Column(
       children: [
@@ -639,6 +699,11 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 // 1. Header Card (Title, Category, Priority, SLA, Status)
                 _buildHeaderCard(context, task, isDark, l10n),
                 const SizedBox(height: 14),
+
+                if (activeAlert != null) ...[
+                  _buildSafetyIncidentBanner(context, activeAlert, isDark, l10n),
+                  const SizedBox(height: 14),
+                ],
 
                 if (task.isPaused) ...[
                   _buildPausedBanner(context, task, isDark, l10n),
@@ -1410,6 +1475,63 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                       color: Color(0xFFB45309),
                     ),
                   ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSafetyIncidentBanner(BuildContext context, SafetyAlert alert,
+      bool isDark, AppLocalizations? l10n) {
+    return Container(
+      key: const Key('banner_task_safety'),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFEF2F2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFFCA5A5)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.emergency_rounded,
+            color: Color(0xFFDC2626),
+            size: 24,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n?.safetyBannerTitle ?? 'Safety Hazard Escalated',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 13.5,
+                    color: Color(0xFF991B1B),
+                  ),
+                ),
+                Text(
+                  l10n?.safetyBannerSubtitle ??
+                      'Emergency dispatch & supervisor alerted out-of-band',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFB91C1C),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${alert.hazardType.replaceAll('_', ' ').toUpperCase()} • ${alert.description}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF7F1D1D),
+                  ),
+                ),
               ],
             ),
           ),

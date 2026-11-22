@@ -1280,6 +1280,150 @@ abstract class AppLocalizations {
   /// **'Supervisor notified • Work continues actively'**
   String get taskDetailHelpBannerSub;
 
+  /// No description provided for @safetyDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Safety Hazard'**
+  String get safetyDialogTitle;
+
+  /// No description provided for @safetyDialogDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'High-priority life safety escalation. Out-of-band alert directly notifies emergency dispatch and supervisors.'**
+  String get safetyDialogDesc;
+
+  /// No description provided for @safetyEmergencySpeedDial.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant Emergency Speed Dial'**
+  String get safetyEmergencySpeedDial;
+
+  /// No description provided for @safetyEmergencyCallPolice.
+  ///
+  /// In en, this message translates to:
+  /// **'Police / Emergency (112)'**
+  String get safetyEmergencyCallPolice;
+
+  /// No description provided for @safetyEmergencyCallAmbulance.
+  ///
+  /// In en, this message translates to:
+  /// **'Ambulance (108)'**
+  String get safetyEmergencyCallAmbulance;
+
+  /// No description provided for @safetyEmergencyCallFire.
+  ///
+  /// In en, this message translates to:
+  /// **'Fire Dispatch (101)'**
+  String get safetyEmergencyCallFire;
+
+  /// No description provided for @safetyEmergencyCallMunicipal.
+  ///
+  /// In en, this message translates to:
+  /// **'Control Room (1916)'**
+  String get safetyEmergencyCallMunicipal;
+
+  /// No description provided for @safetyHazardTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hazard Classification'**
+  String get safetyHazardTypeTitle;
+
+  /// No description provided for @safetyHazardElectrical.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Electrical Wire / High Voltage'**
+  String get safetyHazardElectrical;
+
+  /// No description provided for @safetyHazardStructural.
+  ///
+  /// In en, this message translates to:
+  /// **'Structural Collapse / Landslide'**
+  String get safetyHazardStructural;
+
+  /// No description provided for @safetyHazardGasChemical.
+  ///
+  /// In en, this message translates to:
+  /// **'Toxic Gas Leak / Hazardous Chemical'**
+  String get safetyHazardGasChemical;
+
+  /// No description provided for @safetyHazardViolence.
+  ///
+  /// In en, this message translates to:
+  /// **'Threat of Violence / Aggressive Crowd'**
+  String get safetyHazardViolence;
+
+  /// No description provided for @safetyHazardTraffic.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic Collision / Highway Hazard'**
+  String get safetyHazardTraffic;
+
+  /// No description provided for @safetyHazardOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Critical Life-Safety Risk'**
+  String get safetyHazardOther;
+
+  /// No description provided for @safetyRiskLevelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Level'**
+  String get safetyRiskLevelTitle;
+
+  /// No description provided for @safetyRiskCritical.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical (Immediate Danger)'**
+  String get safetyRiskCritical;
+
+  /// No description provided for @safetyRiskHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High (Severe Threat)'**
+  String get safetyRiskHigh;
+
+  /// No description provided for @safetyNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident Description & Immediate Threats'**
+  String get safetyNotesLabel;
+
+  /// No description provided for @safetyNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe live danger, exact location details, or trapped personnel...'**
+  String get safetyNotesHint;
+
+  /// No description provided for @safetySubmitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit Safety Alert'**
+  String get safetySubmitButton;
+
+  /// No description provided for @safetySubmitSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety alert #{id} transmitted to emergency dispatch.'**
+  String safetySubmitSuccess(Object id);
+
+  /// No description provided for @safetyActionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Hazard'**
+  String get safetyActionReport;
+
+  /// No description provided for @safetyBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Hazard Escalated'**
+  String get safetyBannerTitle;
+
+  /// No description provided for @safetyBannerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency dispatch & supervisor alerted out-of-band'**
+  String get safetyBannerSubtitle;
+
   /// No description provided for @mapSubtitle.
   ///
   /// In en, this message translates to:
@@ -1303,6 +1447,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'In-app map, external directions link, and textual landmark directions will load here.'**
   String get mapOfflineFallbackDesc;
+
+  /// No description provided for @mapTotalTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Pins'**
+  String get mapTotalTasks;
+
+  /// No description provided for @mapCriticalTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical'**
+  String get mapCriticalTasks;
+
+  /// No description provided for @mapOverdueTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get mapOverdueTasks;
+
+  /// No description provided for @mapFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All Work'**
+  String get mapFilterAll;
+
+  /// No description provided for @mapFilterAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'My Route'**
+  String get mapFilterAssigned;
+
+  /// No description provided for @mapFilterUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent Only'**
+  String get mapFilterUrgent;
+
+  /// No description provided for @mapTabVisual.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive Map'**
+  String get mapTabVisual;
+
+  /// No description provided for @mapTabDirections.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn-by-Turn Route'**
+  String get mapTabDirections;
+
+  /// No description provided for @mapSelectPinPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap any task pin to preview route and instructions'**
+  String get mapSelectPinPrompt;
+
+  /// No description provided for @mapLaunchExternalNavigation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Navigation in Google Maps'**
+  String get mapLaunchExternalNavigation;
+
+  /// No description provided for @mapNoAssignedTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No active tasks located in your service area.'**
+  String get mapNoAssignedTasks;
+
+  /// No description provided for @mapWardsHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned Service Wards'**
+  String get mapWardsHeader;
+
+  /// No description provided for @mapStepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop {stop}: {title}'**
+  String mapStepTitle(int stop, String title);
+
+  /// No description provided for @mapStepLandmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Near: {landmark}'**
+  String mapStepLandmark(String landmark);
 
   /// No description provided for @notificationsSubtitle.
   ///

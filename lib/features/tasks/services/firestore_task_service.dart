@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../domain/enums/worker_enums.dart';
+import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
 import '../repositories/task_repository.dart';
 
@@ -13,6 +14,10 @@ class FirestoreTaskService implements TaskRepository {
 
   CollectionReference<Map<String, dynamic>> _tasksCollection(String tenantId) {
     return _firestore.collection('tenants').doc(tenantId).collection('tasks');
+  }
+
+  CollectionReference<Map<String, dynamic>> _safetyAlertsCollection(String tenantId) {
+    return _firestore.collection('tenants').doc(tenantId).collection('safetyAlerts');
   }
 
   @override
@@ -402,6 +407,74 @@ class FirestoreTaskService implements TaskRepository {
       'eventType': 'SUPERVISOR_HELP_CANCELLED',
       'workerUid': workerUid,
       'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<SafetyAlert> reportSafetyIncident({
+    required String tenantId,
+    required String reportedByUid,
+    required String hazardType,
+    required String description,
+    String? taskId,
+    double? latitude,
+    double? longitude,
+    String? photoStoragePath,
+  }) async {
+    final col = _safetyAlertsCollection(tenantId);
+    final docRef = col.doc();
+    final now = DateTime.now();
+    final idempotencyKey = 'alert_${docRef.id}_${now.millisecondsSinceEpoch}';
+
+    final alert = SafetyAlert(
+      id: docRef.id,
+      tenantId: tenantId,
+      taskId: taskId,
+      reportedByUid: reportedByUid,
+      hazardType: hazardType,
+      description: description,
+      latitude: latitude,
+      longitude: longitude,
+      photoStoragePath: photoStoragePath,
+      escalated: true,
+      reportedAt: now,
+      idempotencyKey: idempotencyKey,
+    );
+
+    final data = alert.toJson();
+    data['reportedAt'] = FieldValue.serverTimestamp();
+    await docRef.set(data);
+
+    if (taskId != null) {
+      await _tasksCollection(tenantId).doc(taskId).collection('auditEvents').add({
+        'eventType': 'SAFETY_ALERT_REPORTED',
+        'alertId': docRef.id,
+        'hazardType': hazardType,
+        'reportedByUid': reportedByUid,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    }
+
+    return alert;
+  }
+
+  @override
+  Stream<List<SafetyAlert>> watchSafetyAlerts({
+    required String tenantId,
+    required String workerUid,
+  }) {
+    return _safetyAlertsCollection(tenantId)
+        .where('reportedByUid', isEqualTo: workerUid)
+        .snapshots()
+        .map((snapshot) {
+      final alerts = snapshot.docs.map((doc) {
+        final d = doc.data();
+        d['id'] = doc.id;
+        d['tenantId'] = tenantId;
+        return SafetyAlert.fromJson(d);
+      }).toList();
+      alerts.sort((a, b) => b.reportedAt.compareTo(a.reportedAt));
+      return alerts;
     });
   }
 }
