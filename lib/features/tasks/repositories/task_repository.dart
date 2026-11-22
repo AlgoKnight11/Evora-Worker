@@ -94,4 +94,20 @@ abstract class TaskRepository {
     required String taskId,
     required String workerUid,
   });
+
+  /// Transition an active task to `blocked` with a structured municipal reason and explanation note.
+  Future<void> blockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required BlockReason reason,
+    String? note,
+  });
+
+  /// Remove blocker condition and resume task to `in_progress`.
+  Future<void> unblockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  });
 }

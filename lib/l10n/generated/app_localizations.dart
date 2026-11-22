@@ -1064,6 +1064,120 @@ abstract class AppLocalizations {
   /// **'Task Work Paused'**
   String get taskDetailPausedNotice;
 
+  /// No description provided for @taskDetailActionReportBlocker.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Blocker'**
+  String get taskDetailActionReportBlocker;
+
+  /// No description provided for @taskDetailActionUnblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock & Resume Work'**
+  String get taskDetailActionUnblock;
+
+  /// No description provided for @taskDetailBlockDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Operational Blocker'**
+  String get taskDetailBlockDialogTitle;
+
+  /// No description provided for @taskDetailBlockDialogDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reporting a blocker pauses the task, notifies municipal dispatch, and updates the citizen tracking status to Delayed with your explanation.'**
+  String get taskDetailBlockDialogDesc;
+
+  /// No description provided for @taskDetailBlockReasonAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Restricted (Locked gate, road barricaded)'**
+  String get taskDetailBlockReasonAccess;
+
+  /// No description provided for @taskDetailBlockReasonWeather.
+  ///
+  /// In en, this message translates to:
+  /// **'Adverse Weather (Heavy rain, snow, landslide)'**
+  String get taskDetailBlockReasonWeather;
+
+  /// No description provided for @taskDetailBlockReasonEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipment Failure (Machinery breakdown, no power)'**
+  String get taskDetailBlockReasonEquipment;
+
+  /// No description provided for @taskDetailBlockReasonMaterial.
+  ///
+  /// In en, this message translates to:
+  /// **'Material Unavailable (Awaiting parts or supplies)'**
+  String get taskDetailBlockReasonMaterial;
+
+  /// No description provided for @taskDetailBlockReasonAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting Authority Clearance (NOC / Police)'**
+  String get taskDetailBlockReasonAuthority;
+
+  /// No description provided for @taskDetailBlockReasonSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe Site / Structural Hazard'**
+  String get taskDetailBlockReasonSafety;
+
+  /// No description provided for @taskDetailBlockReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Operational Delay'**
+  String get taskDetailBlockReasonOther;
+
+  /// No description provided for @taskDetailBlockNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed Explanation (Required for Other)'**
+  String get taskDetailBlockNoteLabel;
+
+  /// No description provided for @taskDetailBlockNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what is preventing work at the site...'**
+  String get taskDetailBlockNoteHint;
+
+  /// No description provided for @taskDetailBlockConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Blocker'**
+  String get taskDetailBlockConfirm;
+
+  /// No description provided for @taskDetailBlockSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Task marked as blocked. Dispatch and citizens notified.'**
+  String get taskDetailBlockSuccess;
+
+  /// No description provided for @taskDetailUnblockSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocker cleared. Task resumed to in-progress.'**
+  String get taskDetailUnblockSuccess;
+
+  /// No description provided for @taskDetailBlockedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Blocked'**
+  String get taskDetailBlockedNotice;
+
+  /// No description provided for @taskDetailBlockedNoticeSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Civic grievance delayed on citizen portal'**
+  String get taskDetailBlockedNoticeSub;
+
+  /// No description provided for @taskDetailSafetyCriticalAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Hazard: If there is immediate danger to life or property, call 112 or file an emergency Safety Alert.'**
+  String get taskDetailSafetyCriticalAlert;
+
   /// No description provided for @mapSubtitle.
   ///
   /// In en, this message translates to:

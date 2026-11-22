@@ -520,6 +520,76 @@ class AppLocalizationsHi extends AppLocalizations {
   String get taskDetailPausedNotice => 'कार्य रुका हुआ है';
 
   @override
+  String get taskDetailActionReportBlocker => 'अवरोध दर्ज करें';
+
+  @override
+  String get taskDetailActionUnblock =>
+      'अवरोध हटाएं और कार्य पुनः प्रारंभ करें';
+
+  @override
+  String get taskDetailBlockDialogTitle => 'परिचालन अवरोध दर्ज करें';
+
+  @override
+  String get taskDetailBlockDialogDesc =>
+      'अवरोध दर्ज करने से कार्य रुक जाएगा, नगरपालिका नियंत्रण कक्ष को सूचित किया जाएगा, और नागरिक पोर्टल पर विलंब का कारण प्रदर्शित होगा।';
+
+  @override
+  String get taskDetailBlockReasonAccess =>
+      'पहुंच प्रतिबंधित (गेट बंद, रास्ता अवरुद्ध)';
+
+  @override
+  String get taskDetailBlockReasonWeather =>
+      'प्रतिकूल मौसम (भारी वर्षा, हिमपात, भूस्खलन)';
+
+  @override
+  String get taskDetailBlockReasonEquipment =>
+      'उपकरण विफलता (मशीनरी खराबी, बिजली बंद)';
+
+  @override
+  String get taskDetailBlockReasonMaterial =>
+      'सामग्री अनुपलब्ध (सामग्री या आपूर्ति की कमी)';
+
+  @override
+  String get taskDetailBlockReasonAuthority =>
+      'प्राधिकरण अनुमति की प्रतीक्षा (एनओसी / पुलिस)';
+
+  @override
+  String get taskDetailBlockReasonSafety => 'असुरक्षित स्थल / संरचनात्मक जोखिम';
+
+  @override
+  String get taskDetailBlockReasonOther => 'अन्य परिचालन विलंब';
+
+  @override
+  String get taskDetailBlockNoteLabel =>
+      'विस्तृत विवरण (\'अन्य\' हेतु अनिवार्य)';
+
+  @override
+  String get taskDetailBlockNoteHint =>
+      'वर्णन करें कि कार्य स्थल पर क्या बाधा आ रही है...';
+
+  @override
+  String get taskDetailBlockConfirm => 'अवरोध की पुष्टि करें';
+
+  @override
+  String get taskDetailBlockSuccess =>
+      'कार्य अवरुद्ध चिह्नित किया गया। डिस्पैच और नागरिकों को सूचित कर दिया गया।';
+
+  @override
+  String get taskDetailUnblockSuccess =>
+      'अवरोध हटा दिया गया। कार्य प्रगति पर लौट आया।';
+
+  @override
+  String get taskDetailBlockedNotice => 'कार्य अवरुद्ध है';
+
+  @override
+  String get taskDetailBlockedNoticeSub =>
+      'नागरिक पोर्टल पर शिकायत विलंबित चिह्नित है';
+
+  @override
+  String get taskDetailSafetyCriticalAlert =>
+      'सुरक्षा जोखिम: यदि जीवन या संपत्ति को तत्काल खतरा है, तो 112 पर कॉल करें या आपातकालीन सुरक्षा अलर्ट दर्ज करें।';
+
+  @override
   String get mapSubtitle =>
       'आवंटित कार्य स्थान, स्वीकृत सेवा क्षेत्र और ऑफ़लाइन दिशा-निर्देश';
 

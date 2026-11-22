@@ -86,6 +86,12 @@ class WorkerTask {
   final double? startedLatitude;
   final double? startedLongitude;
 
+  /// Optional operational blocker fields (Phase 4.2)
+  final BlockReason? blockReason;
+  final String? blockNote;
+  final DateTime? blockedAt;
+  final String? blockerPhotoPath;
+
   const WorkerTask({
     required this.id,
     required this.tenantId,
@@ -117,6 +123,10 @@ class WorkerTask {
     this.pauseReason,
     this.startedLatitude,
     this.startedLongitude,
+    this.blockReason,
+    this.blockNote,
+    this.blockedAt,
+    this.blockerPhotoPath,
   });
 
   /// True if the task is currently unclaimed in a team pool.
@@ -129,6 +139,9 @@ class WorkerTask {
 
   /// True if the task is temporarily paused during active work.
   bool get isPaused => pausedAt != null && status == TaskStatus.accepted;
+
+  /// True if the task is actively blocked by an operational obstacle.
+  bool get isBlocked => status == TaskStatus.blocked;
 
   bool get isOverdue =>
       status.isActiveQueue &&
@@ -146,6 +159,11 @@ class WorkerTask {
     bool clearPaused = false,
     double? startedLatitude,
     double? startedLongitude,
+    BlockReason? blockReason,
+    String? blockNote,
+    DateTime? blockedAt,
+    String? blockerPhotoPath,
+    bool clearBlocked = false,
   }) {
     return WorkerTask(
       id: id,
@@ -178,6 +196,10 @@ class WorkerTask {
       pauseReason: clearPaused ? null : (pauseReason ?? this.pauseReason),
       startedLatitude: startedLatitude ?? this.startedLatitude,
       startedLongitude: startedLongitude ?? this.startedLongitude,
+      blockReason: clearBlocked ? null : (blockReason ?? this.blockReason),
+      blockNote: clearBlocked ? null : (blockNote ?? this.blockNote),
+      blockedAt: clearBlocked ? null : (blockedAt ?? this.blockedAt),
+      blockerPhotoPath: clearBlocked ? null : (blockerPhotoPath ?? this.blockerPhotoPath),
     );
   }
 
@@ -228,6 +250,14 @@ class WorkerTask {
       pauseReason: json['pauseReason'] as String?,
       startedLatitude: (json['startedLatitude'] as num?)?.toDouble(),
       startedLongitude: (json['startedLongitude'] as num?)?.toDouble(),
+      blockReason: json['blockReason'] != null
+          ? BlockReason.fromValue(json['blockReason'] as String)
+          : null,
+      blockNote: json['blockNote'] as String?,
+      blockedAt: json['blockedAt'] != null
+          ? DateTime.tryParse(json['blockedAt'] as String)
+          : null,
+      blockerPhotoPath: json['blockerPhotoPath'] as String?,
     );
   }
 
@@ -265,6 +295,10 @@ class WorkerTask {
       if (pauseReason != null) 'pauseReason': pauseReason,
       if (startedLatitude != null) 'startedLatitude': startedLatitude,
       if (startedLongitude != null) 'startedLongitude': startedLongitude,
+      if (blockReason != null) 'blockReason': blockReason!.value,
+      if (blockNote != null) 'blockNote': blockNote,
+      if (blockedAt != null) 'blockedAt': blockedAt!.toUtc().toIso8601String(),
+      if (blockerPhotoPath != null) 'blockerPhotoPath': blockerPhotoPath,
     };
   }
 }

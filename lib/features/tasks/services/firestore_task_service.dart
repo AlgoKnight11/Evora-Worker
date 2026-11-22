@@ -294,4 +294,62 @@ class FirestoreTaskService implements TaskRepository {
       'timestamp': FieldValue.serverTimestamp(),
     });
   }
+
+  @override
+  Future<void> blockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required BlockReason reason,
+    String? note,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    final updateData = <String, dynamic>{
+      'status': TaskStatus.blocked.value,
+      'blockReason': reason.value,
+      'blockedAt': FieldValue.serverTimestamp(),
+      'pausedAt': null,
+      'pauseReason': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    };
+    if (note != null && note.isNotEmpty) updateData['blockNote'] = note;
+
+    await ref.update(updateData);
+
+    final auditData = <String, dynamic>{
+      'eventType': 'TASK_BLOCKED',
+      'workerUid': workerUid,
+      'reason': reason.value,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+    if (note != null && note.isNotEmpty) auditData['note'] = note;
+
+    await ref.collection('auditEvents').add(auditData);
+  }
+
+  @override
+  Future<void> unblockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    final ref = _tasksCollection(tenantId).doc(taskId);
+
+    await ref.update({
+      'status': TaskStatus.inProgress.value,
+      'blockReason': null,
+      'blockNote': null,
+      'blockedAt': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'version': FieldValue.increment(1),
+    });
+
+    await ref.collection('auditEvents').add({
+      'eventType': 'TASK_UNBLOCKED',
+      'workerUid': workerUid,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
 }

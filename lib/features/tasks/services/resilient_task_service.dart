@@ -296,4 +296,54 @@ class ResilientTaskService implements TaskRepository {
       );
     }
   }
+
+  @override
+  Future<void> blockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required BlockReason reason,
+    String? note,
+  }) async {
+    try {
+      await primary.blockTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        reason: reason,
+        note: note,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] blockTask fallback: $e');
+      await fallback.blockTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+        reason: reason,
+        note: note,
+      );
+    }
+  }
+
+  @override
+  Future<void> unblockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    try {
+      await primary.unblockTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+      );
+    } catch (e) {
+      debugPrint('[ResilientTaskService] unblockTask fallback: $e');
+      await fallback.unblockTask(
+        tenantId: tenantId,
+        taskId: taskId,
+        workerUid: workerUid,
+      );
+    }
+  }
 }

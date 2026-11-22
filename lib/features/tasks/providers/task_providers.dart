@@ -298,6 +298,50 @@ class TaskOperationsNotifier extends StateNotifier<AsyncValue<void>> {
       return false;
     }
   }
+
+  Future<bool> blockTask(
+    String taskId, {
+    required BlockReason reason,
+    String? note,
+  }) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.blockTask(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+        reason: reason,
+        note: note,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> unblockTask(String taskId) async {
+    final profile = _ref.read(authNotifierProvider).profile;
+    if (profile == null) return false;
+
+    state = const AsyncValue.loading();
+    try {
+      await _repo.unblockTask(
+        tenantId: profile.tenantId,
+        taskId: taskId,
+        workerUid: profile.uid,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
 }
 
 final taskOperationsProvider =

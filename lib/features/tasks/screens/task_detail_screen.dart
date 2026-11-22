@@ -9,6 +9,7 @@ import '../../../domain/models/worker_task.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../routes/app_router.dart';
 import '../providers/task_providers.dart';
+import '../widgets/block_task_dialog.dart';
 import '../widgets/decline_task_dialog.dart';
 
 /// Comprehensive Task Detail Screen (`/tasks/:taskId`) for field operatives.
@@ -295,6 +296,76 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     );
   }
 
+  Future<void> _handleBlockTask(WorkerTask task, AppLocalizations? l10n) async {
+    final result = await BlockTaskDialog.show(
+      context,
+      taskId: task.id,
+      taskTitle: task.title,
+    );
+
+    if (result == null) return;
+
+    setState(() => _isProcessingAction = true);
+    final success = await ref.read(taskOperationsProvider.notifier).blockTask(
+          task.id,
+          reason: result.reason,
+          note: result.note,
+        );
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(task.id));
+      ref.invalidate(tasksStreamProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n?.taskDetailBlockSuccess ??
+              'Blocker logged and citizen tracking updated'),
+          backgroundColor: EvoraColors.primary,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to report blocker. Please try again.'),
+          backgroundColor: EvoraColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleUnblockTask(
+      WorkerTask task, AppLocalizations? l10n) async {
+    setState(() => _isProcessingAction = true);
+    final success =
+        await ref.read(taskOperationsProvider.notifier).unblockTask(task.id);
+    if (!mounted) return;
+    setState(() => _isProcessingAction = false);
+
+    if (success) {
+      ref.invalidate(taskDetailProvider(task.id));
+      ref.invalidate(tasksStreamProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n?.taskDetailUnblockSuccess ??
+              'Task unblocked and restored to active work'),
+          backgroundColor: EvoraColors.primary,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to unblock task. Please try again.'),
+          backgroundColor: EvoraColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   Future<void> _openInMaps(WorkerTask task) async {
     final lat = task.location.latitude;
     final lng = task.location.longitude;
@@ -474,6 +545,11 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
 
                 if (task.isPaused) ...[
                   _buildPausedBanner(context, task, isDark, l10n),
+                  const SizedBox(height: 14),
+                ],
+
+                if (task.isBlocked) ...[
+                  _buildBlockedBanner(context, task, isDark, l10n),
                   const SizedBox(height: 14),
                 ],
 
@@ -1240,6 +1316,85 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     );
   }
 
+  Widget _buildBlockedBanner(BuildContext context, WorkerTask task, bool isDark,
+      AppLocalizations? l10n) {
+    final reasonText = task.blockReason != null
+        ? _blockReasonLabel(task.blockReason!, l10n)
+        : (l10n?.taskDetailActionReportBlocker ?? 'Work Blocked');
+
+    return Container(
+      key: const Key('banner_task_blocked'),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFEF2F2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFFECACA)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.block_rounded, color: EvoraColors.error, size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n?.taskDetailBlockedNotice ??
+                      'Task Blocked: Field Delay Reported',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 13.5,
+                    color: Color(0xFF991B1B),
+                  ),
+                ),
+                Text(
+                  reasonText,
+                  style: const TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFB91C1C),
+                  ),
+                ),
+                if (task.blockNote != null && task.blockNote!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      task.blockNote!,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF7F1D1D),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _blockReasonLabel(BlockReason reason, AppLocalizations? l10n) {
+    return switch (reason) {
+      BlockReason.accessRestricted =>
+        l10n?.taskDetailBlockReasonAccess ?? 'Access Restricted / Gate Locked',
+      BlockReason.weatherCondition =>
+        l10n?.taskDetailBlockReasonWeather ?? 'Severe Weather / Rain / Fog',
+      BlockReason.equipmentFailure =>
+        l10n?.taskDetailBlockReasonEquipment ?? 'Equipment Breakdown / Power Loss',
+      BlockReason.materialUnavailable =>
+        l10n?.taskDetailBlockReasonMaterial ?? 'Material / Replacements Unavailable',
+      BlockReason.awaitingAuthority =>
+        l10n?.taskDetailBlockReasonAuthority ?? 'Awaiting Police / Ward Clearance',
+      BlockReason.unsafeSite =>
+        l10n?.taskDetailBlockReasonSafety ?? 'Safety Risk / Unstable Site',
+      BlockReason.other =>
+        l10n?.taskDetailBlockReasonOther ?? 'Other Operational Issue',
+    };
+  }
+
   Widget _buildBottomActionBar(BuildContext context, WorkerTask task,
       bool isDark, AppLocalizations? l10n, double bottomInset) {
     return Container(
@@ -1436,7 +1591,6 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       return Row(
         children: [
           Expanded(
-            flex: 2,
             child: OutlinedButton.icon(
               key: const Key('btn_pause_work_detail'),
               onPressed: () => _showPauseWorkSheet(task, l10n),
@@ -1450,40 +1604,28 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
               ),
               icon: const Icon(Icons.pause_circle_outline_rounded, size: 18),
               label: Text(
-                l10n?.taskDetailActionPause ?? 'Pause Work',
+                l10n?.taskDetailActionPause ?? 'Pause',
                 style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
-            flex: 3,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
-              decoration: BoxDecoration(
-                color: EvoraColors.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: EvoraColors.primary.withValues(alpha: 0.4)),
+            child: OutlinedButton.icon(
+              key: const Key('btn_block_task_detail'),
+              onPressed: () => _handleBlockTask(task, l10n),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: EvoraColors.error,
+                side: const BorderSide(color: EvoraColors.error),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.engineering_rounded,
-                      size: 18, color: EvoraColors.primary),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      l10n?.taskDetailActionInProgress ?? 'In Progress',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        color: EvoraColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
+              icon: const Icon(Icons.block_rounded, size: 18),
+              label: Text(
+                l10n?.taskDetailActionReportBlocker ?? 'Report Blocker',
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
               ),
             ),
           ),
@@ -1491,30 +1633,27 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       );
     }
 
-    // 5. Blocked Task
+    // 5. Blocked Task (Operational Delay)
     if (task.status == TaskStatus.blocked) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: EvoraColors.error.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: EvoraColors.error.withValues(alpha: 0.4)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.block_rounded, size: 20, color: EvoraColors.error),
-            const SizedBox(width: 8),
-            Text(
-              l10n?.taskDetailActionBlocked ??
-                  'Task Blocked • Operational Delay Logged',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: EvoraColors.error,
-              ),
+      return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          key: const Key('btn_unblock_task_detail'),
+          onPressed: () => _handleUnblockTask(task, l10n),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: EvoraColors.primary,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-          ],
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            elevation: 0,
+          ),
+          icon: const Icon(Icons.lock_open_rounded, size: 20),
+          label: Text(
+            l10n?.taskDetailActionUnblock ?? 'Unblock & Resume Work',
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+          ),
         ),
       );
     }

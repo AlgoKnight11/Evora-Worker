@@ -521,6 +521,75 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskDetailPausedNotice => 'Task Work Paused';
 
   @override
+  String get taskDetailActionReportBlocker => 'Report Blocker';
+
+  @override
+  String get taskDetailActionUnblock => 'Unblock & Resume Work';
+
+  @override
+  String get taskDetailBlockDialogTitle => 'Report Operational Blocker';
+
+  @override
+  String get taskDetailBlockDialogDesc =>
+      'Reporting a blocker pauses the task, notifies municipal dispatch, and updates the citizen tracking status to Delayed with your explanation.';
+
+  @override
+  String get taskDetailBlockReasonAccess =>
+      'Access Restricted (Locked gate, road barricaded)';
+
+  @override
+  String get taskDetailBlockReasonWeather =>
+      'Adverse Weather (Heavy rain, snow, landslide)';
+
+  @override
+  String get taskDetailBlockReasonEquipment =>
+      'Equipment Failure (Machinery breakdown, no power)';
+
+  @override
+  String get taskDetailBlockReasonMaterial =>
+      'Material Unavailable (Awaiting parts or supplies)';
+
+  @override
+  String get taskDetailBlockReasonAuthority =>
+      'Awaiting Authority Clearance (NOC / Police)';
+
+  @override
+  String get taskDetailBlockReasonSafety => 'Unsafe Site / Structural Hazard';
+
+  @override
+  String get taskDetailBlockReasonOther => 'Other Operational Delay';
+
+  @override
+  String get taskDetailBlockNoteLabel =>
+      'Detailed Explanation (Required for Other)';
+
+  @override
+  String get taskDetailBlockNoteHint =>
+      'Describe what is preventing work at the site...';
+
+  @override
+  String get taskDetailBlockConfirm => 'Confirm Blocker';
+
+  @override
+  String get taskDetailBlockSuccess =>
+      'Task marked as blocked. Dispatch and citizens notified.';
+
+  @override
+  String get taskDetailUnblockSuccess =>
+      'Blocker cleared. Task resumed to in-progress.';
+
+  @override
+  String get taskDetailBlockedNotice => 'Task Blocked';
+
+  @override
+  String get taskDetailBlockedNoticeSub =>
+      'Civic grievance delayed on citizen portal';
+
+  @override
+  String get taskDetailSafetyCriticalAlert =>
+      'Safety Hazard: If there is immediate danger to life or property, call 112 or file an emergency Safety Alert.';
+
+  @override
   String get mapSubtitle =>
       'Assigned task pins, approved service area, and offline navigation fallback';
 

@@ -297,11 +297,11 @@ class MockTaskService implements TaskRepository {
       if (task.tenantId != tenantId) return false;
       if (dismissed.contains(task.id)) return false;
 
-      // 1. Individually assigned to this worker
-      if (task.workerUid == workerUid) return true;
+      // 1. Individually assigned to this worker or default demo worker in sandbox mode
+      if (task.workerUid == workerUid || task.workerUid == 'mock-worker-rajesh-001') return true;
 
       // 2. Unclaimed pool task for worker's crew
-      if (task.workerUid == null && teamId != null && task.teamId == teamId) {
+      if (task.workerUid == null && (teamId == null || task.teamId == teamId || task.teamId == 'crew-alpha-12')) {
         return true;
       }
 
@@ -532,6 +532,62 @@ class MockTaskService implements TaskRepository {
 
     _tasks[index] = existing.copyWith(
       status: TaskStatus.inProgress,
+      clearPaused: true,
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
+  @override
+  Future<void> blockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+    required BlockReason reason,
+    String? note,
+  }) async {
+    await _maybeDelay();
+    final index = _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid) {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      status: TaskStatus.blocked,
+      blockReason: reason,
+      blockNote: note,
+      blockedAt: DateTime.now(),
+      clearPaused: true,
+      updatedAt: DateTime.now(),
+      version: existing.version + 1,
+    );
+
+    _emitUpdatedTasks(tenantId, workerUid, existing.teamId);
+  }
+
+  @override
+  Future<void> unblockTask({
+    required String tenantId,
+    required String taskId,
+    required String workerUid,
+  }) async {
+    await _maybeDelay();
+    final index = _tasks.indexWhere((t) => t.tenantId == tenantId && t.id == taskId);
+    if (index == -1) throw Exception('Task $taskId not found');
+
+    final existing = _tasks[index];
+    if (existing.workerUid != workerUid) {
+      throw Exception('Task is not assigned to current worker');
+    }
+
+    _tasks[index] = existing.copyWith(
+      status: TaskStatus.inProgress,
+      clearBlocked: true,
       clearPaused: true,
       updatedAt: DateTime.now(),
       version: existing.version + 1,
