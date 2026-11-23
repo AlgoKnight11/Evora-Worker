@@ -1,4 +1,3 @@
-import 'package:evora_workers/domain/enums/worker_enums.dart';
 import 'package:evora_workers/domain/models/worker_profile.dart';
 import 'package:evora_workers/features/auth/providers/auth_provider.dart';
 import 'package:evora_workers/features/auth/services/mock_auth_service.dart';

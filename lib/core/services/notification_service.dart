@@ -21,6 +21,14 @@ class NotificationService {
   static const String channelDescription =
       'Real-time alerts for citizen complaints and high-priority field dispatches.';
 
+  /// True if the current platform natively supports flutter_local_notifications
+  bool get isSupportedPlatform =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.linux ||
+          defaultTargetPlatform == TargetPlatform.macOS);
+
   /// Initializes the local notification plugin and configures Android notification channel
   Future<void> initialize({void Function(String taskId)? onSelectTask}) async {
     if (_isInitialized) return;
@@ -29,49 +37,58 @@ class NotificationService {
       onTaskSelected = onSelectTask;
     }
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const darwinSettings = DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
+    if (!isSupportedPlatform) {
+      _isInitialized = true;
+      return;
+    }
 
-    const initializationSettings = InitializationSettings(
-      android: androidSettings,
-      iOS: darwinSettings,
-      macOS: darwinSettings,
-    );
-
-    await _notificationsPlugin.initialize(
-      settings: initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        final payload = response.payload;
-        if (payload != null && payload.isNotEmpty) {
-          final taskId = payload.startsWith('task:')
-              ? payload.substring(5)
-              : payload;
-          if (taskId.isNotEmpty) {
-            onTaskSelected?.call(taskId);
-          }
-        }
-      },
-    );
-
-    // Create high-importance municipal dispatch channel on Android
-    final androidImplementation = _notificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-
-    if (androidImplementation != null) {
-      const channel = AndroidNotificationChannel(
-        channelId,
-        channelName,
-        description: channelDescription,
-        importance: Importance.max,
-        playSound: true,
-        enableVibration: true,
-        showBadge: true,
+    try {
+      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const darwinSettings = DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
       );
-      await androidImplementation.createNotificationChannel(channel);
+
+      const initializationSettings = InitializationSettings(
+        android: androidSettings,
+        iOS: darwinSettings,
+        macOS: darwinSettings,
+      );
+
+      await _notificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+          final payload = response.payload;
+          if (payload != null && payload.isNotEmpty) {
+            final taskId = payload.startsWith('task:')
+                ? payload.substring(5)
+                : payload;
+            if (taskId.isNotEmpty) {
+              onTaskSelected?.call(taskId);
+            }
+          }
+        },
+      );
+
+      // Create high-importance municipal dispatch channel on Android
+      final androidImplementation = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+      if (androidImplementation != null) {
+        const channel = AndroidNotificationChannel(
+          channelId,
+          channelName,
+          description: channelDescription,
+          importance: Importance.max,
+          playSound: true,
+          enableVibration: true,
+          showBadge: true,
+        );
+        await androidImplementation.createNotificationChannel(channel);
+      }
+    } catch (e) {
+      debugPrint('[NotificationService] Initialization note: $e');
     }
 
     _isInitialized = true;
@@ -79,6 +96,7 @@ class NotificationService {
 
   /// Requests the runtime notification permission (Android 13+ POST_NOTIFICATIONS)
   Future<bool> requestNotificationPermission() async {
+    if (!isSupportedPlatform) return true;
     try {
       final androidImplementation = _notificationsPlugin
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
@@ -97,6 +115,7 @@ class NotificationService {
 
   /// Checks whether notifications are currently allowed by the operating system
   Future<bool> areNotificationsEnabled() async {
+    if (!isSupportedPlatform) return true;
     try {
       final androidImplementation = _notificationsPlugin
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
@@ -113,6 +132,7 @@ class NotificationService {
 
   /// Displays an immediate high-priority dispatch notification for a newly registered citizen complaint
   Future<void> showTaskDispatchNotification(WorkerTask task) async {
+    if (!isSupportedPlatform) return;
     try {
       final priorityTag = switch (task.priority) {
         TaskPriority.p1 => '🚨 [CRITICAL P1]',
@@ -168,11 +188,10 @@ class NotificationService {
 
       final id = task.id.hashCode.abs() % 100000;
       await _notificationsPlugin.show(
-        id: id,
-        title: title,
-        body:
-            '${task.location.addressSummary}: ${task.instructions.length > 80 ? "${task.instructions.substring(0, 80)}..." : task.instructions}',
-        notificationDetails: notificationDetails,
+        id,
+        title,
+        '${task.location.addressSummary}: ${task.instructions.length > 80 ? "${task.instructions.substring(0, 80)}..." : task.instructions}',
+        notificationDetails,
         payload: 'task:${task.id}',
       );
     } catch (e) {

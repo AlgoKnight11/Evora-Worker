@@ -1,9 +1,5 @@
-import 'package:evora_workers/core/constants/app_constants.dart';
-import 'package:evora_workers/core/localization/locale_provider.dart';
-import 'package:evora_workers/core/theme/evora_colors.dart';
 import 'package:evora_workers/domain/enums/worker_enums.dart';
 import 'package:evora_workers/domain/models/worker_profile.dart';
-import 'package:evora_workers/domain/models/worker_task.dart';
 import 'package:evora_workers/features/auth/providers/auth_provider.dart';
 import 'package:evora_workers/features/auth/services/mock_auth_service.dart';
 import 'package:evora_workers/features/tasks/providers/task_providers.dart';
@@ -15,7 +11,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:evora_workers/l10n/generated/app_localizations.dart';
 
 void main() {

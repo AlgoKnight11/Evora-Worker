@@ -1,5 +1,4 @@
 import 'package:evora_workers/core/theme/evora_colors.dart';
-import 'package:evora_workers/domain/enums/worker_enums.dart';
 import 'package:evora_workers/features/auth/providers/auth_provider.dart';
 import 'package:evora_workers/features/auth/services/mock_auth_service.dart';
 import 'package:evora_workers/features/tasks/providers/task_providers.dart';

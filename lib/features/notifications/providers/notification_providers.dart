@@ -168,6 +168,12 @@ final dispatchNotificationProvider = StateNotifierProvider<
 
   final notifier = DispatchNotificationNotifier(prefs);
 
+  // Seed with current tasks if already loaded
+  final currentTasks = ref.watch(tasksStreamProvider).valueOrNull;
+  if (currentTasks != null && currentTasks.isNotEmpty) {
+    notifier.processIncomingTasks(currentTasks);
+  }
+
   // Bind to tasksStreamProvider to continuously detect newly filed citizen complaints
   ref.listen<AsyncValue<List<WorkerTask>>>(tasksStreamProvider, (_, next) {
     next.whenData((tasks) {
