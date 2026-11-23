@@ -45,6 +45,17 @@ class TaskLocation {
   }
 }
 
+DateTime? _parseTaskDateTime(dynamic value) {
+  if (value == null) return null;
+  if (value is DateTime) return value;
+  if (value is String) return DateTime.tryParse(value);
+  try {
+    final dt = (value as dynamic).toDate();
+    if (dt is DateTime) return dt;
+  } catch (_) {}
+  return null;
+}
+
 /// Authoritative Field Worker Task mapped to `tenants/{tenantId}/tasks/{taskId}`.
 class WorkerTask {
   final String id;
@@ -255,20 +266,16 @@ class WorkerTask {
         (json['location'] as Map<String, dynamic>?) ?? const {},
       ),
       assignedByUid: json['assignedByUid'] as String? ?? '',
-      assignedAt: DateTime.tryParse(json['assignedAt'] as String? ?? '') ??
+      assignedAt: _parseTaskDateTime(json['assignedAt']) ??
           DateTime.fromMillisecondsSinceEpoch(0),
-      dueAt: DateTime.tryParse(json['dueAt'] as String? ?? '') ??
+      dueAt: _parseTaskDateTime(json['dueAt']) ??
           DateTime.fromMillisecondsSinceEpoch(0),
-      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? '') ??
+      updatedAt: _parseTaskDateTime(json['updatedAt']) ??
           DateTime.fromMillisecondsSinceEpoch(0),
       version: (json['version'] as num?)?.toInt() ?? 1,
       schemaVersion: (json['schemaVersion'] as num?)?.toInt() ?? 1,
-      startedAt: json['startedAt'] != null
-          ? DateTime.tryParse(json['startedAt'] as String)
-          : null,
-      pausedAt: json['pausedAt'] != null
-          ? DateTime.tryParse(json['pausedAt'] as String)
-          : null,
+      startedAt: _parseTaskDateTime(json['startedAt']),
+      pausedAt: _parseTaskDateTime(json['pausedAt']),
       pauseReason: json['pauseReason'] as String?,
       startedLatitude: (json['startedLatitude'] as num?)?.toDouble(),
       startedLongitude: (json['startedLongitude'] as num?)?.toDouble(),
@@ -276,16 +283,12 @@ class WorkerTask {
           ? BlockReason.fromValue(json['blockReason'] as String)
           : null,
       blockNote: json['blockNote'] as String?,
-      blockedAt: json['blockedAt'] != null
-          ? DateTime.tryParse(json['blockedAt'] as String)
-          : null,
+      blockedAt: _parseTaskDateTime(json['blockedAt']),
       blockerPhotoPath: json['blockerPhotoPath'] as String?,
       helpRequested: json['helpRequested'] as bool? ?? false,
       helpRequestType: json['helpRequestType'] as String?,
       helpRequestMessage: json['helpRequestMessage'] as String?,
-      helpRequestedAt: json['helpRequestedAt'] != null
-          ? DateTime.tryParse(json['helpRequestedAt'] as String)
-          : null,
+      helpRequestedAt: _parseTaskDateTime(json['helpRequestedAt']),
     );
   }
 
@@ -380,7 +383,7 @@ class TaskEvent {
       reasonCode: json['reasonCode'] as String?,
       note: json['note'] as String?,
       idempotencyKey: json['idempotencyKey'] as String? ?? '',
-      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? '') ??
+      createdAt: _parseTaskDateTime(json['createdAt']) ??
           DateTime.fromMillisecondsSinceEpoch(0),
     );
   }

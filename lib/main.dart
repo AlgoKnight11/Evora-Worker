@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/constants/app_constants.dart';
 import 'core/localization/locale_provider.dart';
+import 'core/services/notification_service.dart';
 import 'core/theme/evora_theme.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'routes/app_router.dart';
@@ -18,6 +19,13 @@ Future<void> main() async {
     await Firebase.initializeApp();
   } catch (e) {
     debugPrint('Firebase.initializeApp warning: $e');
+  }
+
+  // Initialize Municipal Notification & Dispatch Service
+  try {
+    await NotificationService.instance.initialize();
+  } catch (e) {
+    debugPrint('NotificationService.initialize warning: $e');
   }
 
   SystemChrome.setSystemUIOverlayStyle(

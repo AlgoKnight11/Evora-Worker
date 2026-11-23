@@ -5,6 +5,7 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/evora_colors.dart';
 import '../../../core/widgets/sync_status_pill.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../notifications/providers/notification_providers.dart';
 
 /// Adaptive shell hosting all 6 Field Worker Portal destinations:
 /// Branch 0: My Overview (/overview)
@@ -13,7 +14,7 @@ import '../../../l10n/generated/app_localizations.dart';
 /// Branch 3: Notifications (/notifications)
 /// Branch 4: Task History (/history)
 /// Branch 5: Profile & Help (/profile)
-class WorkerShellScreen extends ConsumerWidget {
+class WorkerShellScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const WorkerShellScreen({
@@ -21,15 +22,33 @@ class WorkerShellScreen extends ConsumerWidget {
     required this.navigationShell,
   });
 
+  @override
+  ConsumerState<WorkerShellScreen> createState() => _WorkerShellScreenState();
+}
+
+class _WorkerShellScreenState extends ConsumerState<WorkerShellScreen> {
   // Maps the 5 mobile bottom-bar slots to StatefulNavigationShell branch indices.
-  // Branch 3 (Notifications) is accessible via the persistent top AppBar bell on mobile,
-  // and directly in the NavigationRail on tablet/desktop screens.
   static const List<int> _mobileBarBranchIndices = [0, 1, 2, 4, 5];
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Auto-check and request notification permission on worker launch
+      final notifier = ref.read(notificationPermissionProvider.notifier);
+      await notifier.checkPermission();
+      if (!mounted) return;
+      final isGranted = ref.read(notificationPermissionProvider);
+      if (!isGranted) {
+        await notifier.requestPermission();
+      }
+    });
+  }
+
   void _goBranch(int branchIndex) {
-    navigationShell.goBranch(
+    widget.navigationShell.goBranch(
       branchIndex,
-      initialLocation: branchIndex == navigationShell.currentIndex,
+      initialLocation: branchIndex == widget.navigationShell.currentIndex,
     );
   }
 
@@ -46,13 +65,17 @@ class WorkerShellScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentIndex = navigationShell.currentIndex;
+    final currentIndex = widget.navigationShell.currentIndex;
     final isWide = MediaQuery.sizeOf(context).width >= 680;
 
     final mobileSelectedIndex = _mobileBarBranchIndices.indexOf(currentIndex);
     final isNotificationsActive = currentIndex == 3;
+
+    // Keep real-time dispatch notification listener active
+    final notifications = ref.watch(dispatchNotificationProvider);
+    final unreadCount = notifications.where((n) => !n.isRead).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -103,13 +126,18 @@ class WorkerShellScreen extends ConsumerWidget {
               key: const Key('nav_notifications_button'),
               tooltip: l10n.navNotificationsFull,
               onPressed: () => _goBranch(3),
-              icon: Icon(
-                isNotificationsActive
-                    ? Icons.notifications_rounded
-                    : Icons.notifications_outlined,
-                color: isNotificationsActive
-                    ? EvoraColors.primary
-                    : EvoraColors.onSurface,
+              icon: Badge(
+                isLabelVisible: unreadCount > 0,
+                label: Text('$unreadCount'),
+                backgroundColor: EvoraColors.error,
+                child: Icon(
+                  isNotificationsActive
+                      ? Icons.notifications_rounded
+                      : Icons.notifications_outlined,
+                  color: isNotificationsActive
+                      ? EvoraColors.primary
+                      : EvoraColors.onSurface,
+                ),
               ),
             ),
           const SizedBox(width: 6),
@@ -149,7 +177,12 @@ class WorkerShellScreen extends ConsumerWidget {
                       label: Text(l10n.navMap),
                     ),
                     NavigationRailDestination(
-                      icon: const Icon(Icons.notifications_outlined),
+                      icon: Badge(
+                        isLabelVisible: unreadCount > 0,
+                        label: Text('$unreadCount'),
+                        backgroundColor: EvoraColors.error,
+                        child: const Icon(Icons.notifications_outlined),
+                      ),
                       selectedIcon: const Icon(Icons.notifications_rounded),
                       label: Text(l10n.navNotifications),
                     ),
@@ -166,10 +199,10 @@ class WorkerShellScreen extends ConsumerWidget {
                   ],
                 ),
                 const VerticalDivider(width: 1, thickness: 1),
-                Expanded(child: navigationShell),
+                Expanded(child: widget.navigationShell),
               ],
             )
-          : navigationShell,
+          : widget.navigationShell,
       bottomNavigationBar: isWide
           ? null
           : NavigationBar(

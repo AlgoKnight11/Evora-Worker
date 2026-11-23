@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/enums/worker_enums.dart';
@@ -21,21 +20,14 @@ import '../services/resilient_task_service.dart';
 /// Selects [ResilientTaskService] with [FirestoreTaskService] as primary and [MockTaskService]
 /// as fallback when signed in with real Firebase credentials.
 final taskRepositoryProvider = Provider<TaskRepository>((ref) {
-  final profile = ref.watch(authNotifierProvider).profile;
-
   final bool firebaseReady = Firebase.apps.isNotEmpty;
-  final bool hasRealAuthUser =
-      firebaseReady && FirebaseAuth.instance.currentUser != null;
-  final bool isTestWorker = profile == null ||
-      profile.uid.startsWith('test-') ||
-      profile.uid.startsWith('mock-');
 
-  // If using test worker, unauthenticated in Firebase Auth, or Firebase not ready:
-  if (!firebaseReady || !hasRealAuthUser || isTestWorker) {
+  // When Firebase is not initialized (e.g. in test suites without Firebase), use MockTaskService
+  if (!firebaseReady) {
     return MockTaskService();
   }
 
-  // Production path with automatic fallback
+  // Production path: Real-time Firestore task repository with Citizen grievance bridge
   return ResilientTaskService(
     primary: FirestoreTaskService(),
     fallback: MockTaskService(),

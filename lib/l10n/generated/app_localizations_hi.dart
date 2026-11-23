@@ -799,6 +799,33 @@ class AppLocalizationsHi extends AppLocalizations {
       'आपके पास कोई अपठित कार्य सूचना या सुपरवाइज़र संदेश नहीं है।';
 
   @override
+  String get notifPermissionActive => 'सिस्टम सूचनाएं सक्रिय हैं';
+
+  @override
+  String get notifPermissionActiveDesc =>
+      'नागरिक शिकायतों और आपातकालीन डिस्पैच के लिए वास्तविक समय सूचनाएं चालू हैं।';
+
+  @override
+  String get notifPermissionDisabled => 'सूचनाएं चालू करें';
+
+  @override
+  String get notifPermissionDisabledDesc =>
+      'अपने क्षेत्र में नागरिकों द्वारा शिकायत दर्ज करने पर तत्काल सूचना प्राप्त करने के लिए सूचनाएं चालू करें।';
+
+  @override
+  String get notifEnableButton => 'सूचनाएं चालू करें';
+
+  @override
+  String get notifTestButton => 'परीक्षण सूचना भेजें';
+
+  @override
+  String get notifTestSuccess =>
+      'परीक्षण सूचना भेजी गई! अपने फ़ोन के नोटिफिकेशन बार की जांच करें।';
+
+  @override
+  String get notifRecentDispatches => 'हाल के फ़ील्ड डिस्पैच';
+
+  @override
   String get historySubtitle =>
       'पूर्ण, वापस किए गए, पुनः आवंटित और रद्द किए गए कार्य';
 

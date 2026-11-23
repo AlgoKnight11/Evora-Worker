@@ -801,6 +801,33 @@ class AppLocalizationsEn extends AppLocalizations {
       'You have no unread dispatch alerts or supervisor review messages.';
 
   @override
+  String get notifPermissionActive => 'System Notifications Active';
+
+  @override
+  String get notifPermissionActiveDesc =>
+      'Real-time alerts for citizen complaints and emergency dispatches are enabled.';
+
+  @override
+  String get notifPermissionDisabled => 'Turn On Notifications';
+
+  @override
+  String get notifPermissionDisabledDesc =>
+      'Enable notifications to receive instant alerts when citizens file complaints in your area.';
+
+  @override
+  String get notifEnableButton => 'Turn On Notifications';
+
+  @override
+  String get notifTestButton => 'Send Test Notification';
+
+  @override
+  String get notifTestSuccess =>
+      'Test notification sent! Check your phone\'s notification bar.';
+
+  @override
+  String get notifRecentDispatches => 'Recent Field Dispatches';
+
+  @override
   String get historySubtitle =>
       'Completed, returned, reassigned, and cancelled tasks';
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../core/localization/locale_provider.dart';
+import '../core/services/notification_service.dart';
 import '../features/auth/models/auth_state.dart';
 import '../features/auth/providers/auth_provider.dart';
 import '../features/auth/screens/login_screen.dart';
@@ -46,8 +47,16 @@ final appRouterInitialLocationProvider = Provider<String>((ref) {
   return WorkerRoutes.splash;
 });
 
+/// Global navigator key for out-of-context router interactions like notification taps.
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = _RouterRefreshNotifier();
+
+  // Wire notification tap navigation to task detail screen
+  NotificationService.instance.onTaskSelected = (taskId) {
+    rootNavigatorKey.currentContext?.go(WorkerRoutes.taskDetail(taskId));
+  };
 
   // Listen to language selection changes
   ref.listen<bool>(
@@ -66,6 +75,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   final initialLocation = ref.watch(appRouterInitialLocationProvider);
 
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: initialLocation,
     refreshListenable: refreshNotifier,
     redirect: (context, state) {

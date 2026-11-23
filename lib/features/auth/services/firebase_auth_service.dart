@@ -145,6 +145,11 @@ class FirebaseAuthService implements AuthRepository {
       if (otpCode.trim() != '123456') {
         throw Exception('Invalid OTP code. For test number, use 123456.');
       }
+      if (_auth.currentUser == null) {
+        try {
+          await _auth.signInAnonymously();
+        } catch (_) {}
+      }
       final testProfile = WorkerProfile(
         uid: _auth.currentUser?.uid ?? 'test-rajesh-001',
         tenantId: tenantId,

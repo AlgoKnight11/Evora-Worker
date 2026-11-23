@@ -1550,6 +1550,54 @@ abstract class AppLocalizations {
   /// **'You have no unread dispatch alerts or supervisor review messages.'**
   String get notificationsEmptySubtitle;
 
+  /// No description provided for @notifPermissionActive.
+  ///
+  /// In en, this message translates to:
+  /// **'System Notifications Active'**
+  String get notifPermissionActive;
+
+  /// No description provided for @notifPermissionActiveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time alerts for citizen complaints and emergency dispatches are enabled.'**
+  String get notifPermissionActiveDesc;
+
+  /// No description provided for @notifPermissionDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn On Notifications'**
+  String get notifPermissionDisabled;
+
+  /// No description provided for @notifPermissionDisabledDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications to receive instant alerts when citizens file complaints in your area.'**
+  String get notifPermissionDisabledDesc;
+
+  /// No description provided for @notifEnableButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn On Notifications'**
+  String get notifEnableButton;
+
+  /// No description provided for @notifTestButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Test Notification'**
+  String get notifTestButton;
+
+  /// No description provided for @notifTestSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Test notification sent! Check your phone\'s notification bar.'**
+  String get notifTestSuccess;
+
+  /// No description provided for @notifRecentDispatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Field Dispatches'**
+  String get notifRecentDispatches;
+
   /// No description provided for @historySubtitle.
   ///
   /// In en, this message translates to:
