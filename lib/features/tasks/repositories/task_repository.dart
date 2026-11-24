@@ -26,6 +26,7 @@ abstract class TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   });
 
   /// Single snapshot fetch of tasks for a worker.
@@ -33,6 +34,7 @@ abstract class TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   });
 
   /// Fetch a single task by its unique ID within a tenant.

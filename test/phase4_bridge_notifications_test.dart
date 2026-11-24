@@ -179,5 +179,68 @@ void main() {
       expect(find.text('Mall Road: Commercial waste spilling onto footpath'), findsOneWidget);
       expect(find.text('View & Accept Task'), findsOneWidget);
     });
+
+    test('4. DispatchNotificationNotifier enforces department filtering between Solid Waste and Roads', () {
+      final notifier = DispatchNotificationNotifier(testPrefs);
+
+      final swmComplaint = WorkerTask(
+        id: 'task_cf_swm_99',
+        tenantId: 'tenant-shimla-01',
+        sourceType: SourceType.civicFlowCase,
+        civicFlowCaseId: 'cf_swm_99',
+        departmentId: 'Nagar Nigam (Sanitation & SWM)',
+        wardId: 'Ward 12',
+        categoryId: 'Solid Waste',
+        status: TaskStatus.assigned,
+        priority: TaskPriority.p2,
+        title: '[CF-2026-112233] Overflowing Dustbin',
+        instructions: 'Garbage spilling onto the main road near bus stand.',
+        location: const TaskLocation(
+          latitude: 31.10,
+          longitude: 77.17,
+          addressSummary: 'Bus Stand Lower Mall',
+          wardId: 'Ward 12',
+        ),
+        assignedByUid: 'Resident Aman',
+        assignedAt: DateTime.now(),
+        dueAt: DateTime.now().add(const Duration(hours: 12)),
+        updatedAt: DateTime.now(),
+      );
+
+      final pwdComplaint = WorkerTask(
+        id: 'task_cf_pwd_88',
+        tenantId: 'tenant-shimla-01',
+        sourceType: SourceType.civicFlowCase,
+        civicFlowCaseId: 'cf_pwd_88',
+        departmentId: 'PWD / Road Engineering Wing',
+        wardId: 'Ward 14',
+        categoryId: 'Roads & Footpaths',
+        status: TaskStatus.assigned,
+        priority: TaskPriority.p1,
+        title: '[CF-2026-445566] Big Pothole on Highway',
+        instructions: 'Dangerous crater on road surface.',
+        location: const TaskLocation(
+          latitude: 31.11,
+          longitude: 77.18,
+          addressSummary: 'Cart Road Highway',
+          wardId: 'Ward 14',
+        ),
+        assignedByUid: 'Resident Rohit',
+        assignedAt: DateTime.now(),
+        dueAt: DateTime.now().add(const Duration(hours: 4)),
+        updatedAt: DateTime.now(),
+      );
+
+      // Process both complaints for a Solid Waste worker ('dept-swm')
+      notifier.processIncomingTasks(
+        [swmComplaint, pwdComplaint],
+        workerDepartment: 'dept-swm',
+      );
+
+      // SWM complaint must be included, PWD complaint must be filtered out!
+      expect(notifier.state.length, 1);
+      expect(notifier.state.first.taskId, 'task_cf_swm_99');
+      expect(notifier.state.first.title, contains('Overflowing Dustbin'));
+    });
   });
 }

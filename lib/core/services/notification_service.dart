@@ -195,7 +195,9 @@ class NotificationService {
         payload: 'task:${task.id}',
       );
     } catch (e) {
-      debugPrint('[NotificationService] Error showing task notification: $e');
+      if (!e.toString().contains('LateInitializationError')) {
+        debugPrint('[NotificationService] Notification dispatch note: $e');
+      }
     }
   }
 

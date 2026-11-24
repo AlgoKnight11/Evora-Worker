@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/constants/municipal_taxonomy.dart';
 import '../../../core/localization/locale_provider.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../domain/enums/worker_enums.dart';
 import '../../../domain/models/worker_task.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../../tasks/providers/task_providers.dart';
 
 /// Notification Permission state notifier (true = granted, false = denied/unrequested)
@@ -72,9 +74,8 @@ class DispatchNotificationNotifier
     extends StateNotifier<List<WorkerNotificationItem>> {
   final SharedPreferences? _prefs;
   final Set<String> _knownTaskIds = {};
-  bool _hasSeeded = false;
 
-  static const String _prefKnownTaskIdsKey = 'evora_worker_known_task_ids';
+  static const String _prefKnownTaskIdsKey = 'evora_worker_known_task_ids_v2';
 
   DispatchNotificationNotifier(this._prefs) : super(const []) {
     _loadKnownTaskIds();
@@ -91,41 +92,28 @@ class DispatchNotificationNotifier
     _prefs?.setStringList(_prefKnownTaskIdsKey, _knownTaskIds.toList());
   }
 
-  /// Processes active tasks from stream, seeding on first load and triggering push on new complaints
-  void processIncomingTasks(List<WorkerTask> tasks) {
-    if (!_hasSeeded) {
-      for (final t in tasks) {
-        _knownTaskIds.add(t.id);
-      }
-      _hasSeeded = true;
-      _saveKnownTaskIds();
-
-      // Seed in-app list with active tasks
-      final initialNotifications = tasks.map((t) {
-        return WorkerNotificationItem(
-          id: 'notif_${t.id}',
-          taskId: t.id,
-          title: t.title,
-          message:
-              '${t.location.addressSummary}: ${t.instructions.length > 80 ? "${t.instructions.substring(0, 80)}..." : t.instructions}',
-          priority: t.priority,
-          timestamp: t.assignedAt,
-        );
-      }).toList();
-      state = initialNotifications;
-      return;
-    }
+  /// Processes active tasks from stream, filtering by worker department and alerting on new grievances
+  void processIncomingTasks(List<WorkerTask> tasks, {String? workerDepartment}) {
+    // 1. Department Scoping: Only process tasks that match the worker's operational department
+    final relevantTasks = tasks.where((task) {
+      if (workerDepartment == null || workerDepartment.trim().isEmpty) return true;
+      if (task.workerUid != null) return true; // directly assigned to this worker
+      return MunicipalTaxonomyBridge.matchesWorkerDepartment(
+        workerDepartment: workerDepartment,
+        taskDepartment: task.departmentId,
+        taskCategory: task.categoryId,
+      );
+    }).toList();
 
     final newItems = <WorkerNotificationItem>[];
+    final unnotifiedTasks = <WorkerTask>[];
 
-    for (final task in tasks) {
+    for (final task in relevantTasks) {
       if (!_knownTaskIds.contains(task.id)) {
         _knownTaskIds.add(task.id);
+        unnotifiedTasks.add(task);
 
-        // 1. Trigger system notification on phone with sound, vibration & BigTextStyle
-        NotificationService.instance.showTaskDispatchNotification(task);
-
-        // 2. Add to in-app notification list
+        // Add to in-app notification list
         final item = WorkerNotificationItem(
           id: 'notif_${task.id}_${DateTime.now().millisecondsSinceEpoch}',
           taskId: task.id,
@@ -133,14 +121,23 @@ class DispatchNotificationNotifier
           message:
               '${task.location.addressSummary}: ${task.instructions.length > 80 ? "${task.instructions.substring(0, 80)}..." : task.instructions}',
           priority: task.priority,
-          timestamp: DateTime.now(),
+          timestamp: task.assignedAt,
         );
         newItems.add(item);
       }
     }
 
-    if (newItems.isNotEmpty) {
+    // Trigger system notifications on the phone for newly detected grievance dispatches
+    if (unnotifiedTasks.isNotEmpty) {
       _saveKnownTaskIds();
+      // Sort so most urgent complaints alert first
+      unnotifiedTasks.sort((a, b) => a.priority.index.compareTo(b.priority.index));
+      for (final task in unnotifiedTasks.take(3)) {
+        NotificationService.instance.showTaskDispatchNotification(task);
+      }
+    }
+
+    if (newItems.isNotEmpty) {
       state = [...newItems, ...state];
     }
   }
@@ -167,17 +164,19 @@ final dispatchNotificationProvider = StateNotifierProvider<
   } catch (_) {}
 
   final notifier = DispatchNotificationNotifier(prefs);
+  final workerDept = ref.watch(authNotifierProvider).profile?.departmentId;
 
   // Seed with current tasks if already loaded
   final currentTasks = ref.watch(tasksStreamProvider).valueOrNull;
   if (currentTasks != null && currentTasks.isNotEmpty) {
-    notifier.processIncomingTasks(currentTasks);
+    notifier.processIncomingTasks(currentTasks, workerDepartment: workerDept);
   }
 
   // Bind to tasksStreamProvider to continuously detect newly filed citizen complaints
   ref.listen<AsyncValue<List<WorkerTask>>>(tasksStreamProvider, (_, next) {
     next.whenData((tasks) {
-      notifier.processIncomingTasks(tasks);
+      final dept = ref.read(authNotifierProvider).profile?.departmentId;
+      notifier.processIncomingTasks(tasks, workerDepartment: dept);
     });
   });
 

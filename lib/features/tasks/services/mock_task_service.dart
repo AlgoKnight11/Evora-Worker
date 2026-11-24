@@ -319,7 +319,7 @@ class MockTaskService implements TaskRepository {
       });
   }
 
-  void _emitUpdatedTasks(String tenantId, String workerUid, String? teamId) {
+  void _emitUpdatedTasks(String tenantId, String workerUid, String? teamId, [String? departmentId]) {
     if (!_streamController.isClosed) {
       _streamController.add(_filterForWorker(
         tenantId: tenantId,
@@ -334,9 +334,10 @@ class MockTaskService implements TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   }) {
     // Schedule initial emission
-    Future.microtask(() => _emitUpdatedTasks(tenantId, workerUid, teamId));
+    Future.microtask(() => _emitUpdatedTasks(tenantId, workerUid, teamId, departmentId));
     return _streamController.stream;
   }
 
@@ -345,6 +346,7 @@ class MockTaskService implements TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   }) async {
     await _maybeDelay();
     return _filterForWorker(

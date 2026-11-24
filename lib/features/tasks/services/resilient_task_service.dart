@@ -22,6 +22,7 @@ class ResilientTaskService implements TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   }) {
     late StreamController<List<WorkerTask>> controller;
     StreamSubscription<List<WorkerTask>>? primarySub;
@@ -38,6 +39,7 @@ class ResilientTaskService implements TaskRepository {
             tenantId: tenantId,
             workerUid: workerUid,
             teamId: teamId,
+            departmentId: departmentId,
           )
           .listen(
             controller.add,
@@ -54,6 +56,7 @@ class ResilientTaskService implements TaskRepository {
                 tenantId: tenantId,
                 workerUid: workerUid,
                 teamId: teamId,
+                departmentId: departmentId,
               )
               .listen(
                 (tasks) {
@@ -82,18 +85,21 @@ class ResilientTaskService implements TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   }) async {
     try {
       final tasks = await primary.getTasksForWorker(
         tenantId: tenantId,
         workerUid: workerUid,
         teamId: teamId,
+        departmentId: departmentId,
       );
       if (tasks.isNotEmpty) return tasks;
       return await fallback.getTasksForWorker(
         tenantId: tenantId,
         workerUid: workerUid,
         teamId: teamId,
+        departmentId: departmentId,
       );
     } catch (e) {
       debugPrint('[ResilientTaskService] getTasksForWorker fallback: $e');
@@ -101,6 +107,7 @@ class ResilientTaskService implements TaskRepository {
         tenantId: tenantId,
         workerUid: workerUid,
         teamId: teamId,
+        departmentId: departmentId,
       );
     }
   }

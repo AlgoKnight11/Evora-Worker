@@ -48,6 +48,7 @@ final tasksStreamProvider = StreamProvider<List<WorkerTask>>((ref) {
     tenantId: profile.tenantId,
     workerUid: profile.uid,
     teamId: profile.teamId,
+    departmentId: profile.departmentId,
   );
 });
 

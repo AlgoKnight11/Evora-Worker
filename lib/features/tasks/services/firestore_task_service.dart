@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import '../../../core/constants/municipal_taxonomy.dart';
 import '../../../domain/enums/worker_enums.dart';
 import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
@@ -160,6 +161,7 @@ class FirestoreTaskService implements TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   }) {
     final controller = StreamController<List<WorkerTask>>.broadcast();
     List<WorkerTask> currentTasks = [];
@@ -179,9 +181,18 @@ class FirestoreTaskService implements TaskRepository {
       }
 
       final filtered = merged.values.where((t) {
+        // 1. Explicitly assigned to this individual worker
         if (t.workerUid == workerUid) return true;
-        if (t.workerUid == null) return true;
+        // 2. Assigned to this worker's rapid response crew
         if (teamId != null && teamId.isNotEmpty && t.teamId == teamId) return true;
+        // 3. Unassigned municipal grievance: filter by department
+        if (t.workerUid == null) {
+          return MunicipalTaxonomyBridge.matchesWorkerDepartment(
+            workerDepartment: departmentId,
+            taskDepartment: t.departmentId,
+            taskCategory: t.categoryId,
+          );
+        }
         return false;
       }).toList();
 
@@ -246,6 +257,7 @@ class FirestoreTaskService implements TaskRepository {
     required String tenantId,
     required String workerUid,
     String? teamId,
+    String? departmentId,
   }) async {
     final tasksSnap = await _tasksCollection(tenantId).get();
     final casesSnap = await _casesCollection(tenantId).get();
@@ -273,8 +285,14 @@ class FirestoreTaskService implements TaskRepository {
 
     final filtered = merged.values.where((t) {
       if (t.workerUid == workerUid) return true;
-      if (t.workerUid == null) return true;
       if (teamId != null && teamId.isNotEmpty && t.teamId == teamId) return true;
+      if (t.workerUid == null) {
+        return MunicipalTaxonomyBridge.matchesWorkerDepartment(
+          workerDepartment: departmentId,
+          taskDepartment: t.departmentId,
+          taskCategory: t.categoryId,
+        );
+      }
       return false;
     }).toList();
 
