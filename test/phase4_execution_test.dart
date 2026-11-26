@@ -20,7 +20,7 @@ void main() {
 
   const testWorker = WorkerProfile(
     uid: 'mock-worker-rajesh-001',
-    tenantId: 'tenant-shimla-01',
+    tenantId: 'tenant_dehradun_01',
     employeeCode: 'EVR-SWM-4091',
     displayName: 'Rajesh Kumar',
     phoneNumber: '+919999999999',
@@ -58,7 +58,7 @@ void main() {
   group('Phase 4.1: Execution Lifecycle Engine - Repository & Service Tests', () {
     test('1. startTask transitions accepted task to in_progress with timestamps & coordinates', () async {
       final mockService = MockTaskService();
-      const tenantId = 'tenant-shimla-01';
+      const tenantId = 'tenant_dehradun_01';
       const taskId = 'task_swm_002'; // Initially accepted
       const workerUid = 'mock-worker-rajesh-001';
 
@@ -88,7 +88,7 @@ void main() {
       final mockService = MockTaskService();
       expect(
         () => mockService.startTask(
-          tenantId: 'tenant-shimla-01',
+          tenantId: 'tenant_dehradun_01',
           taskId: 'task_swm_002',
           workerUid: 'unauthorized_worker_999',
         ),
@@ -98,7 +98,7 @@ void main() {
 
     test('3. pauseTask transitions in_progress task to accepted with pause metadata', () async {
       final mockService = MockTaskService();
-      const tenantId = 'tenant-shimla-01';
+      const tenantId = 'tenant_dehradun_01';
       const taskId = 'task_swm_002';
       const workerUid = 'mock-worker-rajesh-001';
 
@@ -126,7 +126,7 @@ void main() {
 
     test('4. resumeTask clears pause state and returns status to in_progress', () async {
       final mockService = MockTaskService();
-      const tenantId = 'tenant-shimla-01';
+      const tenantId = 'tenant_dehradun_01';
       const taskId = 'task_swm_002';
       const workerUid = 'mock-worker-rajesh-001';
 
@@ -164,20 +164,20 @@ void main() {
       );
 
       await resilient.startTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_002',
         workerUid: 'mock-worker-rajesh-001',
       );
 
       await resilient.pauseTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_002',
         workerUid: 'mock-worker-rajesh-001',
         reason: 'Adverse Weather',
       );
 
       await resilient.resumeTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_002',
         workerUid: 'mock-worker-rajesh-001',
       );
@@ -226,7 +226,7 @@ void main() {
 
       // Start task first in service
       await mockTaskService.startTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_002',
         workerUid: testWorker.uid,
       );
@@ -277,12 +277,12 @@ void main() {
 
       // Start and pause task in service
       await mockTaskService.startTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_002',
         workerUid: testWorker.uid,
       );
       await mockTaskService.pauseTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_002',
         workerUid: testWorker.uid,
         reason: 'Heavy Rain Hold',

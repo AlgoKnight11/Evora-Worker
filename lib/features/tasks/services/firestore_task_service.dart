@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import '../../../core/constants/municipal_taxonomy.dart';
 import '../../../domain/enums/worker_enums.dart';
@@ -211,6 +212,13 @@ class FirestoreTaskService implements TaskRepository {
     StreamSubscription? casesSub;
 
     controller.onListen = () {
+      if (FirebaseAuth.instance.currentUser == null) {
+        FirebaseAuth.instance.signInAnonymously().catchError((e) {
+          debugPrint('[FirestoreTaskService] anonymous auth note: $e');
+          return null as dynamic;
+        });
+      }
+
       tasksSub = _tasksCollection(tenantId).snapshots().listen(
         (snapshot) {
           currentTasks = snapshot.docs.map((doc) {

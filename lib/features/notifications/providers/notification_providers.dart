@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/municipal_taxonomy.dart';
@@ -133,6 +134,7 @@ class DispatchNotificationNotifier
       // Sort so most urgent complaints alert first
       unnotifiedTasks.sort((a, b) => a.priority.index.compareTo(b.priority.index));
       for (final task in unnotifiedTasks.take(3)) {
+        debugPrint('[DispatchNotificationNotifier] Alerting worker on dispatch: ${task.id} - ${task.title}');
         NotificationService.instance.showTaskDispatchNotification(task);
       }
     }

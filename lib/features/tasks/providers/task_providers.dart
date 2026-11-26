@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../domain/enums/worker_enums.dart';
 import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
@@ -94,7 +95,7 @@ final taskDetailProvider = FutureProvider.family<WorkerTask?, String>((ref, task
 
   final repo = ref.watch(taskRepositoryProvider);
   final profile = ref.watch(authNotifierProvider).profile;
-  final tenantId = profile?.tenantId ?? 'tenant-shimla-01';
+  final tenantId = profile?.tenantId ?? AppConstants.defaultTenantId;
   return repo.getTaskById(tenantId: tenantId, taskId: taskId);
 });
 

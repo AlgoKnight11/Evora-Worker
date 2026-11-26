@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../domain/models/worker_profile.dart';
 import '../../../domain/repositories/auth_repository.dart';
@@ -44,6 +45,12 @@ class FirebaseAuthService implements AuthRepository {
   void setRestoredProfile(WorkerProfile profile) {
     _cachedProfile = profile;
     _profileController.add(profile);
+    if (_auth.currentUser == null) {
+      _auth.signInAnonymously().catchError((e) {
+        debugPrint('[FirebaseAuthService] Anonymous restore note: $e');
+        return null as dynamic;
+      });
+    }
   }
 
   @override

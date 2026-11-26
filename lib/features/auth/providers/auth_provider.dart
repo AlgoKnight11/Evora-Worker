@@ -72,7 +72,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (savedJson != null && savedJson.isNotEmpty) {
         try {
           final map = jsonDecode(savedJson) as Map<String, dynamic>;
-          final profile = WorkerProfile.fromJson(map);
+          var profile = WorkerProfile.fromJson(map);
+          // Auto-migrate any legacy pilot tenant ID from local device cache to active Uttarakhand tenant
+          if (profile.tenantId != AppConstants.defaultTenantId) {
+            profile = profile.copyWith(tenantId: AppConstants.defaultTenantId);
+            prefs.setString(
+              AppConstants.prefWorkerProfileJson,
+              jsonEncode(profile.toJson()),
+            );
+          }
           if (profile.isActive) {
             return AuthState(
               status: AuthStatus.authenticated,

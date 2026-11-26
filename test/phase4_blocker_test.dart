@@ -20,7 +20,7 @@ void main() {
 
   const testWorker = WorkerProfile(
     uid: 'mock-worker-rajesh-001',
-    tenantId: 'tenant-shimla-01',
+    tenantId: 'tenant_dehradun_01',
     employeeCode: 'EVR-SWM-4091',
     displayName: 'Rajesh Kumar',
     phoneNumber: '+919999999999',
@@ -68,7 +68,7 @@ void main() {
         () async {
       // task_swm_004 is initially inProgress
       final initialTask = await mockService.getTaskById(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
       );
       expect(initialTask?.status, TaskStatus.inProgress);
@@ -76,7 +76,7 @@ void main() {
       final initialVersion = initialTask?.version ?? 1;
 
       await mockService.blockTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
         workerUid: 'mock-worker-rajesh-001',
         reason: BlockReason.accessRestricted,
@@ -84,7 +84,7 @@ void main() {
       );
 
       final updatedTask = await mockService.getTaskById(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
       );
 
@@ -101,7 +101,7 @@ void main() {
         () async {
       // First block the task
       await mockService.blockTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
         workerUid: 'mock-worker-rajesh-001',
         reason: BlockReason.equipmentFailure,
@@ -109,7 +109,7 @@ void main() {
       );
 
       final blockedTask = await mockService.getTaskById(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
       );
       expect(blockedTask?.status, TaskStatus.blocked);
@@ -118,13 +118,13 @@ void main() {
 
       // Now unblock
       await mockService.unblockTask(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
         workerUid: 'mock-worker-rajesh-001',
       );
 
       final unblockedTask = await mockService.getTaskById(
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         taskId: 'task_swm_004',
       );
 

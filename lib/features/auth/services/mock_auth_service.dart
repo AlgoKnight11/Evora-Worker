@@ -12,7 +12,7 @@ class MockAuthService implements AuthRepository {
 
   MockAuthService({this.simulateDelay = false});
 
-  static const String _defaultTenant = 'tenant-shimla-01';
+  static const String _defaultTenant = 'tenant_dehradun_01';
 
   // Pre-configured test workers
   static final Map<String, WorkerProfile> mockDirectory = {

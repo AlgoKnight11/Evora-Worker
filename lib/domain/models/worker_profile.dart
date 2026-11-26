@@ -35,6 +35,42 @@ class WorkerProfile {
     this.lastSessionValidatedAt,
   });
 
+  WorkerProfile copyWith({
+    String? uid,
+    String? tenantId,
+    String? employeeCode,
+    String? displayName,
+    String? phoneNumber,
+    String? departmentId,
+    String? departmentName,
+    String? teamId,
+    String? teamName,
+    List<String>? authorizedServiceAreaIds,
+    String? supervisorName,
+    String? supervisorPhone,
+    bool? isActive,
+    bool? isContractor,
+    DateTime? lastSessionValidatedAt,
+  }) {
+    return WorkerProfile(
+      uid: uid ?? this.uid,
+      tenantId: tenantId ?? this.tenantId,
+      employeeCode: employeeCode ?? this.employeeCode,
+      displayName: displayName ?? this.displayName,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      departmentId: departmentId ?? this.departmentId,
+      departmentName: departmentName ?? this.departmentName,
+      teamId: teamId ?? this.teamId,
+      teamName: teamName ?? this.teamName,
+      authorizedServiceAreaIds: authorizedServiceAreaIds ?? this.authorizedServiceAreaIds,
+      supervisorName: supervisorName ?? this.supervisorName,
+      supervisorPhone: supervisorPhone ?? this.supervisorPhone,
+      isActive: isActive ?? this.isActive,
+      isContractor: isContractor ?? this.isContractor,
+      lastSessionValidatedAt: lastSessionValidatedAt ?? this.lastSessionValidatedAt,
+    );
+  }
+
   factory WorkerProfile.fromJson(Map<String, dynamic> json) {
     return WorkerProfile(
       uid: json['uid'] as String? ?? '',

@@ -29,7 +29,7 @@ void main() {
 
       final task = WorkerTask(
         id: 'task_cf_test_101',
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'cf_test_101',
         departmentId: 'Solid Waste Management',
@@ -66,7 +66,7 @@ void main() {
 
       final existingTask = WorkerTask(
         id: 'task_cf_initial_01',
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'cf_initial_01',
         departmentId: 'Solid Waste Management',
@@ -96,7 +96,7 @@ void main() {
       // Second run: A new citizen complaint arrives
       final newComplaintTask = WorkerTask(
         id: 'task_cf_new_02',
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'cf_new_02',
         departmentId: 'Roads & Infrastructure',
@@ -185,7 +185,7 @@ void main() {
 
       final swmComplaint = WorkerTask(
         id: 'task_cf_swm_99',
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'cf_swm_99',
         departmentId: 'Nagar Nigam (Sanitation & SWM)',
@@ -209,7 +209,7 @@ void main() {
 
       final pwdComplaint = WorkerTask(
         id: 'task_cf_pwd_88',
-        tenantId: 'tenant-shimla-01',
+        tenantId: 'tenant_dehradun_01',
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'cf_pwd_88',
         departmentId: 'PWD / Road Engineering Wing',

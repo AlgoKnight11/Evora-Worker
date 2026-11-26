@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/constants/app_constants.dart';
 import '../../../domain/enums/worker_enums.dart';
 import '../../../domain/models/safety_alert.dart';
 import '../../../domain/models/worker_task.dart';
@@ -27,7 +28,7 @@ class MockTaskService implements TaskRepository {
       // Task 1: Assigned CivicFlow Case (P1 Critical - Overflowing Bin)
       WorkerTask(
         id: 'task_swm_001',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'case_cf_7101',
         workerUid: 'mock-worker-rajesh-001',
@@ -66,7 +67,7 @@ class MockTaskService implements TaskRepository {
       // Task 2: Accepted CivicFlow Case (P2 - Trail Litter)
       WorkerTask(
         id: 'task_swm_002',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'case_cf_7102',
         workerUid: 'mock-worker-rajesh-001',
@@ -104,7 +105,7 @@ class MockTaskService implements TaskRepository {
       // Task 3: Unclaimed Team Pool Task (P1 Critical - Compactor Hopper Malfunction)
       WorkerTask(
         id: 'task_swm_003',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.municipalWorkOrder,
         workOrderId: 'wo_swm_5503',
         workerUid: null, // Unclaimed pool!
@@ -142,7 +143,7 @@ class MockTaskService implements TaskRepository {
       // Task 4: In Progress CivicFlow Case (P2 - Storm Drain Debris)
       WorkerTask(
         id: 'task_swm_004',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'case_cf_7104',
         workerUid: 'mock-worker-rajesh-001',
@@ -180,7 +181,7 @@ class MockTaskService implements TaskRepository {
       // Task 5: Blocked Work Order (P3 Routine - Landslide Warning)
       WorkerTask(
         id: 'task_swm_005',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.preventiveMaintenance,
         workOrderId: 'wo_swm_9912',
         workerUid: 'mock-worker-rajesh-001',
@@ -215,7 +216,7 @@ class MockTaskService implements TaskRepository {
       // Task 6: Submitted for Review CivicFlow Case (P2)
       WorkerTask(
         id: 'task_swm_006',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.civicFlowCase,
         civicFlowCaseId: 'case_cf_7106',
         workerUid: 'mock-worker-rajesh-001',
@@ -250,7 +251,7 @@ class MockTaskService implements TaskRepository {
       // Task 7: Unclaimed Team Pool Task (P2 Campaign)
       WorkerTask(
         id: 'task_swm_007',
-        tenantId: 'tenant-shimla-01',
+        tenantId: AppConstants.defaultTenantId,
         sourceType: SourceType.campaign,
         workOrderId: 'wo_swm_camp_01',
         workerUid: null, // Unclaimed pool!

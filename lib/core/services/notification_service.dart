@@ -16,7 +16,7 @@ class NotificationService {
   bool _isInitialized = false;
   void Function(String taskId)? onTaskSelected;
 
-  static const String channelId = 'evora_worker_dispatches';
+  static const String channelId = 'evora_worker_dispatches_v2';
   static const String channelName = 'Municipal Dispatches & Grievances';
   static const String channelDescription =
       'Real-time alerts for citizen complaints and high-priority field dispatches.';
@@ -205,21 +205,21 @@ class NotificationService {
   Future<void> showTestNotification() async {
     final sampleTask = WorkerTask(
       id: 'sample_test_dispatch',
-      tenantId: 'tenant-shimla-01',
+      tenantId: 'tenant_dehradun_01',
       sourceType: SourceType.civicFlowCase,
       civicFlowCaseId: 'sample_cf_01',
       departmentId: 'Solid Waste Management',
-      wardId: 'Ward 12 - Mall Road',
+      wardId: 'Ward 12 - Rajpur Road',
       categoryId: 'waste_management',
       status: TaskStatus.assigned,
       priority: TaskPriority.p1,
-      title: 'Overflowing Garbage Bin at Mall Road',
+      title: 'Overflowing Garbage Bin at Rajpur Road',
       instructions:
           'Commercial waste accumulated outside the municipal bin container. Citizen reported waste spilling onto walking promenade.',
       location: const TaskLocation(
-        latitude: 31.1048,
-        longitude: 77.1734,
-        addressSummary: 'Mall Road, Shimla',
+        latitude: 30.3165,
+        longitude: 78.0322,
+        addressSummary: 'Rajpur Road, Dehradun',
         landmark: 'Opposite State Bank',
         wardId: 'Ward 12',
       ),
