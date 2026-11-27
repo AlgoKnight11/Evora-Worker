@@ -319,42 +319,47 @@ class _WorkerShiftBanner extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              // On-Duty Shift Toggle Pill
+              // On-Duty Shift Switch
               InkWell(
                 onTap: onToggleDuty,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(100),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.only(left: 10, right: 4, top: 2, bottom: 2),
                   decoration: BoxDecoration(
                     color: isOnDuty
-                        ? const Color(0xFF00E676).withValues(alpha: 0.15)
-                        : Colors.white.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(20),
+                        ? const Color(0xFF00E676).withValues(alpha: 0.12)
+                        : Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(100),
                     border: Border.all(
                       color: isOnDuty
-                          ? const Color(0xFF00E676).withValues(alpha: 0.5)
-                          : Colors.white.withValues(alpha: 0.3),
+                          ? const Color(0xFF00E676).withValues(alpha: 0.4)
+                          : Colors.white.withValues(alpha: 0.2),
                       width: 1,
                     ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        width: 7,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          color: isOnDuty ? const Color(0xFF00E676) : Colors.white60,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
                       Text(
                         isOnDuty ? 'On Duty' : 'Off Duty',
                         style: TextStyle(
                           color: isOnDuty ? const Color(0xFF00E676) : Colors.white70,
-                          fontSize: 11.5,
+                          fontSize: 12.5,
                           fontWeight: FontWeight.w700,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch.adaptive(
+                          value: isOnDuty,
+                          onChanged: (_) => onToggleDuty?.call(),
+                          activeThumbColor: Colors.white,
+                          activeTrackColor: const Color(0xFF00E676),
+                          inactiveThumbColor: Colors.white70,
+                          inactiveTrackColor: Colors.white24,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),
                     ],
