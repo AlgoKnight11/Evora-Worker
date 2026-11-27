@@ -93,9 +93,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
         try {
           final map = jsonDecode(savedJson) as Map<String, dynamic>;
           var profile = WorkerProfile.fromJson(map);
-          // Auto-migrate any legacy pilot tenant ID from local device cache to active Uttarakhand tenant
+          // Auto-migrate any legacy pilot tenant ID or dummy crew from local device cache
+          bool profileUpdated = false;
           if (profile.tenantId != AppConstants.defaultTenantId) {
             profile = profile.copyWith(tenantId: AppConstants.defaultTenantId);
+            profileUpdated = true;
+          }
+          if (profile.teamName != null && profile.teamName!.contains('Mall Road')) {
+            profile = profile.copyWith(
+              teamName: 'Doon Valley Sanitation Crew',
+              authorizedServiceAreaIds: const ['dehradun-central', 'rajpur-road', 'doon-valley'],
+              supervisorName: 'Sanjay Sharma (Sanitation Officer)',
+              supervisorPhone: '+919412000001',
+            );
+            profileUpdated = true;
+          }
+          if (profileUpdated) {
             prefs.setString(
               AppConstants.prefWorkerProfileJson,
               jsonEncode(profile.toJson()),

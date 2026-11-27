@@ -73,7 +73,7 @@ void main() {
       expect(find.text('Rajesh Kumar'), findsOneWidget);
       expect(find.textContaining('EVR-SWM-4091'), findsOneWidget);
       expect(find.textContaining('Solid Waste Management'), findsOneWidget);
-      expect(find.textContaining('Mall Road Rapid Response Crew'), findsOneWidget);
+      expect(find.textContaining('Doon Valley Sanitation Crew'), findsOneWidget);
     });
 
     testWidgets('2. Renders 4 operational metrics KPI cards with live counts',

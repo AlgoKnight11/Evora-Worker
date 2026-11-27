@@ -28,11 +28,8 @@ final taskRepositoryProvider = Provider<TaskRepository>((ref) {
     return MockTaskService();
   }
 
-  // Production path: Real-time Firestore task repository with Citizen grievance bridge
-  return ResilientTaskService(
-    primary: FirestoreTaskService(),
-    fallback: MockTaskService(),
-  );
+  // Production path: 100% Real-time Cloud Firestore task repository with Citizen grievance bridge. Zero mock data.
+  return FirestoreTaskService();
 });
 
 /// Real-time stream of all active municipal tasks dispatched to the logged-in worker & crew.

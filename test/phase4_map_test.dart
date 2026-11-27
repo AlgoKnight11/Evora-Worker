@@ -25,7 +25,7 @@ void main() {
     departmentId: 'dept-swm',
     departmentName: 'Solid Waste Management',
     teamId: 'crew-alpha-12',
-    teamName: 'Mall Road Rapid Response Crew',
+    teamName: 'Doon Valley Sanitation Crew',
     authorizedServiceAreaIds: ['ward-12', 'ward-13', 'ward-14'],
     supervisorName: 'Vikram Verma (Chief Sanitary Inspector)',
     supervisorPhone: '+919816000001',

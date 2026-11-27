@@ -289,42 +289,44 @@ class _WorkerShiftBanner extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.group_work_rounded,
-                      size: 14,
-                      color: EvoraColors.secondary,
-                    ),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        teamName,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          color: Colors.white.withValues(alpha: 0.90),
-                          fontWeight: FontWeight.w500,
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.group_work_rounded,
+                        size: 14,
+                        color: EvoraColors.secondary,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          teamName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: Colors.white.withValues(alpha: 0.90),
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               // On-Duty Shift Switch
               InkWell(
                 onTap: onToggleDuty,
                 borderRadius: BorderRadius.circular(100),
                 child: Container(
-                  padding: const EdgeInsets.only(left: 10, right: 4, top: 2, bottom: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: isOnDuty
                         ? const Color(0xFF00E676).withValues(alpha: 0.12)
@@ -344,14 +346,14 @@ class _WorkerShiftBanner extends StatelessWidget {
                         isOnDuty ? 'On Duty' : 'Off Duty',
                         style: TextStyle(
                           color: isOnDuty ? const Color(0xFF00E676) : Colors.white70,
-                          fontSize: 12.5,
+                          fontSize: 11.5,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.2,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 2),
                       Transform.scale(
-                        scale: 0.8,
+                        scale: 0.75,
                         child: Switch.adaptive(
                           value: isOnDuty,
                           onChanged: (_) => onToggleDuty?.call(),
