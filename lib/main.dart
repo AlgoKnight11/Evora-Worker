@@ -1,11 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/constants/app_constants.dart';
 import 'core/localization/locale_provider.dart';
+import 'core/services/foreground_dispatch_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/theme/evora_theme.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -26,6 +29,18 @@ Future<void> main() async {
     await NotificationService.instance.initialize();
   } catch (e) {
     debugPrint('NotificationService.initialize warning: $e');
+  }
+
+  // Initialize Foreground Dispatch & Communication Port
+  try {
+    if (!kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
+      FlutterForegroundTask.initCommunicationPort();
+      await ForegroundDispatchService.init();
+    }
+  } catch (e) {
+    debugPrint('ForegroundDispatchService.init warning: $e');
   }
 
   SystemChrome.setSystemUIOverlayStyle(

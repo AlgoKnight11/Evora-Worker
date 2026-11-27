@@ -1,11 +1,28 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../domain/enums/worker_enums.dart';
 import '../../domain/models/worker_task.dart';
 
+/// Top-level background message handler for FCM.
+/// Must be annotated with @pragma('vm:entry-point') to prevent tree-shaking
+/// and allow Android OS to wake up this entry point when the app is killed.
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
+  } catch (_) {}
+  debugPrint('[NotificationService] Terminated/Background FCM received: ${message.messageId}');
+}
+
 /// Production notification service managing system permission prompts,
-/// municipal dispatch alerts, and condition analysis notification expansion.
+/// Firebase Cloud Messaging (FCM) push alerts, municipal dispatch channels,
+/// and deep-linking into assigned field tasks.
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
@@ -15,6 +32,7 @@ class NotificationService {
 
   bool _isInitialized = false;
   void Function(String taskId)? onTaskSelected;
+  String? _pendingTaskIdToOpen;
 
   static const String channelId = 'evora_worker_dispatches_v2';
   static const String channelName = 'Municipal Dispatches & Grievances';
@@ -29,7 +47,18 @@ class NotificationService {
           defaultTargetPlatform == TargetPlatform.linux ||
           defaultTargetPlatform == TargetPlatform.macOS);
 
-  /// Initializes the local notification plugin and configures Android notification channel
+  /// True if Firebase is initialized in the active runtime
+  bool get isFirebaseAvailable => Firebase.apps.isNotEmpty;
+
+  /// Pending task ID clicked while app was cold-starting
+  String? consumePendingTaskId() {
+    final id = _pendingTaskIdToOpen;
+    _pendingTaskIdToOpen = null;
+    return id;
+  }
+
+  /// Initializes the local notification plugin, creates high-priority Android channel,
+  /// and configures Firebase Cloud Messaging handlers.
   Future<void> initialize({void Function(String taskId)? onSelectTask}) async {
     if (_isInitialized) return;
 
@@ -87,11 +116,145 @@ class NotificationService {
         );
         await androidImplementation.createNotificationChannel(channel);
       }
+
+      // Initialize Firebase Cloud Messaging if Firebase is initialized
+      if (isFirebaseAvailable) {
+        await _initializeFirebaseMessaging();
+      }
     } catch (e) {
       debugPrint('[NotificationService] Initialization note: $e');
     }
 
     _isInitialized = true;
+  }
+
+  /// Configures FCM background handler, foreground listener, and notification click intents
+  Future<void> _initializeFirebaseMessaging() async {
+    try {
+      // 1. Register background message handler
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+      final messaging = FirebaseMessaging.instance;
+
+      // 2. Request permission (safe for Android 13+ and iOS)
+      await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
+
+      // 3. Set foreground presentation options
+      await messaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      // 4. Foreground FCM message listener
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('[NotificationService] Foreground FCM received: ${message.notification?.title}');
+        final notification = message.notification;
+        if (notification != null) {
+          final taskId = message.data['taskId'] as String?;
+          showCustomNotification(
+            title: notification.title ?? 'New Municipal Dispatch Alert',
+            body: notification.body ?? '',
+            taskId: taskId,
+          );
+        }
+      });
+
+      // 5. Background notification click (app in background/recent apps)
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        debugPrint('[NotificationService] App opened from FCM click: ${message.data}');
+        final taskId = message.data['taskId'] as String?;
+        if (taskId != null && taskId.isNotEmpty) {
+          onTaskSelected?.call(taskId);
+        }
+      });
+
+      // 6. Cold-start notification click (app was terminated/killed)
+      final initialMessage = await messaging.getInitialMessage();
+      if (initialMessage != null) {
+        debugPrint('[NotificationService] App launched from terminated state via FCM: ${initialMessage.data}');
+        final taskId = initialMessage.data['taskId'] as String?;
+        if (taskId != null && taskId.isNotEmpty) {
+          _pendingTaskIdToOpen = taskId;
+          onTaskSelected?.call(taskId);
+        }
+      }
+    } catch (e) {
+      debugPrint('[NotificationService] FirebaseMessaging setup note: $e');
+    }
+  }
+
+  /// Subscribes worker device to municipal department FCM topics and registers device token
+  Future<void> subscribeWorkerTopics({
+    required String tenantId,
+    required String departmentId,
+    String? workerUid,
+  }) async {
+    if (!isSupportedPlatform || !isFirebaseAvailable) return;
+    try {
+      final messaging = FirebaseMessaging.instance;
+
+      // Request runtime notification permission
+      await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      final cleanTenant = tenantId.replaceAll(RegExp(r'[^a-zA-Z0-9_]'), '_').toLowerCase();
+      final deptSlug = normalizeDeptSlug(departmentId);
+
+      final deptTopic = '${cleanTenant}_$deptSlug';
+      final allTopic = '${cleanTenant}_all_dispatches';
+
+      await messaging.subscribeToTopic(deptTopic);
+      await messaging.subscribeToTopic(allTopic);
+      debugPrint('[NotificationService] Subscribed to FCM topics: $deptTopic, $allTopic');
+
+      final token = await messaging.getToken();
+      debugPrint('[NotificationService] FCM Registration Token: $token');
+
+      // Save FCM token to worker record in Firestore if available
+      if (workerUid != null && token != null && token.isNotEmpty) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('tenants')
+              .doc(tenantId)
+              .collection('workers')
+              .doc(workerUid)
+              .set({
+            'fcmToken': token,
+            'fcmTopics': [deptTopic, allTopic],
+            'lastTokenUpdate': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+          debugPrint('[NotificationService] FCM token saved to worker profile in Firestore');
+        } catch (e) {
+          debugPrint('[NotificationService] Note saving token to Firestore: $e');
+        }
+      }
+    } catch (e) {
+      debugPrint('[NotificationService] subscribeWorkerTopics error: $e');
+    }
+  }
+
+  /// Normalizes a human or raw department name into a canonical FCM topic slug
+  static String normalizeDeptSlug(String department) {
+    final d = department.toLowerCase();
+    if (d.contains('solid_waste') || d.contains('waste') || d.contains('garbage') || d.contains('clean')) {
+      return 'solid_waste';
+    } else if (d.contains('road') || d.contains('traffic') || d.contains('street') || d.contains('pothole')) {
+      return 'roads';
+    } else if (d.contains('water') || d.contains('drain') || d.contains('sewer') || d.contains('leak')) {
+      return 'water_supply';
+    } else if (d.contains('elect') || d.contains('light') || d.contains('power')) {
+      return 'electricity';
+    }
+    return 'general';
   }
 
   /// Requests the runtime notification permission (Android 13+ POST_NOTIFICATIONS)
@@ -198,6 +361,45 @@ class NotificationService {
       if (!e.toString().contains('LateInitializationError')) {
         debugPrint('[NotificationService] Notification dispatch note: $e');
       }
+    }
+  }
+
+  /// Displays a custom or push notification banner with high priority
+  Future<void> showCustomNotification({
+    required String title,
+    required String body,
+    String? taskId,
+  }) async {
+    if (!isSupportedPlatform) return;
+    try {
+      final androidDetails = AndroidNotificationDetails(
+        channelId,
+        channelName,
+        channelDescription: channelDescription,
+        importance: Importance.max,
+        priority: Priority.high,
+        styleInformation: BigTextStyleInformation(
+          body,
+          htmlFormatBigText: false,
+          contentTitle: title,
+          htmlFormatContentTitle: false,
+        ),
+        ticker: 'New Municipal Dispatch Alert',
+        category: AndroidNotificationCategory.reminder,
+        playSound: true,
+        enableVibration: true,
+      );
+
+      final id = DateTime.now().millisecondsSinceEpoch.remainder(100000);
+      await _notificationsPlugin.show(
+        id,
+        title,
+        body,
+        NotificationDetails(android: androidDetails),
+        payload: taskId != null ? 'task:$taskId' : null,
+      );
+    } catch (e) {
+      debugPrint('[NotificationService] showCustomNotification note: $e');
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/providers/duty_provider.dart';
 import '../../../core/state/sync_status_provider.dart';
 import '../../../core/theme/evora_colors.dart';
 import '../../../core/theme/evora_typography.dart';
@@ -26,6 +27,7 @@ class OverviewScreen extends ConsumerWidget {
     final profile = authState.profile;
     final syncState = ref.watch(syncStatusProvider);
     final metrics = ref.watch(overviewMetricsProvider);
+    final isOnDuty = ref.watch(dutyProvider);
 
     return Scaffold(
       backgroundColor: EvoraColors.background,
@@ -40,6 +42,26 @@ class OverviewScreen extends ConsumerWidget {
             _WorkerShiftBanner(
               profile: profile,
               syncState: syncState,
+              isOnDuty: isOnDuty,
+              onToggleDuty: () async {
+                final newStatus =
+                    await ref.read(dutyProvider.notifier).toggleDuty(profile);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        newStatus
+                            ? 'Shift Active: On Duty (Live dispatches connected even when closed)'
+                            : 'Shift Ended: Off Duty',
+                      ),
+                      backgroundColor: newStatus
+                          ? const Color(0xFF00E676)
+                          : EvoraColors.onSurfaceVariant,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
+              },
               l10n: l10n,
               theme: theme,
             ),
@@ -157,12 +179,16 @@ class OverviewScreen extends ConsumerWidget {
 class _WorkerShiftBanner extends StatelessWidget {
   final dynamic profile;
   final SyncStatusState syncState;
+  final bool isOnDuty;
+  final VoidCallback? onToggleDuty;
   final AppLocalizations l10n;
   final ThemeData theme;
 
   const _WorkerShiftBanner({
     required this.profile,
     required this.syncState,
+    this.isOnDuty = true,
+    this.onToggleDuty,
     required this.l10n,
     required this.theme,
   });
@@ -261,34 +287,81 @@ class _WorkerShiftBanner extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.group_work_rounded,
-                  size: 14,
-                  color: EvoraColors.secondary,
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    teamName,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      color: Colors.white.withValues(alpha: 0.90),
-                      fontWeight: FontWeight.w500,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.group_work_rounded,
+                      size: 14,
+                      color: EvoraColors.secondary,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        teamName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: Colors.white.withValues(alpha: 0.90),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              // On-Duty Shift Toggle Pill
+              InkWell(
+                onTap: onToggleDuty,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: isOnDuty
+                        ? const Color(0xFF00E676).withValues(alpha: 0.15)
+                        : Colors.white.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: isOnDuty
+                          ? const Color(0xFF00E676).withValues(alpha: 0.5)
+                          : Colors.white.withValues(alpha: 0.3),
+                      width: 1,
                     ),
                   ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 7,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          color: isOnDuty ? const Color(0xFF00E676) : Colors.white60,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        isOnDuty ? 'On Duty' : 'Off Duty',
+                        style: TextStyle(
+                          color: isOnDuty ? const Color(0xFF00E676) : Colors.white70,
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/localization/locale_provider.dart';
+import '../../../core/services/foreground_dispatch_service.dart';
+import '../../../core/services/notification_service.dart';
 import '../../../domain/models/worker_profile.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../models/auth_state.dart';
@@ -52,6 +54,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (_authRepo is FirebaseAuthService) {
         _authRepo.setRestoredProfile(state.profile!);
       }
+      NotificationService.instance.subscribeWorkerTopics(
+        tenantId: state.profile!.tenantId,
+        departmentId: state.profile!.departmentId,
+        workerUid: state.profile!.uid,
+      );
+      ForegroundDispatchService.startDuty(
+        tenantId: state.profile!.tenantId,
+        departmentId: state.profile!.departmentId,
+      );
     }
 
     // Listen to worker stream if available
@@ -62,6 +73,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
           profile: profile,
         );
         _persistProfile(profile);
+        NotificationService.instance.subscribeWorkerTopics(
+          tenantId: profile.tenantId,
+          departmentId: profile.departmentId,
+          workerUid: profile.uid,
+        );
+        ForegroundDispatchService.startDuty(
+          tenantId: profile.tenantId,
+          departmentId: profile.departmentId,
+        );
       }
     });
   }
